@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Internadda Elite Certificate</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- PDF Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+body {
+    background: #eef2f7;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+/* CERTIFICATE WRAPPER */
+.certificate-wrapper {
+    width: 1123px; /* A4 landscape */
+    height: 794px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 70px 90px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.18);
+    position: relative;
+    box-sizing: border-box;
+}
+
+/* BORDER */
+.certificate-wrapper::after {
+    content: "";
+    position: absolute;
+    inset: 25px;
+    border: 2px solid rgba(67,56,202,0.25);
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    height: 65px;
+}
+
+.badge {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 10px 18px;
+    border-radius: 30px;
+    background: #4338ca;
+    color: white;
+}
+
+/* TITLE */
+.title {
+    margin-top: 40px;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 46px;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.subtitle {
+    text-align: center;
+    margin-top: 8px;
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #64748b;
+}
+
+/* CONTENT */
+.presented {
+    text-align: center;
+    margin-top: 45px;
+    font-size: 16px;
+    color: #475569;
+}
+
+#recipient-name {
+    text-align: center;
+    margin: 30px 0;
+    font-size: 40px;
+    font-weight: 700;
+    color: #4338ca;
+}
+
+.description {
+    max-width: 800px;
+    margin: auto;
+    text-align: center;
+    font-size: 18px;
+    line-height: 1.75;
+    color: #334155;
+}
+
+/* FOOTER */
+.footer {
+    position: absolute;
+    bottom: 80px;
+    left: 90px;
+    right: 90px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-box {
+    text-align: center;
+    font-size: 14px;
+    color: #334155;
+}
+
+.footer-box b {
+    display: block;
+    margin-bottom: 6px;
+}
+
+/* SIGNATURE */
+.signature {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="certificate" class="certificate-wrapper">
+
+    <!-- HEADER -->
+    <div class="header">
+        <img src="https://internadda.com/images/logo.jpg" class="logo" alt="Internadda Logo">
+        <div class="badge">OFFICIAL CREDENTIAL</div>
+    </div>
+
+    <!-- TITLE -->
+    <div class="title">Certificate of Completion</div>
+    <div class="subtitle">Internadda Elite Program</div>
+
+    <!-- BODY -->
+    <div class="presented">This certificate is proudly presented to</div>
+    <div id="recipient-name">Recipient Name</div>
+
+    <div class="description">
+        for successfully completing the <b>Data Science Specialization</b> under the
+        <b>Internadda Elite Program</b>. This certification confirms professional
+        competency in Python Engineering, Data Science, Machine Learning,
+        Deep Learning, and MLOps practices.
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <div class="footer-box">
+            <b>Date Issued</b>
+            <span id="cert-date"></span>
+        </div>
+
+        <div class="footer-box">
+            <div class="signature">Internadda Authority</div>
+            Program Director
+        </div>
+
+        <div class="footer-box">
+            <b>Certificate ID</b>
+            <span id="cert-id"></span>
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+/* Load Name */
+const name = localStorage.getItem("internadda_cert_name");
+if (name) {
+    document.getElementById("recipient-name").innerText = name;
+}
+
+/* Date */
+document.getElementById("cert-date").innerText =
+    new Date().toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    });
+
+/* Certificate ID */
+function generateCertID() {
+    return "IA-DS-" +
+        Math.random().toString(36).substring(2, 6).toUpperCase() +
+        "-" +
+        Date.now().toString().slice(-5);
+}
+document.getElementById("cert-id").innerText = generateCertID();
+
+/* AUTO DOWNLOAD PDF */
+window.onload = function () {
+    setTimeout(() => {
+        html2pdf()
+            .set({
+                margin: 0,
+                filename: `Internadda_Certificate_${name || "User"}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'px', format: 'a4', orientation: 'landscape' }
+            })
+            .from(document.getElementById("certificate"))
+            .save();
+    }, 800);
+};
+</script>
+
+</body>
+</html>
