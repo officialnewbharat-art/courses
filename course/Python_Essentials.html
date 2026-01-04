@@ -3,126 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Data Science | Executive Specialization</title>
+    <title>Data Science Specialization | Internadda Elite</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         :root {
-            --accent: #6366f1;
-            --accent-dark: #4338ca;
-            --bg: #ffffff;
-            --sidebar-bg: #0f172a;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --glass: rgba(255, 255, 255, 0.8);
+            --primary: #4338ca; 
+            --primary-hover: #3730a3;
+            --dark-bg: #0f172a;
+            --text-main: #1a202c;
+            --text-light: #64748b;
+            --white: #ffffff;
             --border: #e2e8f0;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: var(--text-main); line-height: 1.7; overflow-x: hidden; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8faff; color: var(--text-main); line-height: 1.6; }
 
-        /* --- PREMIUM HEADER --- */
         header { 
-            background: var(--glass); 
-            backdrop-filter: blur(12px);
+            background: var(--white); 
             border-bottom: 1px solid var(--border); 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
-            padding: 10px 20px;
+            position: sticky; top: 0; z-index: 1000; padding: 15px 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
-        
-        .nav-container { display: flex; align-items: center; justify-content: space-between; max-width: 1600px; margin: 0 auto; }
-        
-        .logo-box { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-        .logo-box img { height: 38px; width: auto; }
-        .logo-text { font-weight: 800; font-size: 1.2rem; color: var(--sidebar-bg); letter-spacing: -0.5px; }
+        .nav-container { display: flex; align-items: center; justify-content: space-between; max-width: 1400px; margin: 0 auto; }
+        .logo-box { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-box img { height: 35px; border-radius: 6px; }
+        .logo-text { font-weight: 800; font-size: 1.3rem; color: #1a202c; letter-spacing: -0.5px; }
+        .logo-text span { color: var(--primary); }
 
-        .hamburger { font-size: 1.2rem; cursor: pointer; color: var(--accent); background: #f1f5f9; border: none; padding: 10px; border-radius: 8px; }
-
-        /* --- SIDEBAR (MODERN DARK) --- */
         .sidebar {
-            position: fixed; top: 0; left: -360px; width: 340px; height: 100vh;
-            background: var(--sidebar-bg); z-index: 1100; padding: 40px 20px;
-            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            color: white;
+            position: fixed; top: 0; left: -320px; width: 300px; height: 100vh;
+            background: var(--dark-bg); z-index: 1100; padding: 30px 20px;
+            transition: 0.4s ease; color: white;
+            overflow-y: auto;
         }
         .sidebar.active { left: 0; }
-        .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 1050; display: none; }
+        .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1050; display: none; }
         .sidebar-overlay.active { display: block; }
-
-        .curriculum-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 25px; padding-left: 15px; }
         
         .module-item { 
-            padding: 16px; border-radius: 12px; margin-bottom: 8px; cursor: pointer; 
-            display: flex; align-items: center; gap: 15px; font-weight: 500; transition: 0.3s;
-            border: 1px solid transparent; position: relative;
+            padding: 14px; border-radius: 10px; margin-bottom: 8px; cursor: pointer; 
+            display: flex; align-items: center; gap: 12px; font-size: 0.9rem; transition: 0.2s;
         }
-        .module-item.locked { opacity: 0.5; cursor: not-allowed; }
-        .module-item.active { background: rgba(255,255,255,0.1); border-color: var(--accent); color: white; }
-        .module-item i.fa-lock { font-size: 0.8rem; margin-left: auto; }
-        .module-item i.fa-check-circle { color: #10b981; margin-left: auto; }
+        .module-item.active { background: var(--primary); color: white; }
+        .module-item.locked { opacity: 0.4; cursor: not-allowed; }
 
-        /* --- DESKTOP CONTENT CANVAS --- */
-        .main-layout { display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
-        
+        .main-layout { padding: 40px 20px; display: flex; justify-content: center; }
         .content-card { 
-            background: white; 
-            border-radius: 24px; 
-            padding: 80px; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.02); 
-            max-width: 1000px; 
-            width: 100%;
-            border: 1px solid var(--border);
+            background: white; border-radius: 20px; padding: 60px; 
+            max-width: 900px; width: 100%; border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
         }
 
-        /* --- TYPOGRAPHY --- */
-        .module-tag { color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1.5px; margin-bottom: 15px; display: block; }
-        h1.hero { font-family: 'Playfair Display', serif; font-size: 3.5rem; line-height: 1.1; margin-bottom: 30px; }
-        h2.mod-title { font-size: 2.8rem; font-weight: 800; color: var(--sidebar-bg); margin-bottom: 40px; }
-        h3.section-head { font-size: 1.6rem; margin: 50px 0 20px; color: var(--accent-dark); font-weight: 700; }
-        
-        p.body-text { font-size: 1.15rem; color: #475569; margin-bottom: 30px; text-align: justify; }
+        .module-tag { color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1.5px; margin-bottom: 15px; display: block; }
+        .mod-title { font-size: 2.2rem; font-weight: 800; color: var(--dark-bg); margin-bottom: 25px; }
+        .section-head { font-size: 1.4rem; margin: 30px 0 15px; color: var(--primary); font-weight: 700; }
+        .pro-note { background: #f0f4ff; border-left: 4px solid var(--primary); padding: 20px; border-radius: 8px; margin: 20px 0; font-style: italic; }
+        pre { background: #1e293b; color: #e2e8f0; padding: 20px; border-radius: 10px; margin: 20px 0; overflow-x: auto; }
 
-        /* --- PREMIUM ELEMENTS --- */
-        .pro-note { 
-            background: #fdf2f8; border-left: 4px solid #db2777; padding: 30px; border-radius: 0 16px 16px 0; margin: 40px 0;
-            font-size: 1.1rem; color: #9d174d; font-style: italic;
-        }
-
-        pre { 
-            background: #0f172a; color: #f1f5f9; padding: 30px; border-radius: 16px; 
-            overflow-x: auto; font-family: 'Fira Code', monospace; font-size: 0.95rem; margin: 30px 0;
-            border: 1px solid #334155;
-        }
-
-        .btn-premium { 
-            background: var(--accent); color: white; padding: 20px 45px; border-radius: 12px; 
-            font-weight: 700; border: none; cursor: pointer; transition: 0.3s; font-size: 1rem;
+        .btn-primary, .btn-premium { 
+            background: var(--primary); color: white; padding: 16px 35px; border-radius: 12px;
+            border: none; font-weight: 700; cursor: pointer; transition: 0.3s;
             display: inline-flex; align-items: center; gap: 10px;
         }
-        .btn-premium:hover { background: var(--accent-dark); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2); }
+        .btn-primary:hover, .btn-premium:hover { background: var(--primary-hover); transform: translateY(-2px); }
 
-        /* --- MOBILE ADAPTATION --- */
-        @media (max-width: 768px) {
-            .logo-text { font-size: 1rem; }
-            h1.hero { font-size: 2.2rem; }
-            h2.mod-title { font-size: 1.8rem; }
-            .content-card { padding: 40px 20px; border-radius: 0; }
-            .nav-container { padding: 5px 0; }
-        }
-
-        /* --- ENROLLMENT SCREEN --- */
-        #enroll-screen { max-width: 800px; margin: 100px auto; text-align: center; padding: 0 20px; }
-        .input-field { 
-            padding: 20px; width: 100%; max-width: 400px; border: 2px solid var(--border); 
-            border-radius: 12px; font-size: 1.1rem; margin-bottom: 20px; transition: 0.3s;
-        }
-        .input-field:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
+        .input-group { margin: 30px auto; text-align: left; max-width: 400px; }
+        .input-premium { width: 100%; padding: 15px; border: 2px solid var(--border); border-radius: 10px; font-size: 1rem; }
         .hidden { display: none !important; }
     </style>
 </head>
@@ -130,25 +81,22 @@
 
     <header>
         <div class="nav-container">
-            <button class="hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            <button style="background:none; border:none; cursor:pointer; font-size:1.4rem;" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
             <a href="#" class="logo-box">
-                <img src="logo.jpg" alt="Academy Logo" onerror="this.src='https://placehold.co/100x40/0f172a/ffffff?text=ELITE'">
-                <span class="logo-text">INTERNADDA <span style="color:var(--accent)"> ELITE</span></span>
+                <img src="https://internadda.com/images/logo.jpg" alt="Logo">
+                <span class="logo-text">Intern<span>adda</span> Elite</span>
             </a>
-            <div id="prog-stat" style="font-size: 0.85rem; font-weight: 700; color: var(--accent);">0% COMPLETE</div>
+            <div id="prog-stat" style="color:var(--primary); font-weight:700;">0% COMPLETE</div>
         </div>
     </header>
 
     <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
     <aside class="sidebar" id="toc"></aside>
 
-    <div id="enroll-screen">
-        <span class="module-tag">Specialization Program</span>
-        <h1 class="hero">Elite Data Science & Engineering</h1>
-        <p class="body-text" style="text-align: center;">Welcome to the $100,000 learning experience. Master Python memory optimization, production-scale MLOps, and advanced architectural patterns.</p>
-        <input type="text" id="user-name" class="input-field" placeholder="Full Name for Certification">
-        <br>
-        <button class="btn-premium" onclick="startCourse()">Begin Specialization <i class="fas fa-arrow-right"></i></button>
+    <div id="welcome-screen" style="text-align: center; padding: 100px 20px;">
+        <h1 class="hero-title">Advance Your Career with <br><span style="color:var(--primary)">Elite Data Science</span></h1>
+        <p class="body-text" style="max-width:700px; margin: 20px auto 40px;">Master high-performance Python and industry-scale MLOps. Launch your career today with Internadda's proctored curriculum.</p>
+        <button class="btn-primary" onclick="enrollUser()">Start Learning Now <i class="fas fa-arrow-right"></i></button>
     </div>
 
     <div id="course-ui" class="hidden">
@@ -157,11 +105,20 @@
         </main>
     </div>
 
-    <script>
-        let studentName = "";
-        let currentModule = 0;
-        let maxUnlocked = 0;
+    <div id="final-screen" class="hidden" style="text-align: center; padding: 100px 20px;">
+        <h2 class="section-title">Claim Your Official Credential</h2>
+        <p class="body-text">Congratulations on completing the Internadda Elite Specialization.</p>
+        <div class="input-group">
+            <input type="text" id="cert-name" class="input-premium" placeholder="Enter Full Name for Certificate">
+        </div>
+        <button class="btn-primary" onclick="generateCredential()">Generate Certificate <i class="fas fa-award"></i></button>
+    </div>
 
+    <script>
+        let maxUnlocked = 0;
+        let currentModule = 0;
+
+        // Content synchronized with Internadda Elite Curriculum
 const syllabus = [
     {
         title: "Module 01: Professional Python Engineering",
@@ -373,60 +330,73 @@ df['log_income'] = df['income'].apply(lambda x: math.log(x + 1))
             document.querySelector('.sidebar-overlay').classList.toggle('active');
         }
 
-        function startCourse() {
-            studentName = document.getElementById('user-name').value;
-            if(!studentName) return alert("Please enter your name.");
-            document.getElementById('enroll-screen').classList.add('hidden');
-            document.getElementById('course-ui').classList.remove('hidden');
-            renderTOC();
-            loadModule(0);
+        function enrollUser() {
+            Swal.fire({
+                title: 'Successfully Enrolled!',
+                text: 'Welcome to Internadda Elite. Your proctored journey begins now.',
+                icon: 'success',
+                confirmButtonColor: '#4338ca'
+            }).then(() => {
+                document.getElementById('welcome-screen').classList.add('hidden');
+                document.getElementById('course-ui').classList.remove('hidden');
+                renderTOC();
+                loadModule(0);
+            });
         }
 
         function renderTOC() {
             const toc = document.getElementById('toc');
-            let html = `<div class="curriculum-title">Your Progress</div>`;
-            
+            let html = `<div style="text-transform:uppercase; font-size:0.7rem; color:rgba(255,255,255,0.6); margin-bottom:20px;">Curriculum</div>`;
             syllabus.forEach((mod, i) => {
                 const isLocked = i > maxUnlocked;
-                const isActive = i === currentModule;
-                const isDone = i < maxUnlocked;
-
                 html += `
-                    <div class="module-item ${isActive ? 'active' : ''} ${isLocked ? 'locked' : ''}" 
-                         onclick="${!isLocked ? `loadModule(${i})` : ''}">
-                        <i class="fas ${isDone ? 'fa-check-circle' : (isActive ? 'fa-play-circle' : 'fa-lock')}"></i>
+                    <div class="module-item ${i === currentModule ? 'active' : ''} ${isLocked ? 'locked' : ''}" onclick="${!isLocked ? `loadModule(${i})` : ''}">
+                        <i class="fas ${i < maxUnlocked ? 'fa-check-circle' : (isLocked ? 'fa-lock' : 'fa-play-circle')}"></i>
                         ${mod.title}
-                    </div>
-                `;
+                    </div>`;
             });
             toc.innerHTML = html;
-            
-            // Update progress text
-            const progress = Math.round((maxUnlocked / (syllabus.length - 1)) * 100);
-            document.getElementById('prog-stat').innerText = `${progress}% COMPLETE`;
         }
 
         function loadModule(idx) {
             currentModule = idx;
             document.getElementById('main-content').innerHTML = syllabus[idx].content;
+            document.getElementById('prog-stat').innerText = `${Math.round(((maxUnlocked) / syllabus.length) * 100)}% COMPLETE`;
             renderTOC();
-            if(window.innerWidth < 768) {
-                document.getElementById('toc').classList.remove('active');
-                document.querySelector('.sidebar-overlay').classList.remove('active');
-            }
-            window.scrollTo(0,0);
         }
 
         function completeModule() {
-            if (currentModule === maxUnlocked && maxUnlocked < syllabus.length - 1) {
-                maxUnlocked++;
-            }
             if (currentModule < syllabus.length - 1) {
+                maxUnlocked++;
                 loadModule(currentModule + 1);
             } else {
-                alert("Course Complete! Generate your certificate.");
+                document.getElementById('course-ui').classList.add('hidden');
+                document.getElementById('final-screen').classList.remove('hidden');
+                document.getElementById('prog-stat').innerText = `100% COMPLETE`;
             }
         }
+
+function generateCredential() {
+    const name = document.getElementById('cert-name').value.trim();
+
+    if (!name) {
+        Swal.fire('Error', 'Please enter your full name.', 'error');
+        return;
+    }
+
+    // Store name for certificate page
+    localStorage.setItem("internadda_cert_name", name);
+
+    Swal.fire({
+        title: 'Certificate Generated!',
+        text: `Official Internadda Elite Credential issued to ${name}.`,
+        icon: 'success',
+        confirmButtonText: 'View Certificate',
+        confirmButtonColor: '#4338ca'
+    }).then(() => {
+        window.location.href = "certificate.html";
+    });
+}
     </script>
 </body>
 </html>
