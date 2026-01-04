@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Data Science | Executive Specialization</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            --accent: #6366f1;
+            --accent-dark: #4338ca;
+            --bg: #ffffff;
+            --sidebar-bg: #0f172a;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --glass: rgba(255, 255, 255, 0.8);
+            --border: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: var(--text-main); line-height: 1.7; overflow-x: hidden; }
+
+        /* --- PREMIUM HEADER --- */
+        header { 
+            background: var(--glass); 
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            padding: 10px 20px;
+        }
+        
+        .nav-container { display: flex; align-items: center; justify-content: space-between; max-width: 1600px; margin: 0 auto; }
+        
+        .logo-box { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-box img { height: 38px; width: auto; }
+        .logo-text { font-weight: 800; font-size: 1.2rem; color: var(--sidebar-bg); letter-spacing: -0.5px; }
+
+        .hamburger { font-size: 1.2rem; cursor: pointer; color: var(--accent); background: #f1f5f9; border: none; padding: 10px; border-radius: 8px; }
+
+        /* --- SIDEBAR (MODERN DARK) --- */
+        .sidebar {
+            position: fixed; top: 0; left: -360px; width: 340px; height: 100vh;
+            background: var(--sidebar-bg); z-index: 1100; padding: 40px 20px;
+            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            color: white;
+        }
+        .sidebar.active { left: 0; }
+        .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 1050; display: none; }
+        .sidebar-overlay.active { display: block; }
+
+        .curriculum-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 25px; padding-left: 15px; }
+        
+        .module-item { 
+            padding: 16px; border-radius: 12px; margin-bottom: 8px; cursor: pointer; 
+            display: flex; align-items: center; gap: 15px; font-weight: 500; transition: 0.3s;
+            border: 1px solid transparent; position: relative;
+        }
+        .module-item.locked { opacity: 0.5; cursor: not-allowed; }
+        .module-item.active { background: rgba(255,255,255,0.1); border-color: var(--accent); color: white; }
+        .module-item i.fa-lock { font-size: 0.8rem; margin-left: auto; }
+        .module-item i.fa-check-circle { color: #10b981; margin-left: auto; }
+
+        /* --- DESKTOP CONTENT CANVAS --- */
+        .main-layout { display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
+        
+        .content-card { 
+            background: white; 
+            border-radius: 24px; 
+            padding: 80px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.02); 
+            max-width: 1000px; 
+            width: 100%;
+            border: 1px solid var(--border);
+        }
+
+        /* --- TYPOGRAPHY --- */
+        .module-tag { color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1.5px; margin-bottom: 15px; display: block; }
+        h1.hero { font-family: 'Playfair Display', serif; font-size: 3.5rem; line-height: 1.1; margin-bottom: 30px; }
+        h2.mod-title { font-size: 2.8rem; font-weight: 800; color: var(--sidebar-bg); margin-bottom: 40px; }
+        h3.section-head { font-size: 1.6rem; margin: 50px 0 20px; color: var(--accent-dark); font-weight: 700; }
+        
+        p.body-text { font-size: 1.15rem; color: #475569; margin-bottom: 30px; text-align: justify; }
+
+        /* --- PREMIUM ELEMENTS --- */
+        .pro-note { 
+            background: #fdf2f8; border-left: 4px solid #db2777; padding: 30px; border-radius: 0 16px 16px 0; margin: 40px 0;
+            font-size: 1.1rem; color: #9d174d; font-style: italic;
+        }
+
+        pre { 
+            background: #0f172a; color: #f1f5f9; padding: 30px; border-radius: 16px; 
+            overflow-x: auto; font-family: 'Fira Code', monospace; font-size: 0.95rem; margin: 30px 0;
+            border: 1px solid #334155;
+        }
+
+        .btn-premium { 
+            background: var(--accent); color: white; padding: 20px 45px; border-radius: 12px; 
+            font-weight: 700; border: none; cursor: pointer; transition: 0.3s; font-size: 1rem;
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+        .btn-premium:hover { background: var(--accent-dark); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2); }
+
+        /* --- MOBILE ADAPTATION --- */
+        @media (max-width: 768px) {
+            .logo-text { font-size: 1rem; }
+            h1.hero { font-size: 2.2rem; }
+            h2.mod-title { font-size: 1.8rem; }
+            .content-card { padding: 40px 20px; border-radius: 0; }
+            .nav-container { padding: 5px 0; }
+        }
+
+        /* --- ENROLLMENT SCREEN --- */
+        #enroll-screen { max-width: 800px; margin: 100px auto; text-align: center; padding: 0 20px; }
+        .input-field { 
+            padding: 20px; width: 100%; max-width: 400px; border: 2px solid var(--border); 
+            border-radius: 12px; font-size: 1.1rem; margin-bottom: 20px; transition: 0.3s;
+        }
+        .input-field:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <button class="hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            <a href="#" class="logo-box">
+                <img src="logo.jpg" alt="Academy Logo" onerror="this.src='https://placehold.co/100x40/0f172a/ffffff?text=ELITE'">
+                <span class="logo-text">INTERNADDA <span style="color:var(--accent)"> ELITE</span></span>
+            </a>
+            <div id="prog-stat" style="font-size: 0.85rem; font-weight: 700; color: var(--accent);">0% COMPLETE</div>
+        </div>
+    </header>
+
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <aside class="sidebar" id="toc"></aside>
+
+    <div id="enroll-screen">
+        <span class="module-tag">Specialization Program</span>
+        <h1 class="hero">Elite Data Science & Engineering</h1>
+        <p class="body-text" style="text-align: center;">Welcome to the $100,000 learning experience. Master Python memory optimization, production-scale MLOps, and advanced architectural patterns.</p>
+        <input type="text" id="user-name" class="input-field" placeholder="Full Name for Certification">
+        <br>
+        <button class="btn-premium" onclick="startCourse()">Begin Specialization <i class="fas fa-arrow-right"></i></button>
+    </div>
+
+    <div id="course-ui" class="hidden">
+        <main class="main-layout">
+            <div id="main-content" class="content-card"></div>
+        </main>
+    </div>
+
+    <script>
+        let studentName = "";
+        let currentModule = 0;
+        let maxUnlocked = 0;
+
+const syllabus = [
+    {
+        title: "Module 01: Professional Python Engineering",
+        content: `
+            <span class="module-tag">System Architecture</span>
+            <h2 class="mod-title">High-Performance Python & Memory Management</h2>
+            <p class="body-text">At the elite engineering level, we don't just write scripts; we build memory-optimized systems. Python is often criticized for its speed, but a senior engineer knows that bottlenecking usually occurs due to poor resource management and a lack of understanding of the <b>CPython Interpreter</b>.</p>
+            
+            <h3 class="section-head">1. Deep Internals: Memory Allocation & Garbage Collection</h3>
+            <p class="body-text">Python uses a private heap to manage memory. All objects and data structures are located here. The <b>Global Interpreter Lock (GIL)</b> is a mutex that protects access to Python objects, preventing multiple native threads from executing Python bytecodes at once. This is why multi-threading in Python is not suitable for CPU-bound tasks.</p>
+
+            <div class="pro-note">
+                <b>The __slots__ optimization:</b> In a standard class, Python uses a dictionary to store instance variables. This is flexible but consumes significant RAM. By defining <code>__slots__</code>, you tell the interpreter to allocate space for a fixed set of attributes, reducing the memory footprint by up to 60% in large-scale data pipelines.
+            </div>
+
+            
+
+            <h3 class="section-head">2. Advanced Concurrency: Multiprocessing vs. Asyncio</h3>
+            <p class="body-text">To achieve true parallelism, we must bypass the GIL. We use the <code>multiprocessing</code> module to create separate memory spaces. For I/O bound tasks (like fetching data from 1,000 APIs simultaneously), we implement <code>asyncio</code>, which uses an <b>Event Loop</b> to manage tasks concurrently without the overhead of multiple processes.</p>
+
+            <h3 class="section-head">3. Meta-Programming & Design Patterns</h3>
+            <p class="body-text">We implement <b>Singleton</b> patterns for database connections and <b>Factory</b> patterns for model instantiation. Understanding <b>Metaclasses</b> allows you to control class creation, enabling the development of robust internal APIs and frameworks that enforce strict data validation before the code even runs.</p>
+            
+            <button class="btn-premium" onclick="completeModule()">Unlock Module 02 <i class="fas fa-lock-open"></i></button>
+        `
+    },
+    {
+        title: "Module 02: Advanced Data Wrangling",
+        content: `
+            <span class="module-tag">Data Engineering</span>
+            <h2 class="mod-title">Petabyte-Scale Wrangling with Pandas 2.0 & PyArrow</h2>
+            <p class="body-text">Wrangling is where 80% of data science happens. In this module, we move beyond basic manipulation into <b>Vectorized Operations</b> and <b>Columnar Memory</b> storage architectures.</p>
+            
+            <h3 class="section-head">1. The PyArrow Columnar Format</h3>
+            <p class="body-text">Traditional dataframes store data in rows, which is inefficient for analytical queries. <b>Apache Arrow</b> is a cross-language development platform for in-memory data. It specifies a standardized language-independent columnar memory format for hierarchical data, organized for efficient analytical operations on modern hardware like CPUs and GPUs.</p>
+
+            
+
+            <h3 class="section-head">2. Vectorization: Eliminating Python Loops</h3>
+            <p class="body-text">The secret to high-speed data processing is <b>Vectorization</b>. By using NumPy and Pandas vectorized functions, you push calculations down to highly optimized C and Fortran code. This allows you to perform operations on millions of rows in milliseconds, where a standard <code>for-loop</code> would take minutes.</p>
+
+            <pre>
+# Senior Level Vectorization
+df['log_income'] = np.log1p(df['income']) # Optimized C-level execution
+# Junior Level (Avoid this!)
+df['log_income'] = df['income'].apply(lambda x: math.log(x + 1))
+            </pre>
+
+            <h3 class="section-head">3. Time-Series Windowing & Resampling</h3>
+            <p class="body-text">Financial and sensor data require sophisticated temporal handling. We master <b>Rolling Windows</b>, <b>Exponentially Weighted Moving Averages (EWMA)</b>, and <b>Upsampling</b> with interpolation to handle irregular data frequencies in production environments.</p>
+            
+            <button class="btn-premium" onclick="completeModule()">Unlock Module 03 <i class="fas fa-lock-open"></i></button>
+        `
+    },
+    {
+        title: "Module 03: Inferential Statistics",
+        content: `
+            <span class="module-tag">Mathematical Foundations</span>
+            <h2 class="mod-title">Statistical Rigor & Bayesian Inference</h2>
+            <p class="body-text">Statistics is the language of uncertainty. Elite scientists don't just report averages; they report <b>Confidence Intervals</b> and <b>Statistical Power</b>.</p>
+            
+            <h3 class="section-head">1. The Central Limit Theorem (CLT) & Distribution Analysis</h3>
+            <p class="body-text">The CLT states that the sampling distribution of the mean will always be normally distributed, regardless of the population distribution, given a sufficiently large sample size. This is the foundation for <b>Hypothesis Testing</b> and <b>Z-Tests</b>.</p>
+
+            
+
+            <h3 class="section-head">2. A/B Testing & P-Value Interpretation</h3>
+            <p class="body-text">Learn to design robust experiments. We cover <b>Power Analysis</b> (to determine sample size), <b>Significance Levels (Alpha)</b>, and <b>P-Hacking</b> prevention. You will learn to calculate the <b>Minimum Detectable Effect (MDE)</b> to ensure your tests are business-relevant.</p>
+
+            <h3 class="section-head">3. Bayesian vs. Frequentist Probability</h3>
+            <p class="body-text">Frequentists look at the long-run frequency of events. Bayesians update the probability of a hypothesis as more evidence becomes available. We explore <b>Bayes' Theorem</b> and its application in real-time fraud detection systems.</p>
+            
+            <button class="btn-premium" onclick="completeModule()">Unlock Module 04 <i class="fas fa-lock-open"></i></button>
+        `
+    },
+    {
+        title: "Module 04: Supervised Learning (Regression)",
+        content: `
+            <span class="module-tag">Predictive Modeling</span>
+            <h2 class="mod-title">Linear Systems, Cost Functions & Regularization</h2>
+            <p class="body-text">Regression is more than drawing a line. It is about minimizing a <b>Cost Function</b> (MSE) using <b>Gradient Descent</b>.</p>
+            
+            <h3 class="section-head">1. The Math of Ordinary Least Squares (OLS)</h3>
+            <p class="body-text">We derive the normal equation and understand the geometric interpretation of regression. We also address <b>Multicollinearity</b> and its impact on coefficient interpretability.</p>
+
+            <h3 class="section-head">2. Bias-Variance Tradeoff & Overfitting</h3>
+            <p class="body-text">A high-variance model fits the noise in the data. A high-bias model ignores the signal. We use <b>L1 (Lasso)</b> and <b>L2 (Ridge)</b> regularization to penalize large weights, forcing the model to simplify and generalize.</p>
+
+            
+
+            <h3 class="section-head">3. Advanced Metrics</h3>
+            <p class="body-text">Moving beyond R-Squared. We analyze <b>Adjusted R-Squared</b>, <b>AIC/BIC</b> for model selection, and <b>Residual Plots</b> to check for heteroscedasticity, ensuring our model assumptions hold true.</p>
+            
+            <button class="btn-premium" onclick="completeModule()">Unlock Module 05 <i class="fas fa-lock-open"></i></button>
+        `
+    },
+    {
+        title: "Module 05: Gradient Boosting Machines",
+        content: `
+            <span class="module-tag">SOTA Algorithms</span>
+            <h2 class="mod-title">XGBoost, LightGBM, and Hyperparameter Optimization</h2>
+            <p class="body-text">Boosting is the dominant paradigm for tabular data. We explore the evolution from Decision Trees to <b>Gradient Boosted Decision Trees (GBDT)</b>.</p>
+            
+            <h3 class="section-head">1. The Boosting Mechanism</h3>
+            <p class="body-text">Unlike Random Forest (which uses Bagging), Boosting is sequential. Each tree is trained to predict the <b>Residual Errors</b> of the previous ensemble. We dive into <b>Learning Rates</b> and <b>Tree Shrinkage</b>.</p>
+
+            <h3 class="section-head">2. Feature Importance & SHAP Values</h3>
+            <p class="body-text">Black-box models are useless in regulated industries. We use <b>SHAP (SHapley Additive exPlanations)</b> values, based on cooperative game theory, to explain exactly how much each feature contributed to a specific prediction.</p>
+
+            <h3 class="section-head">3. Automated Tuning with Optuna</h3>
+            <p class="body-text">Forget manual tuning. We implement <b>Bayesian Optimization</b> using Optuna to efficiently search the hyperparameter space (max_depth, subsample, colsample_bytree) to find the global minimum of our loss function.</p>
+            
+            <button class="btn-premium" onclick="completeModule()">Unlock Module 06 <i class="fas fa-lock-open"></i></button>
+        `
+    },
+    {
+        title: "Module 06: Dimensionality Reduction",
+        content: `
+            <span class="module-tag">Unsupervised Learning</span>
+            <h2 class="mod-title">PCA, t-SNE, and Manifold Learning</h2>
+            <p class="body-text">High-dimensional data suffers from the <b>Curse of Dimensionality</b>. As features increase, data points become sparse, and distance metrics fail.</p>
+            
+            <h3 class="section-head">1. Principal Component Analysis (PCA)</h3>
+            <p class="body-text">We use linear algebra (Eigenvalues and Eigenvectors) to project data into a lower-dimensional space while retaining the maximum <b>Explained Variance</b>. This is critical for noise reduction and data visualization.</p>
+
+            
+
+            <h3 class="section-head">2. Nonlinear Embedding: t-SNE & UMAP</h3>
+            <p class="body-text">PCA is linear. For complex, manifold structures, we use <b>t-SNE</b> or <b>UMAP</b>. These algorithms preserve local neighborhoods, allowing us to visualize clusters in 2D or 3D that are invisible in the original 100D space.</p>
+            
+            <button class="btn-premium" onclick="completeModule()">Unlock Module 07 <i class="fas fa-lock-open"></i></button>
+        `
+    },
+    {
+        title: "Module 07: Deep Learning & Neural Networks",
+        content: `
+            <span class="module-tag">Artificial Intelligence</span>
+            <h2 class="mod-title">Backpropagation & Computational Graphs</h2>
+            <p class="body-text">Understand the "Engine" of AI. We build a neural network from scratch to understand the <b>Chain Rule</b> of calculus.</p>
+            
+            <h3 class="section-head">1. Activation Functions & Vanishing Gradients</h3>
+            <p class="body-text">We compare Sigmoid, Tanh, and <b>ReLU</b>. You will learn why ReLU became the standard for deep networks and how it prevents the gradient from disappearing during backpropagation.</p>
+
+            <h3 class="section-head">2. Optimizer Architectures</h3>
+            <p class="body-text">Moving beyond simple Stochastic Gradient Descent (SGD). We analyze <b>Adam (Adaptive Moment Estimation)</b>, RMSprop, and Momentum-based optimizers that adjust the learning rate dynamically for each parameter.</p>
+            
+            <button class="btn-premium" onclick="completeModule()">Unlock Module 08 <i class="fas fa-lock-open"></i></button>
+        `
+    },
+    {
+        title: "Module 08: Natural Language Processing (NLP)",
+        content: `
+            <span class="module-tag">Language Modeling</span>
+            <h2 class="mod-title">The Transformer Revolution & LLMs</h2>
+            <p class="body-text">Language is context. We transition from simple Word Embeddings to the <b>Self-Attention mechanism</b> that powers GPT-4.</p>
+            
+            <h3 class="section-head">1. Attention is All You Need</h3>
+            <p class="body-text">Learn how Transformers process entire sequences in parallel, unlike RNNs. We dive into <b>Multi-Head Attention</b>, <b>Positional Encoding</b>, and <b>Layer Normalization</b>.</p>
+
+            
+
+            <h3 class="section-head">2. Fine-Tuning & Prompt Engineering</h3>
+            <p class="body-text">Learn to adapt pre-trained models (BERT, RoBERTa, T5) for specific business tasks like Sentiment Analysis or Named Entity Recognition (NER) using <b>Transfer Learning</b>.</p>
+            
+            <button class="btn-premium" onclick="completeModule()">Unlock Module 09 <i class="fas fa-lock-open"></i></button>
+        `
+    },
+    {
+        title: "Module 09: Computer Vision",
+        content: `
+            <span class="module-tag">Visual Perception</span>
+            <h2 class="mod-title">Convolutional Neural Networks (CNNs)</h2>
+            <p class="body-text">Computers see pixels, but we need them to see objects. We study how <b>Convolutional Layers</b> act as automated feature extractors.</p>
+            
+            <h3 class="section-head">1. Kernels, Stride, and Padding</h3>
+            <p class="body-text">Understand the mathematics of the convolution operation. We explore how different filters can detect horizontal edges, vertical edges, and complex textures.</p>
+
+            
+
+            <h3 class="section-head">2. SOTA Architectures: ResNet & EfficientNet</h3>
+            <p class="body-text">We study <b>Residual Connections</b> which allow us to train networks with hundreds of layers without losing the gradient signal.</p>
+            
+            <button class="btn-premium" onclick="completeModule()">Unlock Module 10 <i class="fas fa-lock-open"></i></button>
+        `
+    },
+    {
+        title: "Module 10: MLOps & Production Engineering",
+        content: `
+            <span class="module-tag">Deployment & ROI</span>
+            <h2 class="mod-title">Model Serving, CI/CD, and Monitoring</h2>
+            <p class="body-text">The final step is turning a model into a <b>Product</b>. This is the difference between a data scientist and an ML Engineer.</p>
+            
+            <h3 class="section-head">1. API Development with FastAPI</h3>
+            <p class="body-text">We build high-performance, asynchronous APIs to serve model predictions. We implement <b>Pydantic</b> for strict data validation at the entry point.</p>
+
+            <h3 class="section-head">2. Containerization with Docker</h3>
+            <p class="body-text">Learn to wrap your entire environment—OS, Python version, Libraries—into a single <b>Docker Image</b>. This ensures "it works on my machine" means "it works in production."</p>
+
+            <h3 class="section-head">3. Model Drift & Monitoring</h3>
+            <p class="body-text">Models decay over time as the world changes. We implement monitoring for <b>Concept Drift</b> and <b>Data Drift</b>, triggering automated retraining pipelines when performance falls below a threshold.</p>
+            
+            <button class="btn-premium" onclick="completeModule()">Generate Final Credential <i class="fas fa-certificate"></i></button>
+        `
+    }
+];
+
+        function toggleSidebar() {
+            document.getElementById('toc').classList.toggle('active');
+            document.querySelector('.sidebar-overlay').classList.toggle('active');
+        }
+
+        function startCourse() {
+            studentName = document.getElementById('user-name').value;
+            if(!studentName) return alert("Please enter your name.");
+            document.getElementById('enroll-screen').classList.add('hidden');
+            document.getElementById('course-ui').classList.remove('hidden');
+            renderTOC();
+            loadModule(0);
+        }
+
+        function renderTOC() {
+            const toc = document.getElementById('toc');
+            let html = `<div class="curriculum-title">Your Progress</div>`;
+            
+            syllabus.forEach((mod, i) => {
+                const isLocked = i > maxUnlocked;
+                const isActive = i === currentModule;
+                const isDone = i < maxUnlocked;
+
+                html += `
+                    <div class="module-item ${isActive ? 'active' : ''} ${isLocked ? 'locked' : ''}" 
+                         onclick="${!isLocked ? `loadModule(${i})` : ''}">
+                        <i class="fas ${isDone ? 'fa-check-circle' : (isActive ? 'fa-play-circle' : 'fa-lock')}"></i>
+                        ${mod.title}
+                    </div>
+                `;
+            });
+            toc.innerHTML = html;
+            
+            // Update progress text
+            const progress = Math.round((maxUnlocked / (syllabus.length - 1)) * 100);
+            document.getElementById('prog-stat').innerText = `${progress}% COMPLETE`;
+        }
+
+        function loadModule(idx) {
+            currentModule = idx;
+            document.getElementById('main-content').innerHTML = syllabus[idx].content;
+            renderTOC();
+            if(window.innerWidth < 768) {
+                document.getElementById('toc').classList.remove('active');
+                document.querySelector('.sidebar-overlay').classList.remove('active');
+            }
+            window.scrollTo(0,0);
+        }
+
+        function completeModule() {
+            if (currentModule === maxUnlocked && maxUnlocked < syllabus.length - 1) {
+                maxUnlocked++;
+            }
+            if (currentModule < syllabus.length - 1) {
+                loadModule(currentModule + 1);
+            } else {
+                alert("Course Complete! Generate your certificate.");
+            }
+        }
+    </script>
+</body>
+</html>
