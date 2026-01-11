@@ -1,93 +1,2324 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Internadda | Under Maintenance</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Python Essentials | Internadda Elite - Master Software Engineering</title>
+    <meta name="title" content="Python Essentials | Internadda Elite - Master Software Engineering">
+    <meta name="description" content="Advance from coder to system-level Python engineer. Master CPython, memory management, and industrial design patterns with Internadda Elite.">
+    <meta name="keywords" content="Python Essentials, Internadda Elite, Python Engineering, CPython, Software Design Patterns, Backend Development, Internadda Courses">
+    <meta name="author" content="Internadda">
+    <meta name="robots" content="index, follow">
 
-<style>
-    * {
-        box-sizing: border-box;
-    }
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://internadda.com/courses/python-essentials">
+    <meta property="og:title" content="Python Essentials | Internadda Elite">
+    <meta property="og:description" content="Master high-performance Python and industry-scale software architecture. Enroll in the Internadda Elite proctored curriculum.">
+    <meta property="og:image" content="https://internadda.com/images/Python-Essentials-for-All.png">
 
-    body {
-        margin: 0;
-        padding: 0;
-        height: 100vh;
-        background: #f8fafc;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        color: #1f2937;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://internadda.com/courses/python-essentials">
+    <meta property="twitter:title" content="Python Essentials | Internadda Elite">
+    <meta property="twitter:description" content="Advance your career with Elite Python Engineering. Master memory management and scaling.">
+    <meta property="twitter:image" content="https://internadda.com/images/Python-Essentials-for-All.png">
 
-    .maintenance-container {
-        background: #ffffff;
-        max-width: 520px;
-        width: 90%;
-        padding: 50px 40px;
-        text-align: center;
-        border-radius: 10px;
-        border: 1px solid #e5e7eb;
-    }
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="../images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon-16x16.png">
 
-    .brand {
-        font-size: 26px;
-        font-weight: 700;
-        letter-spacing: 1px;
-        color: #1e40af;
-        margin-bottom: 25px;
-    }
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    h1 {
-        font-size: 28px;
-        margin-bottom: 15px;
-        font-weight: 600;
-    }
+    <style>
+        
+        :root {
+            --primary: #4338ca; 
+            --primary-hover: #3730a3;
+            --dark-bg: #0f172a;
+            --text-main: #1a202c;
+            --text-light: #64748b;
+            --white: #ffffff;
+            --border: #e2e8f0;
+        }
 
-    p {
-        font-size: 15px;
-        line-height: 1.7;
-        color: #4b5563;
-        margin-bottom: 30px;
-    }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8faff; color: var(--text-main); line-height: 1.6; }
 
-    .divider {
-        width: 60px;
-        height: 3px;
-        background: #1e40af;
-        margin: 0 auto 25px;
-        border-radius: 3px;
-    }
+        header { 
+            background: var(--white); 
+            border-bottom: 1px solid var(--border); 
+            position: sticky; top: 0; z-index: 1000; padding: 15px 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .nav-container { display: flex; align-items: center; justify-content: space-between; max-width: 1400px; margin: 0 auto; }
+        .logo-box { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-box img { height: 35px; border-radius: 6px; }
+        .logo-text { font-weight: 800; font-size: 1.3rem; color: #1a202c; letter-spacing: -0.5px; }
+        .logo-text span { color: var(--primary); }
 
-    .footer-text {
-        font-size: 13px;
-        color: #6b7280;
-        margin-top: 10px;
-    }
-</style>
+        .sidebar {
+            position: fixed; top: 0; left: -320px; width: 300px; height: 100vh;
+            background: var(--dark-bg); z-index: 1100; padding: 30px 20px;
+            transition: 0.4s ease; color: white;
+            overflow-y: auto;
+        }
+        .sidebar.active { left: 0; }
+        .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1050; display: none; }
+        .sidebar-overlay.active { display: block; }
+        
+        .module-item { 
+            padding: 14px; border-radius: 10px; margin-bottom: 8px; cursor: pointer; 
+            display: flex; align-items: center; gap: 12px; font-size: 0.9rem; transition: 0.2s;
+        }
+        .module-item.active { background: var(--primary); color: white; }
+        .module-item.locked { opacity: 0.4; cursor: not-allowed; }
+
+        .main-layout { padding: 40px 20px; display: flex; justify-content: center; }
+        .content-card { 
+            background: white; border-radius: 20px; padding: 60px; 
+            max-width: 900px; width: 100%; border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+
+        .module-tag { color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1.5px; margin-bottom: 15px; display: block; }
+        .mod-title { font-size: 2.2rem; font-weight: 800; color: var(--dark-bg); margin-bottom: 25px; }
+        .section-head { font-size: 1.4rem; margin: 30px 0 15px; color: var(--primary); font-weight: 700; }
+        .pro-note { background: #f0f4ff; border-left: 4px solid var(--primary); padding: 20px; border-radius: 8px; margin: 20px 0; font-style: italic; }
+        pre { background: #1e293b; color: #e2e8f0; padding: 20px; border-radius: 10px; margin: 20px 0; overflow-x: auto; }
+
+        .btn-primary, .btn-premium { 
+            background: var(--primary); color: white; padding: 16px 35px; border-radius: 12px;
+            border: none; font-weight: 700; cursor: pointer; transition: 0.3s;
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+        .btn-primary:hover, .btn-premium:hover { background: var(--primary-hover); transform: translateY(-2px); }
+
+        .input-group { margin: 30px auto; text-align: left; max-width: 400px; }
+        .input-premium { width: 100%; padding: 15px; border: 2px solid var(--border); border-radius: 10px; font-size: 1rem; }
+        .hidden { display: none !important; }
+
+        /* Container to prevent layout shift */
+        #main-content {
+            transition: opacity 0.3s ease;
+            will-change: transform, opacity;
+        }
+
+        /* The Professional Reveal Animation */
+        @keyframes moduleReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) scale(0.98);
+                filter: blur(5px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        .module-reveal-active {
+            animation: moduleReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        /* New Module Unlock Animation */
+        @keyframes slideUpFade {
+            0% {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .module-animate {
+            animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="maintenance-container">
-    <div class="brand">Internadda</div>
+    <header>
+        <div class="nav-container">
+            <button style="background:none; border:none; cursor:pointer; font-size:1.4rem;" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            <a href="#" class="logo-box">
+                <img src="https://internadda.com/images/logo.jpg" alt="Logo">
+                <span class="logo-text">Intern<span>adda</span>
+            </a>
+            <div id="prog-stat" style="color:var(--primary); font-weight:700;">0% COMPLETE</div>
+        </div>
+    </header>
 
-    <h1>Under Maintenance</h1>
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <aside class="sidebar" id="toc"></aside>
 
-    <div class="divider"></div>
-
-    <p>
-        We are currently performing scheduled maintenance to improve your experience.
-        <br><br>
-        Internadda will be back soon. Thank you for your patience and for visiting.
-    </p>
-
-    <div class="footer-text">
-        © 2026 Internadda. All rights reserved.
+    <div id="welcome-screen" style="text-align: center; padding: 100px 20px;">
+        <h1 class="hero-title">Master Software Engineering with <br><span style="color:var(--primary)">Elite Python Essentials</span></h1>
+        <p class="body-text" style="max-width:700px; margin: 20px auto 40px;">Move beyond basic scripts. Master CPython architecture, advanced concurrency, and production-grade software patterns.</p>
+        <button class="btn-primary" onclick="enrollUser()">Start Learning Now <i class="fas fa-arrow-right"></i></button>
     </div>
-</div>
 
+    <div id="course-ui" class="hidden">
+        <main class="main-layout">
+            <div id="main-content" class="content-card"></div>
+        </main>
+    </div>
+
+    <div id="final-screen" class="hidden" style="text-align: center; padding: 100px 20px;">
+        <h2 class="section-title">Claim Your Python Credential</h2>
+        <p class="body-text">Congratulations on mastering the Internadda Elite Python Engineering Track.</p>
+        <div class="input-group">
+            <input type="text" id="cert-name" class="input-premium" placeholder="Enter Full Name for Certificate">
+        </div>
+        <button class="btn-primary" onclick="generateCredential()">Generate Certificate <i class="fas fa-award"></i></button>
+    </div>
+
+    <script>
+        let maxUnlocked = 0;
+        let currentModule = 0;
+
+const syllabus = [
+{
+    title: "Module 01: The Python Virtual Machine",
+    content: `
+        <span class="module-tag">System Architecture</span>
+        <h2 class="mod-title">CPython Internals & Memory Management</h2>
+
+        <p class="body-text">
+            Welcome to the first module of <b>Elite Python Essentials</b>. Here, we go far beyond writing scripts — 
+            we explore how Python works under the hood. You will gain a deep understanding of how code is executed, 
+            how memory is allocated and managed, and why certain performance bottlenecks exist. 
+            By the end of this module, you will be able to write Python code like a <b>system-level engineer</b>.
+        </p>
+
+        <div class="pro-note">
+            <b>Execution Flow Overview:</b>
+            <ul>
+                <li><b>Source Code (.py)</b> → Python Compiler → <b>Bytecode (.pyc)</b></li>
+                <li><b>Python Virtual Machine (PVM)</b> executes bytecode on a stack-based interpreter</li>
+                <li>Runtime memory management with objects stored on the private heap</li>
+                <li>Interaction with underlying C APIs for optimized performance</li>
+            </ul>
+        </div>
+
+        <h3 class="section-head">1. Understanding the Global Interpreter Lock (GIL)</h3>
+        <p class="body-text">
+            Python threads are not true OS threads due to the <b>Global Interpreter Lock (GIL)</b>. 
+            The GIL is a mutex that protects access to Python objects, ensuring only one thread executes Python bytecode at a time. 
+            This design simplifies memory management and prevents race conditions in CPython, 
+            but it has implications:
+        </p>
+        <ul>
+            <li><b>Pros:</b> Thread-safe memory access without complex locking mechanisms.</li>
+            <li><b>Cons:</b> CPU-bound multithreading cannot utilize multiple cores effectively.</li>
+        </ul>
+
+        <p class="body-text">
+            <b>Example:</b> Using threading for CPU-intensive tasks may not speed up your program:
+        </p>
+        <pre>
+import threading
+
+def compute():
+    total = 0
+    for i in range(10**7):
+        total += i
+    return total
+
+threads = []
+for _ in range(4):
+    t = threading.Thread(target=compute)
+    threads.append(t)
+    t.start()
+for t in threads:
+    t.join()
+        </pre>
+        <p class="body-text">
+            Even with 4 threads, the execution time remains similar to a single thread due to the GIL. 
+            For CPU-bound tasks, <code>multiprocessing</code> is recommended.
+        </p>
+
+        <h3 class="section-head">2. Memory Management in Python</h3>
+        <p class="body-text">
+            Python abstracts memory allocation with a <b>private heap</b> and automated garbage collection. 
+            Every object, variable, and data structure resides in this heap, allowing Python to manage memory without user intervention.
+        </p>
+
+        <h4 class="subsection-head">2.1 Reference Counting</h4>
+        <p class="body-text">
+            Python primarily uses <b>reference counting</b>. Each object has a counter of references pointing to it:
+        </p>
+        <ul>
+            <li>When a new reference is created → counter += 1</li>
+            <li>When a reference goes out of scope → counter -= 1</li>
+            <li>When counter reaches 0 → object is deallocated</li>
+        </ul>
+        <p class="body-text">
+            <b>Example:</b>
+        </p>
+        <pre>
+a = [1, 2, 3]  # reference count = 1
+b = a          # reference count = 2
+del a          # reference count = 1
+del b          # reference count = 0 → object deleted
+        </pre>
+
+        <h4 class="subsection-head">2.2 Generational Garbage Collector</h4>
+        <p class="body-text">
+            Circular references (objects referencing each other) cannot be freed by reference counting alone. 
+            Python uses a <b>generational garbage collector</b>:
+        </p>
+        <ul>
+            <li><b>Generation 0:</b> Newly created objects, collected frequently</li>
+            <li><b>Generation 1:</b> Objects surviving one collection cycle</li>
+            <li><b>Generation 2:</b> Long-lived objects, collected rarely</li>
+        </ul>
+        <p class="body-text">
+            This optimizes performance by focusing on short-lived objects, which are most common in typical Python programs.
+        </p>
+
+        <div class="pro-note">
+            <b>Pro Tip:</b> Use the <code>gc</code> module to inspect garbage collection and detect circular references in production.
+        </div>
+
+        <h3 class="section-head">3. Python Bytecode & Execution</h3>
+        <p class="body-text">
+            Python source code (.py) is compiled into <b>bytecode</b>, a platform-independent set of instructions. 
+            The <b>Python Virtual Machine (PVM)</b> executes this bytecode using a stack-based interpreter.
+        </p>
+
+        <h4 class="subsection-head">3.1 Disassembling Bytecode</h4>
+        <p class="body-text">
+            The <code>dis</code> module allows you to see Python bytecode:
+        </p>
+        <pre>
+import dis
+
+def add(a, b):
+    return a + b
+
+dis.dis(add)
+        </pre>
+        <p class="body-text">
+            You will see instructions like <code>LOAD_FAST</code>, <code>BINARY_ADD</code>, and <code>RETURN_VALUE</code>. 
+            Understanding bytecode helps optimize code and debug low-level behavior.
+        </p>
+
+        <h3 class="section-head">4. Optimizing Python Memory Usage</h3>
+        <p class="body-text">
+            Python is flexible but not always memory-efficient. Senior engineers use advanced techniques:
+        </p>
+        <ul>
+            <li><b>__slots__:</b> Fix the set of attributes in classes to reduce memory by avoiding dictionaries per instance.</li>
+            <li><b>Generator Expressions:</b> Process data lazily instead of creating large lists in memory.</li>
+            <li><b>Interning Strings:</b> Use <code>sys.intern()</code> for repeated strings to save memory.</li>
+        </ul>
+
+        <h4 class="subsection-head">4.1 Example: Using __slots__</h4>
+        <pre>
+class Point:
+    __slots__ = ('x', 'y')  # restrict attributes
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+p = Point(1, 2)
+        </pre>
+
+        <h3 class="section-head">5. Profiling & Debugging Memory</h3>
+        <p class="body-text">
+            Learn to detect leaks and optimize:
+        </p>
+        <ul>
+            <li><b>sys.getsizeof():</b> Check memory usage of objects</li>
+            <li><b>tracemalloc:</b> Track memory allocation over time</li>
+            <li><b>objgraph:</b> Visualize object references and detect leaks</li>
+        </ul>
+
+        <h3 class="section-head">6. Putting it All Together</h3>
+        <p class="body-text">
+            By understanding:
+        </p>
+        <ul>
+            <li>The GIL and its impact on multithreading</li>
+            <li>Reference counting & garbage collection</li>
+            <li>Bytecode execution & memory management</li>
+        </ul>
+        <p class="body-text">
+            You can now write Python programs that are memory-efficient, faster, and scalable for enterprise-grade systems.
+        </p>
+
+        <div class="pro-note">
+            <b>Next Steps:</b> In Module 02, we explore Python Data Structures in depth, including lists, dictionaries, sets, tuples, and performance implications in large-scale software systems.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">Unlock Module 02 <i class="fas fa-lock-open"></i></button>
+    `
+},
+
+
+{
+    title: "Module 02: Advanced Python Data Structures",
+    content: `
+        <span class="module-tag">Core Foundations</span>
+        <h2 class="mod-title">Lists, Tuples, Sets, Dictionaries & Performance Optimization</h2>
+
+        <p class="body-text">
+            In this module, we explore Python's core data structures at an advanced level. 
+            Choosing the right data structure is key to building high-performance, maintainable software. 
+            We cover internal implementations, memory efficiency, and complexity considerations.
+        </p>
+
+        <div class="pro-note">
+            <b>Pro Tip:</b> Knowing how Python structures data internally will help you write code that scales to millions of records in production.
+        </div>
+
+        <h3 class="section-head">1. Lists: Dynamic Arrays</h3>
+        <p class="body-text">
+            Python lists are dynamic arrays — they grow and shrink as needed. Internally, lists store pointers to objects on the heap. 
+            Adding elements may trigger a resize, which involves allocating a new block of memory and copying existing elements.
+        </p>
+
+        <h4 class="subsection-head">1.1 List Operations & Time Complexity</h4>
+        <table>
+            <tr><th>Operation</th><th>Average Case</th><th>Worst Case</th></tr>
+            <tr><td>Indexing</td><td>O(1)</td><td>O(1)</td></tr>
+            <tr><td>Append</td><td>O(1) amortized</td><td>O(n) on resize</td></tr>
+            <tr><td>Insert/Delete</td><td>O(n)</td><td>O(n)</td></tr>
+            <tr><td>Search (in)</td><td>O(n)</td><td>O(n)</td></tr>
+        </table>
+
+        <h4 class="subsection-head">1.2 Examples</h4>
+        <pre>
+# Creating a list
+fruits = ['apple', 'banana', 'cherry']
+
+# Appending elements
+fruits.append('date')
+
+# Inserting elements
+fruits.insert(1, 'blueberry')
+
+# Removing elements
+fruits.remove('banana')
+
+# Accessing elements
+print(fruits[2])
+        </pre>
+
+        <h4 class="subsection-head">1.3 Memory Insights</h4>
+        <p class="body-text">
+            Each list has over-allocated space to minimize resizes. For memory-critical applications, consider <b>array.array</b> for homogeneous data.
+        </p>
+
+        <h3 class="section-head">2. Tuples: Immutable Sequences</h3>
+        <p class="body-text">
+            Tuples are immutable and thus more memory-efficient than lists. Python can cache small tuples, reducing allocation overhead.
+        </p>
+
+        <h4 class="subsection-head">2.1 When to Use Tuples</h4>
+        <ul>
+            <li>Function return multiple values</li>
+            <li>As keys in dictionaries</li>
+            <li>Fixed-size datasets</li>
+        </ul>
+
+        <h4 class="subsection-head">2.2 Examples</h4>
+        <pre>
+# Tuple creation
+point = (10, 20)
+
+# Accessing values
+x, y = point
+
+# Using tuple as dictionary key
+locations = { (0,0): 'origin', (1,2): 'point A' }
+        </pre>
+
+        <h3 class="section-head">3. Sets: Unordered Collections</h3>
+        <p class="body-text">
+            Sets are unordered collections of unique elements implemented using hash tables. 
+            Membership testing is O(1) on average.
+        </p>
+
+        <h4 class="subsection-head">3.1 Common Set Operations</h4>
+        <ul>
+            <li>Union: <code>a | b</code></li>
+            <li>Intersection: <code>a & b</code></li>
+            <li>Difference: <code>a - b</code></li>
+            <li>Symmetric Difference: <code>a ^ b</code></li>
+        </ul>
+
+        <h4 class="subsection-head">3.2 Examples</h4>
+        <pre>
+a = {1, 2, 3}
+b = {3, 4, 5}
+
+print(a | b)  # {1,2,3,4,5}
+print(a & b)  # {3}
+print(a - b)  # {1,2}
+print(a ^ b)  # {1,2,4,5}
+        </pre>
+
+        <h3 class="section-head">4. Dictionaries: Key-Value Storage</h3>
+        <p class="body-text">
+            Dictionaries in Python 3.7+ maintain insertion order and are implemented using hash tables. 
+            Understanding collisions, hash functions, and resizing is critical for high-performance code.
+        </p>
+
+        <h4 class="subsection-head">4.1 Dictionary Operations & Complexity</h4>
+        <table>
+            <tr><th>Operation</th><th>Average Case</th><th>Worst Case</th></tr>
+            <tr><td>Get/Set Item</td><td>O(1)</td><td>O(n)</td></tr>
+            <tr><td>Delete Item</td><td>O(1)</td><td>O(n)</td></tr>
+            <tr><td>Iteration</td><td>O(n)</td><td>O(n)</td></tr>
+        </table>
+
+        <h4 class="subsection-head">4.2 Examples</h4>
+        <pre>
+# Creating a dictionary
+student = {'name':'Alice', 'age':24, 'grade':'A'}
+
+# Accessing values
+print(student['name'])
+
+# Adding key-value pair
+student['id'] = 101
+
+# Iterating
+for key, value in student.items():
+    print(key, value)
+        </pre>
+
+        <h3 class="section-head">5. Nested & Complex Data Structures</h3>
+        <p class="body-text">
+            Combining lists, tuples, sets, and dictionaries allows you to model complex datasets.
+            Example: a database of students with courses and grades.
+        </p>
+
+        <h4 class="subsection-head">5.1 Example</h4>
+        <pre>
+students = [
+    {'name':'Alice', 'courses':{'Math':90, 'Science':85}},
+    {'name':'Bob', 'courses':{'Math':78, 'Science':92}}
+]
+
+# Access Alice's Math score
+print(students[0]['courses']['Math'])
+        </pre>
+
+        <h3 class="section-head">6. Time & Space Complexity Considerations</h3>
+        <p class="body-text">
+            Understanding complexity helps choose the right data structure:
+        </p>
+        <ul>
+            <li>Use lists for ordered sequences</li>
+            <li>Use sets for membership checks</li>
+            <li>Use dictionaries for key-based access</li>
+            <li>Use tuples for fixed, immutable collections</li>
+        </ul>
+
+        <h3 class="section-head">7. Memory Optimization Techniques</h3>
+        <p class="body-text">
+            <ul>
+                <li>Use <b>__slots__</b> in classes to save memory</li>
+                <li>Use generators instead of large lists for iteration</li>
+                <li>Use <b>array.array</b> for homogeneous numeric data</li>
+                <li>Leverage <b>interned strings</b> for repeated keys or labels</li>
+            </ul>
+        </p>
+
+        <h3 class="section-head">8. Practical Examples & Use Cases</h3>
+        <p class="body-text">
+            <b>Example 1: Counting occurrences using dictionaries:</b>
+        </p>
+        <pre>
+words = ['apple', 'banana', 'apple', 'cherry', 'banana']
+counter = {}
+for word in words:
+    counter[word] = counter.get(word, 0) + 1
+
+print(counter)  # {'apple': 2, 'banana': 2, 'cherry': 1}
+        </pre>
+
+        <p class="body-text">
+            <b>Example 2: Removing duplicates using sets:</b>
+        </p>
+        <pre>
+numbers = [1, 2, 3, 2, 4, 1, 5]
+unique_numbers = list(set(numbers))
+print(unique_numbers)  # [1,2,3,4,5]
+        </pre>
+
+        <p class="body-text">
+            <b>Example 3: Nested dictionary for configuration management:</b>
+        </p>
+        <pre>
+config = {
+    'database': {'host':'localhost','port':3306},
+    'logging': {'level':'INFO','file':'app.log'}
+}
+
+print(config['database']['host'])
+        </pre>
+
+        <div class="pro-note">
+            <b>Pro Tip:</b> For enterprise applications, understanding these structures allows you to model data efficiently, reducing memory usage and improving runtime performance.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">Unlock Module 03 <i class="fas fa-lock-open"></i></button>
+    `
+},
+
+{
+    title: "Module 03: Object-Oriented Python Engineering",
+    content: `
+        <span class="module-tag">Software Architecture</span>
+        <h2 class="mod-title">Advanced Classes, Inheritance & Metaprogramming</h2>
+
+        <p class="body-text">
+            In this module, we move beyond procedural Python and explore <b>Object-Oriented Programming (OOP)</b> at an elite level. 
+            Understanding OOP deeply allows you to design robust, reusable, and maintainable systems. 
+            You will learn about classes, inheritance, polymorphism, special methods, and advanced Python features like metaclasses and descriptors.
+        </p>
+
+        <div class="pro-note">
+            <b>Pro Tip:</b> Mastering OOP in Python is essential for writing large-scale software systems and libraries that are used across teams or in production environments.
+        </div>
+
+        <h3 class="section-head">1. Python Classes & Object Internals</h3>
+        <p class="body-text">
+            A Python class is a blueprint for creating objects. Under the hood, each object is a dictionary (<code>__dict__</code>) storing attributes. 
+            Python classes are dynamic — you can add attributes and methods at runtime.
+        </p>
+
+        <h4 class="subsection-head">1.1 Creating a Class</h4>
+        <pre>
+class Employee:
+    def __init__(self, name, salary):
+        self.name = name
+        self.salary = salary
+
+    def work(self):
+        print(f"{self.name} is working.")
+
+emp1 = Employee("Alice", 70000)
+emp1.work()
+        </pre>
+
+        <h4 class="subsection-head">1.2 Object Internals</h4>
+        <p class="body-text">
+            Every object has:
+        </p>
+        <ul>
+            <li><b>__dict__:</b> stores instance attributes</li>
+            <li><b>__class__:</b> reference to its class</li>
+            <li><b>__slots__ (optional):</b> reduces memory by fixing attribute names</li>
+        </ul>
+
+        <h3 class="section-head">2. Inheritance & Polymorphism</h3>
+        <p class="body-text">
+            Inheritance allows a class to reuse code from another class (parent). Polymorphism lets different classes implement the same method in a unique way.
+        </p>
+
+        <h4 class="subsection-head">2.1 Example: Single Inheritance</h4>
+        <pre>
+class Manager(Employee):
+    def __init__(self, name, salary, team_size):
+        super().__init__(name, salary)
+        self.team_size = team_size
+
+    def work(self):
+        print(f"{self.name} is managing a team of {self.team_size} people.")
+
+mgr = Manager("Bob", 120000, 10)
+mgr.work()
+        </pre>
+
+        <h4 class="subsection-head">2.2 Example: Polymorphism</h4>
+        <pre>
+employees = [emp1, mgr]
+for e in employees:
+    e.work()  # Calls respective method based on object type
+        </pre>
+
+        <h3 class="section-head">3. Encapsulation & Property Decorators</h3>
+        <p class="body-text">
+            Encapsulation hides internal state. Use <b>private/protected attributes</b> with <code>_</code> or <code>__</code>, and control access using <code>@property</code>.
+        </p>
+
+        <h4 class="subsection-head">3.1 Example</h4>
+        <pre>
+class Employee:
+    def __init__(self, name, salary):
+        self.__salary = salary  # private
+        self.name = name
+
+    @property
+    def salary(self):
+        return self.__salary
+
+    @salary.setter
+    def salary(self, value):
+        if value < 0:
+            raise ValueError("Salary cannot be negative")
+        self.__salary = value
+
+e = Employee("Alice", 70000)
+print(e.salary)
+e.salary = 80000
+        </pre>
+
+        <h3 class="section-head">4. Special (Dunder) Methods</h3>
+        <p class="body-text">
+            Dunder methods let objects behave like built-in types. They support operators, iteration, and representation.
+        </p>
+
+        <h4 class="subsection-head">4.1 Common Dunder Methods</h4>
+        <ul>
+            <li><code>__str__</code> - string representation</li>
+            <li><code>__repr__</code> - developer-friendly representation</li>
+            <li><code>__add__</code> - operator overloading</li>
+            <li><code>__len__</code> - return object length</li>
+            <li><code>__getitem__</code>, <code>__setitem__</code> - item access</li>
+        </ul>
+
+        <h4 class="subsection-head">4.2 Example: Operator Overloading</h4>
+        <pre>
+class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __add__(self, other):
+        return Vector(self.x + other.x, self.y + other.y)
+
+    def __repr__(self):
+        return f"Vector({self.x}, {self.y})"
+
+v1 = Vector(2, 3)
+v2 = Vector(4, 1)
+print(v1 + v2)  # Vector(6, 4)
+        </pre>
+
+        <h3 class="section-head">5. Metaclasses & Dynamic Class Creation</h3>
+        <p class="body-text">
+            Metaclasses allow you to control class creation. This is powerful for building frameworks or enforcing rules on classes.
+        </p>
+
+        <h4 class="subsection-head">5.1 Example: Logging Class Creation</h4>
+        <pre>
+class Meta(type):
+    def __new__(cls, name, bases, dct):
+        print(f"Creating class {name}")
+        return super().__new__(cls, name, bases, dct)
+
+class Employee(metaclass=Meta):
+    pass
+        </pre>
+
+        <p class="body-text">
+            Output: "Creating class Employee" — The metaclass intercepts creation.
+        </p>
+
+        <h3 class="section-head">6. Descriptors: Controlled Attribute Access</h3>
+        <p class="body-text">
+            Descriptors define how attributes are accessed, set, or deleted. They are used for validation and lazy evaluation.
+        </p>
+
+        <h4 class="subsection-head">6.1 Example</h4>
+        <pre>
+class Positive:
+    def __get__(self, instance, owner):
+        return instance._value
+
+    def __set__(self, instance, value):
+        if value < 0:
+            raise ValueError("Value must be positive")
+        instance._value = value
+
+class Account:
+    balance = Positive()
+
+a = Account()
+a.balance = 100  # OK
+# a.balance = -50  # ValueError
+        </pre>
+
+        <h3 class="section-head">7. Multiple Inheritance & Method Resolution Order (MRO)</h3>
+        <p class="body-text">
+            Python supports multiple inheritance. The MRO determines the order of method resolution.
+        </p>
+
+        <h4 class="subsection-head">7.1 Example</h4>
+        <pre>
+class A:
+    def show(self): print("A")
+class B(A):
+    def show(self): print("B")
+class C(A):
+    def show(self): print("C")
+class D(B, C):
+    pass
+
+d = D()
+d.show()        # B - follows MRO: D -> B -> C -> A
+print(D.__mro__)
+        </pre>
+
+        <h3 class="section-head">8. Memory Optimization for OOP</h3>
+        <ul>
+            <li>Use <b>__slots__</b> to fix attributes and reduce per-object overhead</li>
+            <li>Use <b>weakref</b> for large graphs to avoid reference cycles</li>
+            <li>Avoid storing duplicate immutable objects; consider interning</li>
+        </ul>
+
+        <h3 class="section-head">9. Practical OOP Example</h3>
+        <p class="body-text">
+            Imagine a software system for a company:
+        </p>
+        <pre>
+class Employee:
+    __slots__ = ('name', 'salary')
+    def __init__(self, name, salary):
+        self.name = name
+        self.salary = salary
+
+    def display(self):
+        print(f"{self.name} earns {self.salary}")
+
+class Manager(Employee):
+    __slots__ = ('team_size',)
+    def __init__(self, name, salary, team_size):
+        super().__init__(name, salary)
+        self.team_size = team_size
+
+    def display(self):
+        super().display()
+        print(f"Manages team of {self.team_size}")
+        </pre>
+
+        <h3 class="section-head">10. Key Takeaways</h3>
+        <ul>
+            <li>Understand class internals and memory</li>
+            <li>Use inheritance and polymorphism for reusable code</li>
+            <li>Master encapsulation and property decorators</li>
+            <li>Use dunder methods to integrate with Python features</li>
+            <li>Leverage metaclasses and descriptors for advanced frameworks</li>
+            <li>Optimize memory with __slots__ and weak references</li>
+        </ul>
+
+        <div class="pro-note">
+            <b>Next Steps:</b> In Module 04, we will dive into <b>Functional Programming, Iterators, and Generators</b> to write high-performance, memory-efficient Python pipelines.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">Unlock Module 04 <i class="fas fa-lock-open"></i></button>
+    `
+},
+
+{
+    title: "Module 04: Functional & High-Performance Python",
+    content: `
+        <span class="module-tag">Software Patterns</span>
+        <h2 class="mod-title">Functional Programming, Iterators, Generators & Decorators</h2>
+
+        <p class="body-text">
+            In this module, we elevate Python programming to a high-performance level. 
+            We focus on writing memory-efficient, readable, and maintainable code using <b>functional programming</b>, <b>iterators</b>, <b>generators</b>, and <b>decorators</b>.
+            These are crucial for building large-scale pipelines, data processing systems, and production-grade applications.
+        </p>
+
+        <div class="pro-note">
+            <b>Pro Tip:</b> Functional programming in Python reduces side-effects, improves concurrency potential, and makes testing easier.
+        </div>
+
+        <h3 class="section-head">1. Functional Programming in Python</h3>
+        <p class="body-text">
+            Python supports first-class functions, higher-order functions, and immutability. Functional programming focuses on <b>pure functions</b> that avoid side-effects.
+        </p>
+
+        <h4 class="subsection-head">1.1 Map, Filter, Reduce</h4>
+        <pre>
+from functools import reduce
+
+# Map - apply function to all elements
+nums = [1, 2, 3, 4, 5]
+squared = list(map(lambda x: x**2, nums))
+
+# Filter - select elements based on condition
+even = list(filter(lambda x: x % 2 == 0, nums))
+
+# Reduce - cumulative computation
+sum_total = reduce(lambda x, y: x + y, nums)
+
+print(squared, even, sum_total)
+        </pre>
+
+        <h4 class="subsection-head">1.2 List Comprehensions & Generators</h4>
+        <pre>
+# List comprehension
+squared = [x**2 for x in nums]
+
+# Generator expression (memory efficient)
+squared_gen = (x**2 for x in nums)
+for val in squared_gen:
+    print(val)
+        </pre>
+
+        <h3 class="section-head">2. Iterators & Iterables</h3>
+        <p class="body-text">
+            Iterables are objects you can loop over (lists, sets, dicts). Iterators implement <code>__iter__()</code> and <code>__next__()</code> for sequential access.
+        </p>
+
+        <h4 class="subsection-head">2.1 Creating Custom Iterators</h4>
+        <pre>
+class Countdown:
+    def __init__(self, start):
+        self.current = start
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.current <= 0:
+            raise StopIteration
+        val = self.current
+        self.current -= 1
+        return val
+
+for i in Countdown(5):
+    print(i)
+        </pre>
+
+        <h3 class="section-head">3. Generators for Lazy Evaluation</h3>
+        <p class="body-text">
+            Generators are a memory-efficient way to produce sequences without storing the entire dataset in memory.
+        </p>
+
+        <h4 class="subsection-head">3.1 Generator Functions</h4>
+        <pre>
+def fibonacci(n):
+    a, b = 0, 1
+    for _ in range(n):
+        yield a
+        a, b = b, a + b
+
+for num in fibonacci(10):
+    print(num)
+        </pre>
+
+        <h4 class="subsection-head">3.2 Generator Expressions</h4>
+        <pre>
+nums = [1, 2, 3, 4, 5]
+squared_gen = (x**2 for x in nums)
+for val in squared_gen:
+    print(val)
+        </pre>
+
+        <div class="pro-note">
+            <b>Pro Tip:</b> Use generators for processing huge datasets or streaming data to save memory and improve performance.
+        </div>
+
+        <h3 class="section-head">4. Decorators: Extending Functionality</h3>
+        <p class="body-text">
+            Decorators allow you to wrap functions or classes to add functionality without modifying their source code.
+        </p>
+
+        <h4 class="subsection-head">4.1 Basic Decorator</h4>
+        <pre>
+def timer(func):
+    import time
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(f"{func.__name__} took {end-start:.4f}s")
+        return result
+    return wrapper
+
+@timer
+def compute():
+    sum([i**2 for i in range(1000000)])
+
+compute()
+        </pre>
+
+        <h4 class="subsection-head">4.2 Decorators with Arguments</h4>
+        <pre>
+def repeat(n):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            for _ in range(n):
+                func(*args, **kwargs)
+        return wrapper
+    return decorator
+
+@repeat(3)
+def greet():
+    print("Hello!")
+
+greet()
+        </pre>
+
+        <h3 class="section-head">5. Functional Patterns & Best Practices</h3>
+        <ul>
+            <li>Prefer <b>pure functions</b> with no side effects</li>
+            <li>Use <b>higher-order functions</b> to abstract repeated logic</li>
+            <li>Favor <b>generators</b> for large datasets</li>
+            <li>Use <b>map/filter/reduce</b> instead of loops when possible</li>
+            <li>Combine <b>decorators</b> with logging, caching, and validation</li>
+        </ul>
+
+        <h3 class="section-head">6. Currying & Partial Functions</h3>
+        <p class="body-text">
+            Currying is breaking a function with multiple arguments into a series of single-argument functions. Python provides <code>functools.partial</code> for similar functionality.
+        </p>
+
+        <h4 class="subsection-head">6.1 Example</h4>
+        <pre>
+from functools import partial
+
+def multiply(x, y):
+    return x * y
+
+double = partial(multiply, 2)
+print(double(5))  # 10
+        </pre>
+
+        <h3 class="section-head">7. Exception Handling in Functional Pipelines</h3>
+        <pre>
+def safe_divide(x, y):
+    try:
+        return x / y
+    except ZeroDivisionError:
+        return None
+
+nums = [(10,2), (5,0), (8,4)]
+results = list(map(lambda t: safe_divide(*t), nums))
+print(results)  # [5.0, None, 2.0]
+        </pre>
+
+        <h3 class="section-head">8. Practical Use Cases</h3>
+        <ul>
+            <li>Data pipelines: generators for streaming logs</li>
+            <li>Functional transformations in ETL processes</li>
+            <li>Decorators for caching and memoization</li>
+            <li>Lazy evaluation for large computations in ML preprocessing</li>
+        </ul>
+
+        <h3 class="section-head">9. Performance Optimization Techniques</h3>
+        <ul>
+            <li>Use generator expressions instead of lists</li>
+            <li>Use built-in functions over manual loops</li>
+            <li>Minimize side-effects for easier concurrency</li>
+            <li>Memoize expensive function calls using decorators</li>
+        </ul>
+
+        <div class="pro-note">
+            <b>Pro Tip:</b> Functional programming combined with iterators and generators enables scalable and maintainable Python pipelines for data-intensive applications.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">Unlock Module 05 <i class="fas fa-lock-open"></i></button>
+    `
+},
+
+{
+    title: "Module 05: Advanced Data Processing & Performance Optimization",
+    content: `
+        <span class="module-tag">High-Performance Python</span>
+        <h2 class="mod-title">Multiprocessing, Async IO, and Memory-Efficient Data Handling</h2>
+
+        <p class="body-text">
+            In this module, we focus on **scalable and high-performance data processing in Python**. We explore concurrency using <b>multithreading, multiprocessing, and asynchronous programming</b>. 
+            Additionally, we cover memory-efficient handling of large datasets with <b>NumPy, Pandas, and PyArrow</b>, as well as profiling tools to detect bottlenecks in production systems.
+        </p>
+
+        <div class="pro-note">
+            <b>Pro Tip:</b> Optimizing Python pipelines is not just about writing faster code; it’s about understanding how Python executes, how memory is used, and how I/O operations can be parallelized efficiently.
+        </div>
+
+        <h3 class="section-head">1. Understanding Python Concurrency</h3>
+        <p class="body-text">
+            Python provides multiple ways to achieve concurrency:
+        </p>
+        <ul>
+            <li><b>Threading:</b> For I/O-bound tasks; limited by the Global Interpreter Lock (GIL).</li>
+            <li><b>Multiprocessing:</b> For CPU-bound tasks; bypasses the GIL by using separate memory spaces.</li>
+            <li><b>Async IO:</b> Event-driven concurrency; ideal for thousands of simultaneous I/O operations.</li>
+        </ul>
+
+        <h4 class="subsection-head">1.1 Multithreading Example</h4>
+        <pre>
+import threading
+import time
+
+def fetch_data(id):
+    print(f"Fetching data {id}")
+    time.sleep(1)
+    print(f"Data {id} fetched")
+
+threads = []
+for i in range(5):
+    t = threading.Thread(target=fetch_data, args=(i,))
+    threads.append(t)
+    t.start()
+
+for t in threads:
+    t.join()
+        </pre>
+
+        <p class="body-text">
+            Note: Threading is limited by the GIL for CPU-bound tasks, but it shines in I/O-bound scenarios.
+        </p>
+
+        <h4 class="subsection-head">1.2 Multiprocessing Example</h4>
+        <pre>
+from multiprocessing import Pool
+
+def compute_square(n):
+    return n*n
+
+with Pool(4) as p:
+    results = p.map(compute_square, [1, 2, 3, 4, 5])
+print(results)
+        </pre>
+
+        <p class="body-text">
+            Multiprocessing creates separate processes, each with its own Python interpreter and memory space, making it ideal for CPU-heavy tasks like data transformations, simulations, or ML preprocessing.
+        </p>
+
+        <h3 class="section-head">2. Asynchronous Programming with Asyncio</h3>
+        <p class="body-text">
+            Async IO allows Python to perform thousands of I/O operations concurrently without creating multiple threads or processes. It uses an <b>event loop</b> to schedule coroutines.
+        </p>
+
+        <h4 class="subsection-head">2.1 Basic Async Example</h4>
+        <pre>
+import asyncio
+
+async def fetch_data(id):
+    print(f"Start fetching {id}")
+    await asyncio.sleep(1)
+    print(f"Done fetching {id}")
+
+async def main():
+    tasks = [fetch_data(i) for i in range(5)]
+    await asyncio.gather(*tasks)
+
+asyncio.run(main())
+        </pre>
+
+        <h3 class="section-head">3. Efficient Data Handling with NumPy</h3>
+        <p class="body-text">
+            NumPy arrays provide **vectorized operations** that are orders of magnitude faster than Python loops. They also reduce memory usage compared to lists.
+        </p>
+
+        <h4 class="subsection-head">3.1 Vectorized Operations</h4>
+        <pre>
+import numpy as np
+
+arr = np.arange(1_000_000)
+squared = arr**2  # Fast C-level execution
+        </pre>
+
+        <h4 class="subsection-head">3.2 Memory Views</h4>
+        <p class="body-text">
+            NumPy arrays share memory when slicing, avoiding unnecessary copies.
+        </p>
+        <pre>
+a = np.arange(10)
+b = a[2:5]  # b is a view, not a copy
+b[0] = 99
+print(a)  # [0 1 99 3 4 5 6 7 8 9]
+        </pre>
+
+        <h3 class="section-head">4. Optimizing Pandas Pipelines</h3>
+        <p class="body-text">
+            Pandas is powerful but can consume a lot of memory. Key optimizations include:
+        </p>
+        <ul>
+            <li>Use <b>categorical types</b> for string columns with limited unique values.</li>
+            <li>Use <b>vectorized operations</b> instead of row-wise loops.</li>
+            <li>Chunk large CSVs with <code>chunksize</code> to reduce memory usage.</li>
+            <li>Use <b>PyArrow</b> for columnar, in-memory operations.</li>
+        </ul>
+
+        <h4 class="subsection-head">4.1 Example: Memory Optimization</h4>
+        <pre>
+import pandas as pd
+
+df = pd.read_csv("large.csv", dtype={"category_col": "category"})
+df["new_col"] = df["numeric_col"] * 2  # vectorized
+        </pre>
+
+        <h3 class="section-head">5. Profiling Python Code</h3>
+        <p class="body-text">
+            Profiling helps identify bottlenecks. Python provides <b>cProfile</b>, <b>timeit</b>, and memory profilers.
+        </p>
+
+        <h4 class="subsection-head">5.1 Using timeit</h4>
+        <pre>
+import timeit
+
+code = "sum([i**2 for i in range(1000)])"
+time = timeit.timeit(code, number=1000)
+print(time)
+        </pre>
+
+        <h4 class="subsection-head">5.2 Using cProfile</h4>
+        <pre>
+import cProfile
+
+def compute():
+    sum([i**2 for i in range(1000)])
+
+cProfile.run("compute()")
+        </pre>
+
+        <h3 class="section-head">6. Memory Profiling</h3>
+        <p class="body-text">
+            Detect large memory consumers using <b>memory_profiler</b>.
+        </p>
+
+        <h4 class="subsection-head">6.1 Example</h4>
+        <pre>
+from memory_profiler import profile
+
+@profile
+def load_data():
+    a = [i**2 for i in range(1_000_000)]
+    return a
+
+load_data()
+        </pre>
+
+        <h3 class="section-head">7. Parallelizing Pandas with Dask</h3>
+        <p class="body-text">
+            Dask allows Pandas-like operations on datasets larger than memory with parallel execution.
+        </p>
+
+        <h4 class="subsection-head">7.1 Example</h4>
+        <pre>
+import dask.dataframe as dd
+
+ddf = dd.read_csv("large.csv")
+result = ddf.groupby("category_col").sum().compute()
+        </pre>
+
+        <h3 class="section-head">8. Best Practices for High-Performance Python</h3>
+        <ul>
+            <li>Vectorize operations with NumPy/Pandas instead of Python loops</li>
+            <li>Use generators for streaming large datasets</li>
+            <li>Use async IO for thousands of I/O-bound tasks</li>
+            <li>Use multiprocessing for CPU-bound tasks</li>
+            <li>Profile memory and CPU usage in production pipelines</li>
+            <li>Optimize data types in Pandas (categoricals, floats vs ints)</li>
+            <li>Consider columnar storage like PyArrow or Parquet for big data</li>
+        </ul>
+
+        <h3 class="section-head">9. Real-World Example: ETL Pipeline</h3>
+        <pre>
+import pandas as pd
+import asyncio
+
+async def process_chunk(chunk):
+    chunk["value"] = chunk["value"] * 2
+    return chunk
+
+async def main():
+    for chunk in pd.read_csv("big_data.csv", chunksize=100_000):
+        await process_chunk(chunk)
+
+asyncio.run(main())
+        </pre>
+
+        <div class="pro-note">
+            <b>Pro Tip:</b> Combining async IO, chunked processing, and vectorized operations can process millions of rows efficiently without blowing up memory usage.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">Unlock Module 06 <i class="fas fa-lock-open"></i></button>
+    `
+},
+
+{
+    title: "Module 06: Data Modeling & Dimensionality Reduction",
+    content: `
+        <span class="module-tag">Machine Learning Foundations</span>
+        <h2 class="mod-title">Principal Component Analysis (PCA), t-SNE, UMAP & Feature Engineering</h2>
+
+        <p class="body-text">
+            High-dimensional datasets often suffer from the <b>curse of dimensionality</b>. As the number of features increases, 
+            data points become sparse, distance metrics become less meaningful, and models can overfit easily. 
+            In this module, we explore dimensionality reduction techniques and feature engineering strategies to prepare datasets for high-performance machine learning.
+        </p>
+
+        <div class="pro-note">
+            <b>Pro Tip:</b> Reducing dimensionality helps in visualization, denoising, improving model generalization, and speeding up training.
+        </div>
+
+        <h3 class="section-head">1. Principal Component Analysis (PCA)</h3>
+        <p class="body-text">
+            PCA is a linear dimensionality reduction technique that projects data into a lower-dimensional space while retaining maximum <b>explained variance</b>. 
+            It transforms correlated features into a set of uncorrelated components (principal components).
+        </p>
+
+        <h4 class="subsection-head">1.1 Mathematical Intuition</h4>
+        <ul>
+            <li>Compute the covariance matrix of standardized data.</li>
+            <li>Calculate eigenvalues and eigenvectors.</li>
+            <li>Sort eigenvectors by descending eigenvalues.</li>
+            <li>Project data onto the top k eigenvectors to reduce dimensions.</li>
+        </ul>
+
+        <h4 class="subsection-head">1.2 PCA Example with Python</h4>
+        <pre>
+import numpy as np
+from sklearn.decomposition import PCA
+
+# Sample data (5 features, 10 samples)
+X = np.random.rand(10, 5)
+
+# Initialize PCA to reduce to 2 components
+pca = PCA(n_components=2)
+X_reduced = pca.fit_transform(X)
+
+print("Explained variance ratio:", pca.explained_variance_ratio_)
+print("Reduced data shape:", X_reduced.shape)
+        </pre>
+
+        <h4 class="subsection-head">1.3 Choosing the Number of Components</h4>
+        <p class="body-text">
+            Use the <b>explained variance ratio</b> to select the minimum number of components that retain a desired fraction of variance (e.g., 95%):
+        </p>
+        <pre>
+import matplotlib.pyplot as plt
+
+pca_full = PCA().fit(X)
+plt.plot(np.cumsum(pca_full.explained_variance_ratio_))
+plt.xlabel('Number of components')
+plt.ylabel('Cumulative explained variance')
+plt.show()
+        </pre>
+
+        <h3 class="section-head">2. Nonlinear Dimensionality Reduction: t-SNE & UMAP</h3>
+        <p class="body-text">
+            Linear methods like PCA fail to capture complex, nonlinear relationships in data. 
+            Nonlinear embedding methods such as <b>t-SNE</b> and <b>UMAP</b> preserve local neighborhood structure and are excellent for visualization of clusters.
+        </p>
+
+        <h4 class="subsection-head">2.1 t-SNE Example</h4>
+        <pre>
+from sklearn.manifold import TSNE
+import matplotlib.pyplot as plt
+
+X_embedded = TSNE(n_components=2, perplexity=30, learning_rate=200).fit_transform(X)
+
+plt.scatter(X_embedded[:,0], X_embedded[:,1])
+plt.title("t-SNE Visualization")
+plt.show()
+        </pre>
+
+        <h4 class="subsection-head">2.2 UMAP Example</h4>
+        <pre>
+import umap
+
+X_umap = umap.UMAP(n_neighbors=15, min_dist=0.1).fit_transform(X)
+
+plt.scatter(X_umap[:,0], X_umap[:,1])
+plt.title("UMAP Visualization")
+plt.show()
+        </pre>
+
+        <div class="pro-note">
+            <b>Pro Tip:</b> t-SNE is computationally expensive for very large datasets, whereas UMAP scales better and often preserves global structure.
+        </div>
+
+        <h3 class="section-head">3. Feature Engineering for High-Dimensional Data</h3>
+        <p class="body-text">
+            Transforming raw features into meaningful representations is critical for machine learning. Key techniques include:
+        </p>
+
+        <h4 class="subsection-head">3.1 Scaling & Normalization</h4>
+        <pre>
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+
+scaler = StandardScaler()  # zero mean, unit variance
+X_scaled = scaler.fit_transform(X)
+        </pre>
+
+        <h4 class="subsection-head">3.2 Encoding Categorical Variables</h4>
+        <pre>
+from sklearn.preprocessing import OneHotEncoder
+
+categories = np.array(['A', 'B', 'C', 'A'])
+encoder = OneHotEncoder(sparse=False)
+encoded = encoder.fit_transform(categories.reshape(-1,1))
+print(encoded)
+        </pre>
+
+        <h4 class="subsection-head">3.3 Feature Selection</h4>
+        <p class="body-text">
+            Remove redundant or irrelevant features using:
+        </p>
+        <ul>
+            <li>Variance thresholding</li>
+            <li>Correlation analysis</li>
+            <li>Model-based importance (e.g., tree-based feature importance)</li>
+        </ul>
+
+        <h4 class="subsection-head">3.4 Polynomial & Interaction Features</h4>
+        <pre>
+from sklearn.preprocessing import PolynomialFeatures
+
+poly = PolynomialFeatures(degree=2, interaction_only=True)
+X_poly = poly.fit_transform(X_scaled)
+print(X_poly.shape)
+        </pre>
+
+        <h3 class="section-head">4. Practical Applications</h3>
+        <ul>
+            <li>Visualizing high-dimensional datasets for clustering analysis.</li>
+            <li>Reducing dimensionality to prevent overfitting in regression or classification models.</li>
+            <li>Improving computational efficiency by reducing feature space.</li>
+            <li>Preprocessing for deep learning models to improve convergence speed.</li>
+        </ul>
+
+        <h3 class="section-head">5. Best Practices</h3>
+        <ul>
+            <li>Always scale or normalize features before PCA or distance-based embeddings.</li>
+            <li>Check cumulative explained variance to choose optimal number of components.</li>
+            <li>Use t-SNE/UMAP mainly for visualization, not for feeding into predictive models.</li>
+            <li>Combine PCA + t-SNE/UMAP for very high-dimensional datasets to reduce computational load.</li>
+            <li>Document and store feature transformations for reproducible pipelines.</li>
+        </ul>
+
+        <h3 class="section-head">6. Real-World Example: Dimensionality Reduction Pipeline</h3>
+        <pre>
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+import umap
+import matplotlib.pyplot as plt
+
+# Load dataset
+df = pd.read_csv("dataset.csv")
+features = df.drop("target", axis=1)
+
+# Standardize features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(features)
+
+# Reduce dimensions using PCA
+pca = PCA(n_components=20)
+X_pca = pca.fit_transform(X_scaled)
+
+# Further embed using UMAP
+X_umap = umap.UMAP(n_neighbors=15, min_dist=0.1).fit_transform(X_pca)
+
+plt.scatter(X_umap[:,0], X_umap[:,1], c=df["target"])
+plt.title("Dimensionality Reduction Pipeline")
+plt.show()
+        </pre>
+
+        <div class="pro-note">
+            <b>Pro Tip:</b> Combining PCA for initial linear reduction and UMAP/t-SNE for visualization is standard in industry pipelines for exploratory data analysis and preprocessing.
+        </div>
+
+        <h3 class="section-head">7. Performance Optimization</h3>
+        <ul>
+            <li>Use incremental PCA for extremely large datasets that don't fit in memory.</li>
+            <li>Use sparse matrices if the data contains many zeros to save memory.</li>
+            <li>Reduce feature precision (float32 instead of float64) to cut memory usage by 50%.</li>
+            <li>Use GPU-accelerated libraries (cuML, RAPIDS) for PCA/t-SNE/UMAP on large-scale data.</li>
+        </ul>
+
+        <h3 class="section-head">8. Summary</h3>
+        <ul>
+            <li>PCA: Linear, fast, retains most variance, reduces dimensionality.</li>
+            <li>t-SNE: Nonlinear, preserves local structure, excellent for cluster visualization.</li>
+            <li>UMAP: Nonlinear, scalable, preserves local & global structures.</li>
+            <li>Feature Engineering: Scaling, encoding, interactions, feature selection.</li>
+            <li>Best Practices: Standardization, combination of methods, memory-efficient handling.</li>
+        </ul>
+
+        <button class="btn-premium" onclick="completeModule()">Unlock Module 07 <i class="fas fa-lock-open"></i></button>
+    `
+},
+
+{
+    title: "Module 07: Deep Learning & Neural Networks",
+    content: `
+        <span class="module-tag">Artificial Intelligence</span>
+        <h2 class="mod-title">Backpropagation, Activation Functions & Optimizers</h2>
+
+        <p class="body-text">
+            Deep learning is the cornerstone of modern AI. In this module, we build neural networks from scratch to understand <b>backpropagation</b>, the role of <b>activation functions</b>, and advanced <b>optimization techniques</b>. 
+            By the end, you will know not just how to use libraries like TensorFlow or PyTorch, but why the networks actually learn.
+        </p>
+
+        <div class="pro-note">
+            <b>Pro Tip:</b> Understanding the math behind backpropagation and activation functions is critical to debug, optimize, and design robust networks.
+        </div>
+
+        <h3 class="section-head">1. Neural Network Architecture</h3>
+        <p class="body-text">
+            A neural network is composed of layers of interconnected neurons. The key components are:
+        </p>
+        <ul>
+            <li><b>Input Layer:</b> Receives raw features.</li>
+            <li><b>Hidden Layers:</b> Perform nonlinear transformations to capture patterns.</li>
+            <li><b>Output Layer:</b> Produces predictions (regression, classification, or embeddings).</li>
+            <li><b>Weights & Biases:</b> Parameters learned during training.</li>
+        </ul>
+
+        <h4 class="subsection-head">1.1 Forward Propagation</h4>
+        <p class="body-text">
+            In forward propagation, inputs pass through the network layer by layer:
+        </p>
+        <pre>
+# Single neuron forward pass
+import numpy as np
+
+X = np.array([0.5, 0.3])
+W = np.array([0.4, 0.7])
+b = 0.1
+
+# Linear combination
+Z = np.dot(X, W) + b
+
+# Activation function (sigmoid)
+A = 1 / (1 + np.exp(-Z))
+print(A)
+        </pre>
+
+        <h3 class="section-head">2. Activation Functions & Vanishing Gradients</h3>
+        <p class="body-text">
+            Activation functions introduce nonlinearity. Choosing the right activation is critical for gradient flow and convergence.
+        </p>
+        <ul>
+            <li><b>Sigmoid:</b> Smooth, output between 0-1. Can cause vanishing gradients in deep networks.</li>
+            <li><b>Tanh:</b> Output between -1 and 1. Slightly better gradient behavior than sigmoid.</li>
+            <li><b>ReLU (Rectified Linear Unit):</b> Output = max(0, x). Prevents vanishing gradient, standard for hidden layers.</li>
+            <li><b>Leaky ReLU:</b> Allows small negative slope to avoid "dead neurons".</li>
+        </ul>
+
+        <h4 class="subsection-head">2.1 ReLU Example</h4>
+        <pre>
+def relu(x):
+    return np.maximum(0, x)
+
+X = np.array([-2, -1, 0, 1, 2])
+print(relu(X))
+        </pre>
+
+        <h3 class="section-head">3. Loss Functions</h3>
+        <p class="body-text">
+            The loss function quantifies the difference between predictions and true labels. Common losses include:
+        </p>
+        <ul>
+            <li><b>Mean Squared Error (MSE):</b> Regression tasks.</li>
+            <li><b>Binary Cross-Entropy:</b> Binary classification.</li>
+            <li><b>Categorical Cross-Entropy:</b> Multi-class classification.</li>
+        </ul>
+
+        <h3 class="section-head">4. Backpropagation & Chain Rule</h3>
+        <p class="body-text">
+            Backpropagation calculates gradients of the loss function with respect to each weight using the chain rule. It updates weights via gradient descent.
+        </p>
+
+        <h4 class="subsection-head">4.1 Simple Backprop Example</h4>
+        <pre>
+# Forward pass
+X = 0.5
+W = 0.4
+b = 0.1
+y_true = 1
+
+Z = X*W + b
+A = 1 / (1 + np.exp(-Z))  # sigmoid
+loss = 0.5 * (A - y_true)**2
+
+# Backward pass
+dLoss_dA = A - y_true
+dA_dZ = A * (1 - A)
+dZ_dW = X
+
+dLoss_dW = dLoss_dA * dA_dZ * dZ_dW
+print(dLoss_dW)
+        </pre>
+
+        <h3 class="section-head">5. Optimizers: Beyond SGD</h3>
+        <p class="body-text">
+            Stochastic Gradient Descent (SGD) is the base optimizer, but adaptive optimizers improve convergence:
+        </p>
+        <ul>
+            <li><b>SGD with Momentum:</b> Adds inertia to smooth updates.</li>
+            <li><b>RMSprop:</b> Scales learning rates by a moving average of squared gradients.</li>
+            <li><b>Adam:</b> Combines momentum and RMSprop for robust convergence.</li>
+        </ul>
+
+        <h4 class="subsection-head">5.1 Adam Update Rule</h4>
+        <pre>
+m = 0  # momentum
+v = 0  # velocity
+beta1 = 0.9
+beta2 = 0.999
+epsilon = 1e-8
+learning_rate = 0.001
+
+grad = 0.01  # example gradient
+
+# Update biased first and second moment
+m = beta1 * m + (1 - beta1) * grad
+v = beta2 * v + (1 - beta2) * grad**2
+
+# Correct bias
+m_hat = m / (1 - beta1)
+v_hat = v / (1 - beta2)
+
+# Update weight
+W = W - learning_rate * m_hat / (np.sqrt(v_hat) + epsilon)
+        </pre>
+
+        <h3 class="section-head">6. Weight Initialization & Regularization</h3>
+        <p class="body-text">
+            Proper initialization prevents slow convergence or exploding/vanishing gradients.
+        </p>
+        <ul>
+            <li><b>Xavier/Glorot Initialization:</b> For sigmoid/tanh activations.</li>
+            <li><b>He Initialization:</b> For ReLU activations.</li>
+            <li><b>Regularization:</b> L2 (weight decay) or L1 to prevent overfitting.</li>
+            <li><b>Dropout:</b> Randomly disables neurons during training for better generalization.</li>
+        </ul>
+
+        <h3 class="section-head">7. Building a Neural Network in NumPy</h3>
+        <pre>
+import numpy as np
+
+# Example 2-layer network
+def sigmoid(x):
+    return 1/(1+np.exp(-x))
+
+X = np.random.rand(5,3)  # 5 samples, 3 features
+y = np.array([[1],[0],[1],[0],[1]])
+
+# Initialize weights
+W1 = np.random.randn(3,4)
+b1 = np.zeros((1,4))
+W2 = np.random.randn(4,1)
+b2 = np.zeros((1,1))
+
+# Forward pass
+Z1 = np.dot(X,W1)+b1
+A1 = sigmoid(Z1)
+Z2 = np.dot(A1,W2)+b2
+A2 = sigmoid(Z2)
+
+# Loss
+loss = np.mean((A2 - y)**2)
+print("Loss:", loss)
+        </pre>
+
+        <h3 class="section-head">8. Training Tricks for Deep Networks</h3>
+        <ul>
+            <li>Batch normalization to stabilize learning.</li>
+            <li>Learning rate scheduling to avoid overshooting minima.</li>
+            <li>Gradient clipping to prevent exploding gradients.</li>
+            <li>Use mini-batches instead of full-batch or single-sample updates.</li>
+            <li>Monitor training with validation loss to prevent overfitting.</li>
+        </ul>
+
+        <h3 class="section-head">9. Real-World Application: Handwritten Digit Classification</h3>
+        <pre>
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Flatten
+from tensorflow.keras.datasets import mnist
+from tensorflow.keras.utils import to_categorical
+
+(X_train, y_train), (X_test, y_test) = mnist.load_data()
+y_train = to_categorical(y_train)
+y_test = to_categorical(y_test)
+
+model = Sequential([
+    Flatten(input_shape=(28,28)),
+    Dense(128, activation='relu'),
+    Dense(64, activation='relu'),
+    Dense(10, activation='softmax')
+])
+
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+model.fit(X_train, y_train, validation_split=0.1, epochs=10, batch_size=32)
+        </pre>
+
+        <div class="pro-note">
+            <b>Pro Tip:</b> Understanding low-level NumPy implementation of backpropagation helps debug neural networks and optimize architectures in real-world projects.
+        </div>
+
+        <h3 class="section-head">10. Summary</h3>
+        <ul>
+            <li>Neural networks consist of input, hidden, and output layers.</li>
+            <li>Forward propagation calculates predictions; backpropagation updates weights.</li>
+            <li>Activation functions introduce nonlinearity and prevent vanishing gradients.</li>
+            <li>Optimizers like Adam accelerate convergence.</li>
+            <li>Weight initialization, regularization, and batch normalization improve training stability.</li>
+            <li>Deep learning pipelines require careful preprocessing, monitoring, and validation.</li>
+        </ul>
+
+        <button class="btn-premium" onclick="completeModule()">Unlock Module 08 <i class="fas fa-lock-open"></i></button>
+    `
+},
+
+{
+    title: "Module 08: Natural Language Processing (NLP)",
+    content: `
+        <span class="module-tag">Language Modeling</span>
+        <h2 class="mod-title">Transformers, Attention Mechanism & Large Language Models</h2>
+
+        <p class="body-text">
+            Natural Language Processing (NLP) enables machines to understand, interpret, and generate human language. 
+            In this module, we dive deep into modern NLP, focusing on <b>transformers</b>, <b>self-attention</b>, and <b>large language models (LLMs)</b>. 
+            By the end, you will understand how GPT-style models work under the hood and how to fine-tune them for real-world tasks.
+        </p>
+
+        <div class="pro-note">
+            <b>Pro Tip:</b> Transformers replaced RNNs and LSTMs for almost all modern NLP tasks because they handle long-range dependencies efficiently and scale better on GPUs.
+        </div>
+
+        <h3 class="section-head">1. Traditional NLP Approaches</h3>
+        <p class="body-text">
+            Before transformers, NLP relied on:
+        </p>
+        <ul>
+            <li><b>Bag-of-Words (BoW):</b> Count vectors, ignores word order.</li>
+            <li><b>TF-IDF:</b> Weighted frequency of words, still ignores context.</li>
+            <li><b>Word Embeddings:</b> Dense vectors like Word2Vec or GloVe, capture semantic similarity.</li>
+            <li><b>RNNs & LSTMs:</b> Sequence models that capture context, but struggle with long-range dependencies and parallelization.</li>
+        </ul>
+
+        <h3 class="section-head">2. The Transformer Revolution</h3>
+        <p class="body-text">
+            Introduced in "Attention is All You Need" (Vaswani et al., 2017), transformers rely entirely on the <b>self-attention mechanism</b> to model dependencies between words in a sequence, removing recurrence.
+        </p>
+
+        <h4 class="subsection-head">2.1 Transformer Architecture</h4>
+        <ul>
+            <li><b>Input Embedding:</b> Converts tokens into dense vectors.</li>
+            <li><b>Positional Encoding:</b> Adds sequence order information.</li>
+            <li><b>Multi-Head Self-Attention:</b> Allows each word to attend to all others, capturing dependencies.</li>
+            <li><b>Feed-Forward Network:</b> Applies nonlinear transformations to each token embedding.</li>
+            <li><b>Layer Normalization & Residual Connections:</b> Stabilize and accelerate training.</li>
+            <li><b>Output Projection:</b> Maps embeddings back to vocabulary logits for prediction.</li>
+        </ul>
+
+        <h4 class="subsection-head">2.2 Multi-Head Attention Example</h4>
+        <pre>
+import torch
+from torch import nn
+
+# Example: single attention layer
+query = torch.rand(5, 10, 64)  # batch_size=5, seq_len=10, embedding=64
+key = torch.rand(5, 10, 64)
+value = torch.rand(5, 10, 64)
+
+attention = nn.MultiheadAttention(embed_dim=64, num_heads=8)
+output, weights = attention(query, key, value)
+print("Output shape:", output.shape)
+        </pre>
+
+        <h3 class="section-head">3. Self-Attention Mechanism</h3>
+        <p class="body-text">
+            Self-attention computes a weighted sum of all token embeddings, where weights represent how much each word attends to every other word. 
+            Mathematically:
+        </p>
+        <pre>
+Attention(Q, K, V) = softmax((QK^T) / sqrt(d_k)) * V
+        </pre>
+        <p class="body-text">
+            - Q = Query matrix, K = Key matrix, V = Value matrix  
+            - d_k = embedding dimension for scaling  
+            - Softmax ensures weights sum to 1  
+        </p>
+
+        <h3 class="section-head">4. Positional Encoding</h3>
+        <p class="body-text">
+            Transformers are permutation-invariant, so we add positional encodings to embeddings:
+        </p>
+        <pre>
+import numpy as np
+
+def positional_encoding(seq_len, d_model):
+    PE = np.zeros((seq_len, d_model))
+    for pos in range(seq_len):
+        for i in range(0, d_model, 2):
+            PE[pos, i] = np.sin(pos / (10000 ** ((2 * i)/d_model)))
+            PE[pos, i+1] = np.cos(pos / (10000 ** ((2 * i)/d_model)))
+    return PE
+
+PE = positional_encoding(50, 64)
+print(PE.shape)
+        </pre>
+
+        <h3 class="section-head">5. Pre-trained Large Language Models (LLMs)</h3>
+        <p class="body-text">
+            Modern NLP leverages transfer learning. Popular models include:
+        </p>
+        <ul>
+            <li><b>BERT:</b> Bidirectional Encoder Representations, excellent for classification & NER.</li>
+            <li><b>RoBERTa:</b> Optimized BERT with more training and dynamic masking.</li>
+            <li><b>GPT-series:</b> Decoder-only transformer for text generation.</li>
+            <li><b>T5:</b> Text-to-text framework, converts all tasks to sequence generation.</li>
+        </ul>
+
+        <h4 class="subsection-head">5.1 Fine-Tuning Example with HuggingFace</h4>
+        <pre>
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import torch
+
+tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
+model = AutoModelForSequenceClassification.from_pretrained("bert-base-uncased", num_labels=2)
+
+texts = ["I love Python!", "I hate bugs."]
+inputs = tokenizer(texts, padding=True, truncation=True, return_tensors="pt")
+
+outputs = model(**inputs)
+print(outputs.logits)
+        </pre>
+
+        <h3 class="section-head">6. Prompt Engineering for LLMs</h3>
+        <p class="body-text">
+            Prompt engineering is the process of designing effective instructions for pre-trained models to perform tasks without full fine-tuning:
+        </p>
+        <ul>
+            <li>Use clear, specific instructions.</li>
+            <li>Provide examples in the prompt (few-shot learning).</li>
+            <li>Break tasks into subtasks to improve output accuracy.</li>
+            <li>Use temperature, max tokens, and top-p for controlled generation.</li>
+        </ul>
+
+        <h4 class="subsection-head">6.1 GPT-Style Text Generation Example</h4>
+        <pre>
+from transformers import GPT2Tokenizer, GPT2LMHeadModel
+
+tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
+model = GPT2LMHeadModel.from_pretrained("gpt2")
+
+prompt = "Once upon a time in a futuristic city,"
+inputs = tokenizer(prompt, return_tensors="pt")
+outputs = model.generate(**inputs, max_length=50, temperature=0.8)
+
+print(tokenizer.decode(outputs[0]))
+        </pre>
+
+        <h3 class="section-head">7. Tokenization & Embeddings</h3>
+        <p class="body-text">
+            Tokenization splits text into subword units. Embeddings map tokens into dense vectors capturing semantic relationships:
+        </p>
+        <ul>
+            <li>WordPiece (BERT) and Byte-Pair Encoding (GPT) for subword tokenization.</li>
+            <li>Embedding layers transform token IDs into trainable vectors.</li>
+            <li>Contextual embeddings depend on surrounding words, unlike static embeddings like Word2Vec.</li>
+        </ul>
+
+        <h3 class="section-head">8. Real-World Applications</h3>
+        <ul>
+            <li>Text classification: spam detection, sentiment analysis.</li>
+            <li>Named Entity Recognition (NER): extracting names, dates, locations.</li>
+            <li>Text summarization and translation.</li>
+            <li>Question answering and dialogue systems.</li>
+            <li>Code generation and document understanding.</li>
+        </ul>
+
+        <h3 class="section-head">9. Best Practices in NLP</h3>
+        <ul>
+            <li>Always preprocess text: lowercasing, removing punctuation, handling stopwords.</li>
+            <li>Use pretrained embeddings for small datasets to improve performance.</li>
+            <li>Monitor overfitting: large LLMs can memorize training data.</li>
+            <li>Use mixed-precision training and gradient checkpointing for large models.</li>
+            <li>Document tokenization and preprocessing pipelines for reproducibility.</li>
+        </ul>
+
+        <h3 class="section-head">10. Summary</h3>
+        <ul>
+            <li>Traditional NLP relied on BoW, TF-IDF, embeddings, and RNNs.</li>
+            <li>Transformers use self-attention to model long-range dependencies efficiently.</li>
+            <li>Multi-head attention and positional encoding allow parallelization and context understanding.</li>
+            <li>Pretrained LLMs (BERT, GPT, T5) enable transfer learning for diverse tasks.</li>
+            <li>Prompt engineering allows task-specific outputs without full model retraining.</li>
+            <li>Tokenization, embeddings, and preprocessing are critical for model accuracy.</li>
+        </ul>
+
+        <button class="btn-premium" onclick="completeModule()">Unlock Module 09 <i class="fas fa-lock-open"></i></button>
+    `
+},
+
+{
+    title: "Module 09: Computer Vision",
+    content: `
+        <span class="module-tag">Visual Perception</span>
+        <h2 class="mod-title">Convolutional Neural Networks (CNNs) & Modern CV Architectures</h2>
+
+        <p class="body-text">
+            Computer Vision (CV) enables machines to interpret visual data such as images and videos. 
+            In this module, we study how Convolutional Neural Networks (CNNs) work, their mathematical foundations, 
+            and how state-of-the-art architectures like ResNet and EfficientNet solve real-world problems such as object detection and image classification.
+        </p>
+
+        <div class="pro-note">
+            <b>Pro Tip:</b> CNNs automatically extract hierarchical features from images: from edges to textures to complex objects, enabling end-to-end learning without manual feature engineering.
+        </div>
+
+        <h3 class="section-head">1. Image Representation & Preprocessing</h3>
+        <p class="body-text">
+            Images are represented as tensors of shape <b>(height, width, channels)</b>. For RGB images, channels = 3. 
+            Preprocessing steps include:
+        </p>
+        <ul>
+            <li>Normalization (0–1 or -1 to 1 scaling)</li>
+            <li>Resizing to a fixed dimension</li>
+            <li>Data augmentation: rotation, flipping, brightness adjustments</li>
+            <li>Standardization using mean and standard deviation of dataset</li>
+        </ul>
+
+        <h4 class="subsection-head">1.1 Example: Preprocessing with PyTorch</h4>
+        <pre>
+from torchvision import transforms
+
+transform = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.RandomHorizontalFlip(),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], 
+                         std=[0.229, 0.224, 0.225])
+])
+        </pre>
+
+        <h3 class="section-head">2. Convolutional Layers</h3>
+        <p class="body-text">
+            The convolution operation slides a filter (kernel) over the input image to extract features such as edges and textures. 
+            Key concepts:
+        </p>
+        <ul>
+            <li><b>Kernels/Filters:</b> Small matrices (e.g., 3x3) applied over input</li>
+            <li><b>Stride:</b> Step size of the kernel</li>
+            <li><b>Padding:</b> Adding pixels around the input to control output size</li>
+            <li><b>Feature Maps:</b> Output of convolution, showing detected patterns</li>
+        </ul>
+
+        <h4 class="subsection-head">2.1 Convolution Example</h4>
+        <pre>
+import torch
+import torch.nn as nn
+
+conv = nn.Conv2d(in_channels=3, out_channels=16, kernel_size=3, stride=1, padding=1)
+input_image = torch.rand(1, 3, 224, 224)  # batch=1, channels=3, HxW=224
+output = conv(input_image)
+print(output.shape)  # (1, 16, 224, 224)
+        </pre>
+
+        <h3 class="section-head">3. Pooling Layers</h3>
+        <p class="body-text">
+            Pooling reduces spatial dimensions while retaining important features. Common types:
+        </p>
+        <ul>
+            <li><b>Max Pooling:</b> Takes the maximum value in a window</li>
+            <li><b>Average Pooling:</b> Computes the mean</li>
+        </ul>
+        <pre>
+pool = nn.MaxPool2d(kernel_size=2, stride=2)
+pooled_output = pool(output)
+print(pooled_output.shape)  # Downsampled by factor of 2
+        </pre>
+
+        <h3 class="section-head">4. Activation Functions</h3>
+        <p class="body-text">
+            Nonlinear activations allow CNNs to model complex patterns. Common choices:
+        </p>
+        <ul>
+            <li><b>ReLU:</b> max(0, x), prevents vanishing gradients</li>
+            <li><b>LeakyReLU:</b> Allows small negative slope</li>
+            <li><b>Softmax:</b> Converts logits to probability distribution for classification</li>
+        </ul>
+
+        <h3 class="section-head">5. Architectures: From LeNet to Modern CNNs</h3>
+        <p class="body-text">
+            Classic CNNs (LeNet, AlexNet) paved the way, but modern CV requires deeper, efficient networks.
+        </p>
+
+        <h4 class="subsection-head">5.1 ResNet (Residual Networks)</h4>
+        <p class="body-text">
+            Deep networks often face <b>vanishing gradient</b> issues. ResNet introduces <b>skip connections</b>:
+        </p>
+        <pre>
+output = F(x) + x  # Residual connection
+        </pre>
+        <p class="body-text">
+            This allows gradients to flow directly through skip connections, enabling hundreds of layers to be trained effectively.
+        </p>
+
+        <h4 class="subsection-head">5.2 EfficientNet</h4>
+        <p class="body-text">
+            EfficientNet scales depth, width, and resolution using compound scaling, achieving high accuracy with fewer parameters.
+        </p>
+
+        <h3 class="section-head">6. Object Detection & Segmentation</h3>
+        <p class="body-text">
+            Beyond classification, CV tasks include detecting objects and segmenting regions:
+        </p>
+        <ul>
+            <li>YOLO, SSD: Single-shot detectors for real-time object detection</li>
+            <li>Faster R-CNN: Region proposal networks for high-accuracy detection</li>
+            <li>Mask R-CNN: Adds segmentation masks per object</li>
+        </ul>
+
+        <h4 class="subsection-head">6.1 Detection Example with TorchVision</h4>
+        <pre>
+from torchvision.models.detection import fasterrcnn_resnet50_fpn
+model = fasterrcnn_resnet50_fpn(pretrained=True)
+model.eval()
+
+images = [torch.rand(3, 224, 224)]
+predictions = model(images)
+print(predictions)
+        </pre>
+
+        <h3 class="section-head">7. Transfer Learning in CV</h3>
+        <p class="body-text">
+            Large pre-trained models on ImageNet can be fine-tuned for new tasks:
+        </p>
+        <pre>
+from torchvision import models, nn
+
+model = models.resnet50(pretrained=True)
+for param in model.parameters():
+    param.requires_grad = False  # Freeze base layers
+
+# Replace classifier for custom dataset
+model.fc = nn.Linear(model.fc.in_features, num_classes)
+        </pre>
+
+        <h3 class="section-head">8. Training & Optimization</h3>
+        <ul>
+            <li>Use SGD or Adam optimizers</li>
+            <li>Apply learning rate schedulers for stable convergence</li>
+            <li>Augmentation improves generalization</li>
+            <li>Batch normalization accelerates training and improves stability</li>
+        </ul>
+
+        <h3 class="section-head">9. Real-World Applications</h3>
+        <ul>
+            <li>Autonomous vehicles: detecting pedestrians, cars, traffic signs</li>
+            <li>Medical imaging: detecting tumors, segmenting organs</li>
+            <li>Retail: product recognition and shelf monitoring</li>
+            <li>Face recognition and biometric verification</li>
+            <li>Augmented reality and robotics</li>
+        </ul>
+
+        <h3 class="section-head">10. Summary</h3>
+        <ul>
+            <li>Images are tensors; preprocessing ensures consistency and efficiency.</li>
+            <li>CNNs automatically extract hierarchical features through convolution and pooling.</li>
+            <li>Activation functions introduce non-linearity, enabling complex pattern learning.</li>
+            <li>Modern architectures like ResNet and EfficientNet allow deep networks without vanishing gradients.</li>
+            <li>Object detection and segmentation extend CV from classification to actionable insights.</li>
+            <li>Transfer learning reduces data requirements and accelerates deployment.</li>
+        </ul>
+
+        <button class="btn-premium" onclick="completeModule()">Unlock Module 10 <i class="fas fa-lock-open"></i></button>
+    `
+},
+
+{
+    title: "Module 10: MLOps & Production Engineering",
+    content: `
+        <span class="module-tag">Deployment & ROI</span>
+        <h2 class="mod-title">Model Serving, CI/CD Pipelines & Monitoring</h2>
+
+        <p class="body-text">
+            Building a machine learning model is only half the job. Production-grade ML requires deploying models reliably, monitoring them, and ensuring they deliver consistent business value. 
+            In this module, we cover <b>model serving</b>, <b>containerization</b>, <b>CI/CD pipelines</b>, and <b>model monitoring</b> — the essential tools of MLOps.
+        </p>
+
+        <div class="pro-note">
+            <b>Pro Tip:</b> In production, 70–80% of ML engineer time is spent on deployment, monitoring, scaling, and retraining pipelines, not on model creation.
+        </div>
+
+        <h3 class="section-head">1. Model Serving with FastAPI</h3>
+        <p class="body-text">
+            FastAPI is a high-performance web framework ideal for serving ML models asynchronously. Key concepts:
+        </p>
+        <ul>
+            <li>Define RESTful endpoints for predictions</li>
+            <li>Validate incoming requests using Pydantic</li>
+            <li>Support batch and single-instance inference</li>
+            <li>Integrate logging and exception handling for observability</li>
+        </ul>
+
+        <h4 class="subsection-head">1.1 FastAPI Example</h4>
+        <pre>
+from fastapi import FastAPI
+from pydantic import BaseModel
+import joblib
+import numpy as np
+
+app = FastAPI()
+
+# Load trained model
+model = joblib.load("model.pkl")
+
+class InputData(BaseModel):
+    features: list
+
+@app.post("/predict")
+def predict(data: InputData):
+    x = np.array(data.features).reshape(1, -1)
+    prediction = model.predict(x)
+    return {"prediction": prediction.tolist()}
+        </pre>
+
+        <h3 class="section-head">2. Containerization with Docker</h3>
+        <p class="body-text">
+            Docker ensures that the entire ML environment — OS, dependencies, and model artifacts — runs consistently anywhere.
+        </p>
+        <ul>
+            <li>Write a Dockerfile specifying Python version, dependencies, and startup commands</li>
+            <li>Build Docker image and run containers for isolated environments</li>
+            <li>Use Docker Compose for multi-service applications</li>
+        </ul>
+
+        <h4 class="subsection-head">2.1 Dockerfile Example</h4>
+        <pre>
+# Base image
+FROM python:3.11-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements
+COPY requirements.txt .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy app code
+COPY . .
+
+# Expose API port
+EXPOSE 8000
+
+# Run FastAPI app
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+        </pre>
+
+        <h3 class="section-head">3. CI/CD for ML</h3>
+        <p class="body-text">
+            Continuous Integration / Continuous Deployment (CI/CD) pipelines automate testing, building, and deploying ML models. Key components:
+        </p>
+        <ul>
+            <li>Version control: Git for code and ML artifacts</li>
+            <li>Unit tests for preprocessing, feature engineering, and model outputs</li>
+            <li>Automated Docker builds on code changes</li>
+            <li>Deployment to staging/production environments</li>
+        </ul>
+
+        <h4 class="subsection-head">3.1 CI/CD Example with GitHub Actions</h4>
+        <pre>
+name: ML Pipeline CI/CD
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run tests
+        run: pytest tests/
+      - name: Build Docker image
+        run: docker build -t ml-api:latest .
+      - name: Push Docker image
+        run: docker tag ml-api:latest username/ml-api:latest && docker push username/ml-api:latest
+        </pre>
+
+        <h3 class="section-head">4. Monitoring & Logging</h3>
+        <p class="body-text">
+            ML models degrade over time due to <b>concept drift</b> and <b>data drift</b>. Monitoring ensures models maintain performance:
+        </p>
+        <ul>
+            <li>Log predictions, input features, and request metadata</li>
+            <li>Track key metrics (accuracy, F1, precision, recall)</li>
+            <li>Detect drift using statistical tests or embedding distance</li>
+            <li>Trigger retraining pipelines automatically when performance drops</li>
+        </ul>
+
+        <h4 class="subsection-head">4.1 Logging Example with Python</h4>
+        <pre>
+import logging
+logging.basicConfig(filename='ml_api.log', level=logging.INFO)
+
+def log_request(input_data, prediction):
+    logging.info(f"Input: {input_data}, Prediction: {prediction}")
+        </pre>
+
+        <h3 class="section-head">5. Scaling Models</h3>
+        <p class="body-text">
+            For high-volume inference, scale your deployment:
+        </p>
+        <ul>
+            <li>Horizontal scaling: multiple containers behind a load balancer</li>
+            <li>GPU acceleration for deep learning models</li>
+            <li>Serverless deployments with AWS Lambda or Google Cloud Functions for event-driven inference</li>
+            <li>Batch predictions using queue systems like RabbitMQ or Kafka</li>
+        </ul>
+
+        <h3 class="section-head">6. Model Versioning</h3>
+        <p class="body-text">
+            Track model versions to ensure reproducibility:
+        </p>
+        <ul>
+            <li>Store artifacts with model metadata, training data snapshot, and hyperparameters</li>
+            <li>Use tools like MLflow, DVC, or Weights & Biases for version control</li>
+            <li>Implement rollback in CI/CD pipelines in case of model failure</li>
+        </ul>
+
+        <h3 class="section-head">7. Security & Governance</h3>
+        <p class="body-text">
+            Protect ML systems from data leaks, adversarial attacks, and unauthorized access:
+        </p>
+        <ul>
+            <li>Validate all inputs and sanitize text/images</li>
+            <li>Implement authentication and API rate-limiting</li>
+            <li>Monitor for anomalous predictions that could indicate attacks</li>
+            <li>Keep audit logs for compliance and governance</li>
+        </ul>
+
+        <h3 class="section-head">8. Real-World MLOps Workflow</h3>
+        <ol>
+            <li>Data ingestion → preprocessing → feature engineering</li>
+            <li>Model training → evaluation → artifact storage</li>
+            <li>API serving using FastAPI → containerization with Docker</li>
+            <li>Continuous integration and deployment</li>
+            <li>Monitoring metrics, drift detection → retraining</li>
+        </ol>
+
+        <h3 class="section-head">9. Summary</h3>
+        <ul>
+            <li>Production ML is about reliability, scalability, and maintainability.</li>
+            <li>FastAPI provides asynchronous, validated endpoints for serving models.</li>
+            <li>Docker ensures environment consistency and easy deployment.</li>
+            <li>CI/CD automates testing, building, and deployment, reducing human error.</li>
+            <li>Monitoring detects drift, tracks metrics, and triggers retraining pipelines.</li>
+            <li>Security, governance, and model versioning ensure trust and compliance.</li>
+        </ul>
+
+        <button class="btn-premium" onclick="completeModule()">Generate Final Credential <i class="fas fa-certificate"></i></button>
+    `
+},
+
+
+
+];
+
+        function toggleSidebar() {
+            document.getElementById('toc').classList.toggle('active');
+            document.querySelector('.sidebar-overlay').classList.toggle('active');
+        }
+
+        function enrollUser() {
+            Swal.fire({
+                title: 'Successfully Enrolled!',
+                text: 'Welcome to Internadda Elite Python Engineering.',
+                icon: 'success',
+                confirmButtonColor: '#4338ca'
+            }).then(() => {
+                document.getElementById('welcome-screen').classList.add('hidden');
+                document.getElementById('course-ui').classList.remove('hidden');
+                renderTOC();
+                loadModule(0);
+            });
+        }
+
+        function renderTOC() {
+            const toc = document.getElementById('toc');
+            let html = `<div style="text-transform:uppercase; font-size:0.7rem; color:rgba(255,255,255,0.6); margin-bottom:20px;">Curriculum</div>`;
+            syllabus.forEach((mod, i) => {
+                const isLocked = i > maxUnlocked;
+                html += `
+                    <div class="module-item ${i === currentModule ? 'active' : ''} ${isLocked ? 'locked' : ''}" onclick="${!isLocked ? `loadModule(${i})` : ''}">
+                        <i class="fas ${i < maxUnlocked ? 'fa-check-circle' : (isLocked ? 'fa-lock' : 'fa-play-circle')}"></i>
+                        ${mod.title}
+                    </div>`;
+            });
+            toc.innerHTML = html;
+        }
+
+        function loadModule(idx) {
+            currentModule = idx;
+            const contentArea = document.getElementById('main-content');
+            const layout = document.querySelector('.main-layout');
+
+            // 1. Instant Reset: Hide content so the change isn't messy
+            contentArea.style.opacity = '0';
+            contentArea.classList.remove('module-reveal-active');
+
+            // 2. Teleport to top of the content area (not the whole page) 
+            // This mimics the Coursera behavior where the UI stays fixed
+            layout.scrollIntoView({ behavior: 'instant', block: 'start' });
+
+            // 3. Small timeout to allow the browser to process the 'top' position
+            setTimeout(() => {
+                contentArea.innerHTML = syllabus[idx].content;
+                
+                // 4. Trigger the professional reveal
+                contentArea.classList.add('module-reveal-active');
+                contentArea.style.opacity = '1';
+                
+                // Update Stats
+                document.getElementById('prog-stat').innerText = `${Math.round(((maxUnlocked) / syllabus.length) * 100)}% COMPLETE`;
+                renderTOC();
+            }, 50); 
+}
+
+        function completeModule() {
+            if (currentModule < syllabus.length - 1) {
+                maxUnlocked++;
+                loadModule(currentModule + 1);
+            } else {
+                document.getElementById('course-ui').classList.add('hidden');
+                document.getElementById('final-screen').classList.remove('hidden');
+                document.getElementById('prog-stat').innerText = `100% COMPLETE`;
+            }
+        }
+
+        function generateCredential() {
+            const name = document.getElementById('cert-name').value.trim();
+            if (!name) {
+                Swal.fire('Error', 'Please enter your full name.', 'error');
+                return;
+            }
+            localStorage.setItem("internadda_cert_name", name);
+            Swal.fire({
+                title: 'Certificate Generated!',
+                text: `Official Python Specialization Credential issued to ${name}.`,
+                icon: 'success',
+                confirmButtonText: 'View Certificate',
+                confirmButtonColor: '#4338ca'
+            }).then(() => {
+                window.location.href = "certificate.html";
+            });
+        }
+    </script>
 </body>
 </html>
