@@ -23,17 +23,16 @@
     <meta property="twitter:description" content="Advance your career with Elite Python Engineering. Master memory management and scaling.">
     <meta property="twitter:image" content="https://internadda.com/images/Python-Essentials-for-All.png">
 
-    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="../images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon-16x16.png">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
-        
         :root {
             --primary: #4338ca; 
             --primary-hover: #3730a3;
@@ -45,11 +44,11 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background-color: #f8faff; color: var(--text-main); line-height: 1.6; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8faff; color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
 
+        /* --- UI COMPONENTS --- */
         header { 
-            background: var(--white); 
-            border-bottom: 1px solid var(--border); 
+            background: var(--white); border-bottom: 1px solid var(--border); 
             position: sticky; top: 0; z-index: 1000; padding: 15px 25px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
@@ -59,86 +58,95 @@
         .logo-text { font-weight: 800; font-size: 1.3rem; color: #1a202c; letter-spacing: -0.5px; }
         .logo-text span { color: var(--primary); }
 
+        /* 3D Circular Badge Animation */
+        .trust-badge-container {
+            position: relative; width: 120px; height: 120px;
+            margin: 0 auto 30px; perspective: 1000px;
+        }
+        .circular-text {
+            width: 100%; height: 100%;
+            animation: rotateText 10s linear infinite; position: absolute;
+        }
+        @keyframes rotateText {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+        .inner-check {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: var(--primary); color: white; width: 50px; height: 50px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; box-shadow: 0 10px 20px rgba(67, 56, 202, 0.3); border: 3px solid white;
+        }
+
+        .hero-title { font-size: 3rem; font-weight: 800; letter-spacing: -1.5px; line-height: 1.2; margin-bottom: 20px; }
+
+        /* Course Stats Bar */
+        .course-meta-bar {
+            display: flex; justify-content: center; gap: 30px; margin-bottom: 40px;
+            background: white; padding: 15px; border-radius: 50px;
+            border: 1px solid var(--border); max-width: 800px; margin-inline: auto;
+        }
+        .meta-item { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--text-light); font-size: 0.9rem; }
+        .meta-item i { color: var(--primary); }
+
+        /* Instructor Card */
+        .instructor-card {
+            display: flex; align-items: center; gap: 20px; max-width: 550px;
+            margin: 50px auto; padding: 20px; background: #fff; border-radius: 15px;
+            text-align: left; border: 1px solid var(--border);
+        }
+        .instructor-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
+        .blue-tick { color: #0095f6; margin-left: 5px; }
+
+        /* Sidebar & Layout */
         .sidebar {
             position: fixed; top: 0; left: -320px; width: 300px; height: 100vh;
             background: var(--dark-bg); z-index: 1100; padding: 30px 20px;
-            transition: 0.4s ease; color: white;
-            overflow-y: auto;
+            transition: 0.4s ease; color: white; overflow-y: auto;
         }
         .sidebar.active { left: 0; }
         .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1050; display: none; }
         .sidebar-overlay.active { display: block; }
-        
-        .module-item { 
-            padding: 14px; border-radius: 10px; margin-bottom: 8px; cursor: pointer; 
-            display: flex; align-items: center; gap: 12px; font-size: 0.9rem; transition: 0.2s;
-        }
+        .module-item { padding: 14px; border-radius: 10px; margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; gap: 12px; font-size: 0.9rem; transition: 0.2s; }
         .module-item.active { background: var(--primary); color: white; }
         .module-item.locked { opacity: 0.4; cursor: not-allowed; }
 
         .main-layout { padding: 40px 20px; display: flex; justify-content: center; }
-        .content-card { 
-            background: white; border-radius: 20px; padding: 60px; 
-            max-width: 900px; width: 100%; border: 1px solid var(--border);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-        }
+        .content-card { background: white; border-radius: 20px; padding: 60px; max-width: 900px; width: 100%; border: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
 
-        .module-tag { color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1.5px; margin-bottom: 15px; display: block; }
-        .mod-title { font-size: 2.2rem; font-weight: 800; color: var(--dark-bg); margin-bottom: 25px; }
-        .section-head { font-size: 1.4rem; margin: 30px 0 15px; color: var(--primary); font-weight: 700; }
-        .pro-note { background: #f0f4ff; border-left: 4px solid var(--primary); padding: 20px; border-radius: 8px; margin: 20px 0; font-style: italic; }
-        pre { background: #1e293b; color: #e2e8f0; padding: 20px; border-radius: 10px; margin: 20px 0; overflow-x: auto; }
-
-        .btn-primary, .btn-premium { 
-            background: var(--primary); color: white; padding: 16px 35px; border-radius: 12px;
-            border: none; font-weight: 700; cursor: pointer; transition: 0.3s;
-            display: inline-flex; align-items: center; gap: 10px;
-        }
+        .btn-primary, .btn-premium { background: var(--primary); color: white; padding: 16px 35px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; }
         .btn-primary:hover, .btn-premium:hover { background: var(--primary-hover); transform: translateY(-2px); }
 
-        .input-group { margin: 30px auto; text-align: left; max-width: 400px; }
-        .input-premium { width: 100%; padding: 15px; border: 2px solid var(--border); border-radius: 10px; font-size: 1rem; }
+        pre { background: #1e293b; color: #e2e8f0; padding: 20px; border-radius: 10px; margin: 20px 0; overflow-x: auto; }
         .hidden { display: none !important; }
+        
+        .module-tag { color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1.5px; margin-bottom: 10px; display: block; }
+        .mod-title { font-size: 2.2rem; font-weight: 800; color: var(--dark-bg); margin-bottom: 25px; }
+        .pro-note { background: #f0f4ff; border-left: 4px solid var(--primary); padding: 20px; border-radius: 8px; margin: 20px 0; font-style: italic; }
 
-        /* Container to prevent layout shift */
-        #main-content {
-            transition: opacity 0.3s ease;
-            will-change: transform, opacity;
-        }
-
-        /* The Professional Reveal Animation */
         @keyframes moduleReveal {
-            0% {
-                opacity: 0;
-                transform: translateY(20px) scale(0.98);
-                filter: blur(5px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-                filter: blur(0);
-            }
+            0% { opacity: 0; transform: translateY(20px); filter: blur(5px); }
+            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
+        .module-reveal-active { animation: moduleReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
 
-        .module-reveal-active {
-            animation: moduleReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
-        /* New Module Unlock Animation */
-        @keyframes slideUpFade {
-            0% {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
 
-        .module-animate {
-            animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-    </style>
+        .module-item {
+    /* ... existing styles ... */
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+    }
+
+    .module-item.active::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: #60a5fa; /* A lighter blue accent */
+        border-radius: 0 4px 4px 0;
+    }
+        </style>
 </head>
 <body>
 
@@ -147,7 +155,7 @@
             <button style="background:none; border:none; cursor:pointer; font-size:1.4rem;" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
             <a href="#" class="logo-box">
                 <img src="https://internadda.com/images/logo.jpg" alt="Logo">
-                <span class="logo-text">Intern<span>adda</span>
+                <span class="logo-text">Intern<span>adda</span></span>
             </a>
             <div id="prog-stat" style="color:var(--primary); font-weight:700;">0% COMPLETE</div>
         </div>
@@ -156,10 +164,41 @@
     <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
     <aside class="sidebar" id="toc"></aside>
 
-    <div id="welcome-screen" style="text-align: center; padding: 100px 20px;">
+    <div id="welcome-screen" style="text-align: center; padding: 80px 20px;">
+        <div class="trust-badge-container">
+            <div class="circular-text">
+                <svg viewBox="0 0 100 100" width="120" height="120">
+                    <path id="circlePath" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="none"/>
+                    <text font-size="9" font-weight="bold" fill="#4338ca">
+                        <textPath xlink:href="#circlePath">VERIFIED ELITE CURRICULUM • INTERNADDA PROFESSIONAL •</textPath>
+                    </text>
+                </svg>
+            </div>
+            <div class="inner-check"><i class="fas fa-check"></i></div>
+        </div>
+
         <h1 class="hero-title">Master Software Engineering with <br><span style="color:var(--primary)">Elite Python Essentials</span></h1>
-        <p class="body-text" style="max-width:700px; margin: 20px auto 40px;">Move beyond basic scripts. Master CPython architecture, advanced concurrency, and production-grade software patterns.</p>
+
+        <div class="course-meta-bar">
+            <div class="meta-item"><i class="fas fa-layer-group"></i> 10 Elite Modules</div>
+            <div class="meta-item"><i class="fas fa-clock"></i> 45+ Hours Est.</div>
+            <div class="meta-item"><i class="fas fa-certificate"></i> Global Credential</div>
+        </div>
+
+        <p class="body-text" style="max-width:700px; margin: 0 auto 40px; color: var(--text-light); font-size: 1.1rem;">
+            Move beyond basic scripts. Master CPython architecture, advanced concurrency, and production-grade software patterns designed for senior developers.
+        </p>
+
         <button class="btn-primary" onclick="enrollUser()">Start Learning Now <i class="fas fa-arrow-right"></i></button>
+
+        <div class="instructor-card">
+            <img src="../Vikash.jpg" alt="Vikash" class="instructor-img">
+            <div class="instructor-info">
+                <p style="font-size: 0.75rem; color: var(--primary); font-weight: 700; text-transform: uppercase; margin-bottom: 5px;">Lead Instructor</p>
+                <h4 style="margin:0;">Vikash Yadav <i class="fas fa-check-circle blue-tick"></i></h4>
+                <p style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">Co-Founder of Internadda & Professional Python Developer. Dedicated to training the next generation of engineers.</p>
+            </div>
+        </div>
     </div>
 
     <div id="course-ui" class="hidden">
@@ -169,10 +208,10 @@
     </div>
 
     <div id="final-screen" class="hidden" style="text-align: center; padding: 100px 20px;">
-        <h2 class="section-title">Claim Your Python Credential</h2>
-        <p class="body-text">Congratulations on mastering the Internadda Elite Python Engineering Track.</p>
-        <div class="input-group">
-            <input type="text" id="cert-name" class="input-premium" placeholder="Enter Full Name for Certificate">
+        <h2 class="hero-title">Mastery Achieved.</h2>
+        <p class="body-text">You have completed the Internadda Elite Python Specialization.</p>
+        <div style="margin: 30px auto; max-width: 400px;">
+            <input type="text" id="cert-name" style="width:100%; padding:15px; border-radius:10px; border:2px solid var(--border);" placeholder="Enter Full Name for Certificate">
         </div>
         <button class="btn-primary" onclick="generateCredential()">Generate Certificate <i class="fas fa-award"></i></button>
     </div>
@@ -181,7 +220,7 @@
         let maxUnlocked = 0;
         let currentModule = 0;
 
-const syllabus = [
+ const syllabus = [
 {
     title: "Module 01: The Python Virtual Machine",
     content: `
@@ -2238,8 +2277,8 @@ def log_request(input_data, prediction):
 
         function enrollUser() {
             Swal.fire({
-                title: 'Successfully Enrolled!',
-                text: 'Welcome to Internadda Elite Python Engineering.',
+                title: 'Welcome to Elite Track!',
+                text: 'Your proctored curriculum is now active.',
                 icon: 'success',
                 confirmButtonColor: '#4338ca'
             }).then(() => {
@@ -2252,7 +2291,7 @@ def log_request(input_data, prediction):
 
         function renderTOC() {
             const toc = document.getElementById('toc');
-            let html = `<div style="text-transform:uppercase; font-size:0.7rem; color:rgba(255,255,255,0.6); margin-bottom:20px;">Curriculum</div>`;
+            let html = `<div style="text-transform:uppercase; font-size:0.7rem; color:rgba(255,255,255,0.6); margin-bottom:20px; letter-spacing:1px;">Elite Curriculum</div>`;
             syllabus.forEach((mod, i) => {
                 const isLocked = i > maxUnlocked;
                 html += `
@@ -2289,7 +2328,7 @@ def log_request(input_data, prediction):
                 document.getElementById('prog-stat').innerText = `${Math.round(((maxUnlocked) / syllabus.length) * 100)}% COMPLETE`;
                 renderTOC();
             }, 50); 
-}
+        }
 
         function completeModule() {
             if (currentModule < syllabus.length - 1) {
@@ -2302,33 +2341,14 @@ def log_request(input_data, prediction):
             }
         }
 
-    function viewPythonCertificate() {
-    localStorage.setItem("internadda_cert_name", "Student Name"); // You already have this
-    localStorage.setItem("internadda_course_name", "Python Essentials Program"); // ADD THIS LINE
-    window.location.href = "certificate.html";
-    }
-
-    function generateCredential() {
-        const name = document.getElementById('cert-name').value.trim();
-        if (!name) {
-            Swal.fire('Error', 'Please enter your full name.', 'error');
-            return;
+        function generateCredential() {
+            const name = document.getElementById('cert-name').value.trim();
+            if (!name) { Swal.fire('Error', 'Please enter your full name.', 'error'); return; }
+            localStorage.setItem("internadda_cert_name", name);
+            localStorage.setItem("internadda_course_name", "Python Essentials Program");
+            Swal.fire('Issued!', 'Your professional credential has been generated.', 'success')
+            .then(() => { window.location.href = "certificate.html"; });
         }
-        
-        // SAVE BOTH NAME AND COURSE TITLE
-        localStorage.setItem("internadda_cert_name", name);
-        localStorage.setItem("internadda_course_name", "Python Essentials Program"); 
-    
-        Swal.fire({
-            title: 'Certificate Generated!',
-            text: `Official Python Specialization Credential issued to ${name}.`,
-            icon: 'success',
-            confirmButtonText: 'View Certificate',
-            confirmButtonColor: '#4338ca'
-        }).then(() => {
-            window.location.href = "certificate.html";
-        });
-    }
-        </script>
+    </script>
 </body>
 </html>
