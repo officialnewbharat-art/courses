@@ -121,208 +121,998 @@
         // Content synchronized with Internadda Elite Curriculum
 const syllabus = [
     {
-        title: "Module 01: Professional Python Engineering",
-        content: `
-            <span class="module-tag">System Architecture</span>
-            <h2 class="mod-title">High-Performance Python & Memory Management</h2>
-            <p class="body-text">At the elite engineering level, we don't just write scripts; we build memory-optimized systems. Python is often criticized for its speed, but a senior engineer knows that bottlenecking usually occurs due to poor resource management and a lack of understanding of the <b>CPython Interpreter</b>.</p>
-            
-            <h3 class="section-head">1. Deep Internals: Memory Allocation & Garbage Collection</h3>
-            <p class="body-text">Python uses a private heap to manage memory. All objects and data structures are located here. The <b>Global Interpreter Lock (GIL)</b> is a mutex that protects access to Python objects, preventing multiple native threads from executing Python bytecodes at once. This is why multi-threading in Python is not suitable for CPU-bound tasks.</p>
+title: "Module 01: Professional Python Engineering",
+content: `
+    <span class="module-tag">System Architecture</span>
+    <h2 class="mod-title">High-Performance Python & Memory Management</h2>
 
-            <div class="pro-note">
-                <b>The __slots__ optimization:</b> In a standard class, Python uses a dictionary to store instance variables. This is flexible but consumes significant RAM. By defining <code>__slots__</code>, you tell the interpreter to allocate space for a fixed set of attributes, reducing the memory footprint by up to 60% in large-scale data pipelines.
-            </div>
+    <p class="body-text">
+        This module transforms you from a Python coder into a <b>system-level Python engineer</b>.
+        You will learn how Python actually runs behind the scenes, how memory is allocated,
+        how performance is optimized, and how large-scale applications are designed in industry.
+    </p>
 
-            
+    <p class="body-text">
+        Real engineering does not mean writing long scripts.
+        It means:
+        <ul>
+            <li>building predictable architectures</li>
+            <li>reducing memory consumption</li>
+            <li>writing scalable modules</li>
+            <li>designing maintainable systems used by real users</li>
+        </ul>
+    </p>
 
-            <h3 class="section-head">2. Advanced Concurrency: Multiprocessing vs. Asyncio</h3>
-            <p class="body-text">To achieve true parallelism, we must bypass the GIL. We use the <code>multiprocessing</code> module to create separate memory spaces. For I/O bound tasks (like fetching data from 1,000 APIs simultaneously), we implement <code>asyncio</code>, which uses an <b>Event Loop</b> to manage tasks concurrently without the overhead of multiple processes.</p>
+    <!-- NEW SUBTOPIC 1 -->
+    <h3 class="section-head">1. CPython Architecture & Execution Model</h3>
 
-            <h3 class="section-head">3. Meta-Programming & Design Patterns</h3>
-            <p class="body-text">We implement <b>Singleton</b> patterns for database connections and <b>Factory</b> patterns for model instantiation. Understanding <b>Metaclasses</b> allows you to control class creation, enabling the development of robust internal APIs and frameworks that enforce strict data validation before the code even runs.</p>
-            
-            <button class="btn-premium" onclick="completeModule()">Unlock Module 02 <i class="fas fa-lock-open"></i></button>
-        `
-    },
-    {
-        title: "Module 02: Advanced Data Wrangling",
-        content: `
-            <span class="module-tag">Data Engineering</span>
-            <h2 class="mod-title">Petabyte-Scale Wrangling with Pandas 2.0 & PyArrow</h2>
-            <p class="body-text">Wrangling is where 80% of data science happens. In this module, we move beyond basic manipulation into <b>Vectorized Operations</b> and <b>Columnar Memory</b> storage architectures.</p>
-            
-            <h3 class="section-head">1. The PyArrow Columnar Format</h3>
-            <p class="body-text">Traditional dataframes store data in rows, which is inefficient for analytical queries. <b>Apache Arrow</b> is a cross-language development platform for in-memory data. It specifies a standardized language-independent columnar memory format for hierarchical data, organized for efficient analytical operations on modern hardware like CPUs and GPUs.</p>
+    <p class="body-text">
+        Python is not “just interpreted”.
+        Your code is first converted into <b>bytecode</b>, then executed by the <b>CPython Virtual Machine</b>.
+        Understanding this flow helps you predict performance behavior.
+    </p>
 
-            
+    <div class="pro-note">
+        <b>Execution flow:</b>
+        <ul>
+            <li>Source Code (.py)</li>
+            <li>Bytecode (.pyc)</li>
+            <li>Interpreter executes bytecode</li>
+            <li>Underlying C implementations run operations</li>
+        </ul>
+        This explains why Python is powerful — it sits on top of optimized C libraries.
+    </div>
 
-            <h3 class="section-head">2. Vectorization: Eliminating Python Loops</h3>
-            <p class="body-text">The secret to high-speed data processing is <b>Vectorization</b>. By using NumPy and Pandas vectorized functions, you push calculations down to highly optimized C and Fortran code. This allows you to perform operations on millions of rows in milliseconds, where a standard <code>for-loop</code> would take minutes.</p>
+    <!-- UPDATED MEMORY TOPIC -->
+    <h3 class="section-head">2. Memory Allocation, Reference Counting & Garbage Collection</h3>
 
-            <pre>
+    <p class="body-text">
+        Python manages memory automatically using:
+        <ul>
+            <li>a private heap</li>
+            <li>reference counters for each object</li>
+            <li>a garbage collector for cyclic references</li>
+        </ul>
+        Understanding this prevents memory leaks and crashes in long-running applications.
+    </p>
+
+    <p class="body-text">
+        The <b>Global Interpreter Lock (GIL)</b> ensures only one thread executes Python bytecode at a time.
+        This affects design choices for concurrency and performance tuning.
+    </p>
+
+    <div class="pro-note">
+        <b>Practical memory optimizations you will learn:</b>
+        <ul>
+            <li>__slots__ to reduce per-object RAM usage</li>
+            <li>choosing tuple vs list vs array</li>
+            <li>avoiding unnecessary object creation</li>
+            <li>reusing objects using pools</li>
+        </ul>
+    </div>
+
+    <!-- NEW DATA STRUCTURES TOPIC -->
+    <h3 class="section-head">3. Choosing the Right Data Structure</h3>
+
+    <p class="body-text">
+        Wrong data structure = slow program.
+        You will learn when to use:
+        <ul>
+            <li>list vs deque</li>
+            <li>set vs list for lookups</li>
+            <li>tuple vs list for immutability</li>
+            <li>dict vs dataclass for structured data</li>
+        </ul>
+        Internal implementation is also covered (hash tables, resizing, collisions).
+    </p>
+
+    <!-- NEW CONCURRENCY TOPIC -->
+    <h3 class="section-head">4. Concurrency Models in Real Systems</h3>
+
+    <p class="body-text">
+        You will master three professional concurrency styles:
+    </p>
+
+    <div class="pro-note">
+        <ul>
+            <li><b>Multithreading</b> – best for I/O bound programs</li>
+            <li><b>Multiprocessing</b> – true parallel CPU execution</li>
+            <li><b>Asyncio</b> – event loop based high-scaling network tasks</li>
+        </ul>
+        You will not just “learn syntax” — you will decide which model is right for which real-world scenario.
+    </div>
+
+    <!-- NEW TOPIC -->
+    <h3 class="section-head">5. Design Patterns for Large Applications</h3>
+
+    <p class="body-text">
+        Industry software is built using patterns, not random code.
+        In this module you implement:
+        <ul>
+            <li>Singleton for global services (DB, Logger)</li>
+            <li>Factory for modular object creation</li>
+            <li>Repository for clean database access</li>
+            <li>Observer for event-driven systems</li>
+        </ul>
+        These patterns are used in Django, FastAPI, ML pipelines, and microservices.
+    </p>
+
+    <!-- NEW TOPIC -->
+    <h3 class="section-head">6. Writing Python for Production, Not Just Practice</h3>
+
+    <p class="body-text">
+        You will follow professional engineering rules:
+        <ul>
+            <li>PEP-8 and PEP-20 guidelines</li>
+            <li>type hints and static analysis</li>
+            <li>modular project structure</li>
+            <li>documentation and docstrings</li>
+            <li>testable functions and unit testing</li>
+        </ul>
+    </p>
+
+    <p class="body-text">
+        By the end of this module you will not just know Python —
+        you will be ready to work on <b>enterprise backend systems, scalable APIs, and data platforms</b>.
+    </p>
+
+    <button class="btn-premium" onclick="completeModule()">Unlock Module 02 <i class="fas fa-lock-open"></i></button>
+`
+},
+
+{
+    title: "Module 02: Advanced Data Wrangling",
+    content: `
+        <span class="module-tag">Data Engineering</span>
+        <h2 class="mod-title">Petabyte-Scale Wrangling with Pandas 2.0 & PyArrow</h2>
+
+        <p class="body-text">
+            Data wrangling is where more than <b>80% of real-world data science time</b> is spent.
+            In this module, you learn how to clean, combine, reshape and optimize datasets
+            at scales ranging from Excel sheets to petabyte warehouses.
+            We focus not on basic functions, but on <b>engineering-grade techniques</b>
+            used in analytics companies, fintech, AI pipelines and data platforms.
+        </p>
+
+        <p class="body-text">
+            You will move beyond CSV reading and learn how to:
+            <ul>
+                <li>work with columnar memory formats</li>
+                <li>perform vectorized operations</li>
+                <li>optimize joins and merges</li>
+                <li>handle missing, dirty and duplicated data</li>
+                <li>process time-series and streaming style datasets</li>
+            </ul>
+        </p>
+
+        <!-- NEW SUBTOPIC -->
+        <h3 class="section-head">1. Modern DataFrames: Pandas 2.0 + PyArrow Backend</h3>
+
+        <p class="body-text">
+            Pandas 2.0 introduced optional integration with <b>PyArrow as a backend</b>.
+            Instead of storing data in Python objects, columns are stored in <b>Arrow columnar format</b>,
+            greatly reducing memory usage and improving performance.
+        </p>
+
+        <div class="pro-note">
+            <b>Benefits of Arrow-backed DataFrames:</b>
+            <ul>
+                <li>faster filtering and aggregation</li>
+                <li>zero-copy data sharing between libraries</li>
+                <li>GPU acceleration compatibility</li>
+                <li>efficient compression and serialization</li>
+            </ul>
+            This is the same technology used inside big data systems like Spark, DuckDB and BigQuery.
+        </div>
+
+        <!-- ALREADY EXISTING TOPIC — EXPANDED -->
+        <h3 class="section-head">2. The PyArrow Columnar Format</h3>
+
+        <p class="body-text">
+            Traditional row-based storage is slow for analytics because CPUs fetch unnecessary fields.
+            <b>Columnar format</b> stores each column together, improving:
+            <ul>
+                <li>scan speed</li>
+                <li>compression efficiency</li>
+                <li>SIMD vector computation</li>
+            </ul>
+        </p>
+
+        <p class="body-text">
+            Arrow enables:
+            <ul>
+                <li>zero-copy conversion to NumPy, Pandas, Spark, TensorFlow</li>
+                <li>cross-language support (Python, R, Java, C++)</li>
+                <li>fast serialization for APIs & ML serving</li>
+            </ul>
+        </p>
+
+        <!-- VECTORIZATION -->
+        <h3 class="section-head">3. Vectorization: Eliminating Python Loops</h3>
+
+        <p class="body-text">
+            The biggest performance mistake is using Python loops on large datasets.
+            <b>Vectorization</b> replaces loops with optimized C-level operations working on entire arrays at once.
+            This allows millions of rows to be processed in milliseconds.
+        </p>
+
+        <pre>
 # Senior Level Vectorization
-df['log_income'] = np.log1p(df['income']) # Optimized C-level execution
-# Junior Level (Avoid this!)
-df['log_income'] = df['income'].apply(lambda x: math.log(x + 1))
-            </pre>
+df['log_income'] = np.log1p(df['income'])  # C-level execution, SIMD optimized
 
-            <h3 class="section-head">3. Time-Series Windowing & Resampling</h3>
-            <p class="body-text">Financial and sensor data require sophisticated temporal handling. We master <b>Rolling Windows</b>, <b>Exponentially Weighted Moving Averages (EWMA)</b>, and <b>Upsampling</b> with interpolation to handle irregular data frequencies in production environments.</p>
-            
-            <button class="btn-premium" onclick="completeModule()">Unlock Module 03 <i class="fas fa-lock-open"></i></button>
-        `
-    },
-    {
-        title: "Module 03: Inferential Statistics",
-        content: `
-            <span class="module-tag">Mathematical Foundations</span>
-            <h2 class="mod-title">Statistical Rigor & Bayesian Inference</h2>
-            <p class="body-text">Statistics is the language of uncertainty. Elite scientists don't just report averages; they report <b>Confidence Intervals</b> and <b>Statistical Power</b>.</p>
-            
-            <h3 class="section-head">1. The Central Limit Theorem (CLT) & Distribution Analysis</h3>
-            <p class="body-text">The CLT states that the sampling distribution of the mean will always be normally distributed, regardless of the population distribution, given a sufficiently large sample size. This is the foundation for <b>Hypothesis Testing</b> and <b>Z-Tests</b>.</p>
+# Junior Level (Avoid this)
+df['log_income'] = df['income'].apply(lambda x: math.log(x + 1))  # Python loop overhead
+        </pre>
 
-            
+        <div class="pro-note">
+            <b>Rule:</b> If you are using <code>for</code> or <code>apply()</code> on large data,
+            you are leaving 90% performance on the table.
+        </div>
 
-            <h3 class="section-head">2. A/B Testing & P-Value Interpretation</h3>
-            <p class="body-text">Learn to design robust experiments. We cover <b>Power Analysis</b> (to determine sample size), <b>Significance Levels (Alpha)</b>, and <b>P-Hacking</b> prevention. You will learn to calculate the <b>Minimum Detectable Effect (MDE)</b> to ensure your tests are business-relevant.</p>
+        <!-- NEW CLEANING TOPIC -->
+        <h3 class="section-head">4. Industrial-Grade Data Cleaning</h3>
 
-            <h3 class="section-head">3. Bayesian vs. Frequentist Probability</h3>
-            <p class="body-text">Frequentists look at the long-run frequency of events. Bayesians update the probability of a hypothesis as more evidence becomes available. We explore <b>Bayes' Theorem</b> and its application in real-time fraud detection systems.</p>
-            
-            <button class="btn-premium" onclick="completeModule()">Unlock Module 04 <i class="fas fa-lock-open"></i></button>
-        `
-    },
-    {
-        title: "Module 04: Supervised Learning (Regression)",
-        content: `
-            <span class="module-tag">Predictive Modeling</span>
-            <h2 class="mod-title">Linear Systems, Cost Functions & Regularization</h2>
-            <p class="body-text">Regression is more than drawing a line. It is about minimizing a <b>Cost Function</b> (MSE) using <b>Gradient Descent</b>.</p>
-            
-            <h3 class="section-head">1. The Math of Ordinary Least Squares (OLS)</h3>
-            <p class="body-text">We derive the normal equation and understand the geometric interpretation of regression. We also address <b>Multicollinearity</b> and its impact on coefficient interpretability.</p>
+        <p class="body-text">
+            Real-world data is messy. You will learn how to handle:
+            <ul>
+                <li>missing values (MCAR, MAR, MNAR)</li>
+                <li>outliers and extreme values</li>
+                <li>string normalization</li>
+                <li>duplicate detection and removal</li>
+                <li>mixed data types inside the same column</li>
+            </ul>
+        </p>
 
-            <h3 class="section-head">2. Bias-Variance Tradeoff & Overfitting</h3>
-            <p class="body-text">A high-variance model fits the noise in the data. A high-bias model ignores the signal. We use <b>L1 (Lasso)</b> and <b>L2 (Ridge)</b> regularization to penalize large weights, forcing the model to simplify and generalize.</p>
+        <p class="body-text">
+            You will also learn when to <b>drop</b> vs <b>impute</b>
+            using statistical and domain-driven choices.
+        </p>
 
-            
+        <!-- TIME SERIES -->
+        <h3 class="section-head">5. Time-Series Windowing & Resampling</h3>
 
-            <h3 class="section-head">3. Advanced Metrics</h3>
-            <p class="body-text">Moving beyond R-Squared. We analyze <b>Adjusted R-Squared</b>, <b>AIC/BIC</b> for model selection, and <b>Residual Plots</b> to check for heteroscedasticity, ensuring our model assumptions hold true.</p>
-            
-            <button class="btn-premium" onclick="completeModule()">Unlock Module 05 <i class="fas fa-lock-open"></i></button>
-        `
-    },
-    {
+        <p class="body-text">
+            Financial markets, IoT sensor data, server logs and user analytics
+            require time-aware operations. We will work with:
+            <ul>
+                <li>Rolling windows</li>
+                <li>EWMA (Exponentially Weighted Moving Average)</li>
+                <li>Resampling (upsampling & downsampling)</li>
+                <li>Irregular timestamps and missing intervals</li>
+            </ul>
+        </p>
+
+        <!-- JOINS & MERGES -->
+        <h3 class="section-head">6. High-Performance Joins & Merges</h3>
+
+        <p class="body-text">
+            Joining tables incorrectly is the fastest way to crash memory.
+            You will master:
+            <ul>
+                <li>inner, outer, left, right joins</li>
+                <li>index-based joins vs key-based joins</li>
+                <li>merge conflicts and deduplication</li>
+                <li>join-order optimization</li>
+            </ul>
+        </p>
+
+        <p class="body-text">
+            You will also learn how databases and Spark optimize joins internally,
+            preparing you for big-data engineering roles.
+        </p>
+
+        <button class="btn-premium" onclick="completeModule()">Unlock Module 03 <i class="fas fa-lock-open"></i></button>
+    `
+},
+
+
+ {
+    title: "Module 03: Inferential Statistics",
+    content: `
+        <span class="module-tag">Mathematical Foundations</span>
+        <h2 class="mod-title">Statistical Rigor & Bayesian Inference</h2>
+
+        <p class="body-text">
+            Statistics is the language of uncertainty. Elite data scientists do not just compute averages —
+            they quantify how confident they are in their results.
+            In this module, you will learn how to move from <b>descriptive summaries</b> to
+            <b>decision-making under uncertainty</b> using formal statistical methods.
+        </p>
+
+        <p class="body-text">
+            You will learn how to:
+            <ul>
+                <li>estimate population parameters from samples</li>
+                <li>construct confidence intervals</li>
+                <li>perform hypothesis testing</li>
+                <li>interpret p-values correctly (not blindly)</li>
+                <li>apply Bayesian reasoning in real systems</li>
+            </ul>
+        </p>
+
+        <!-- CLT -->
+        <h3 class="section-head">1. The Central Limit Theorem (CLT) & Distribution Analysis</h3>
+
+        <p class="body-text">
+            The Central Limit Theorem explains why the normal distribution appears everywhere.
+            It states that when you take repeated samples and compute their means,
+            the distribution of those means tends to be <b>approximately normal</b> —
+            even if the original data is skewed or non-normal.
+        </p>
+
+        <div class="pro-note">
+            <b>Why CLT matters in real life:</b>
+            <ul>
+                <li>forms the basis of Z-tests and t-tests</li>
+                <li>enables confidence interval construction</li>
+                <li>supports error estimation in machine learning models</li>
+                <li>explains why many natural processes look “Gaussian”</li>
+            </ul>
+        </div>
+
+        <p class="body-text">
+            You will also learn to compare:
+            <ul>
+                <li>normal vs binomial vs Poisson distributions</li>
+                <li>skewness and kurtosis</li>
+                <li>heavy-tailed distributions (common in finance)</li>
+            </ul>
+        </p>
+
+        <!-- A/B Testing -->
+        <h3 class="section-head">2. A/B Testing, Hypothesis Testing & P-Value Interpretation</h3>
+
+        <p class="body-text">
+            A/B testing is the scientific backbone of product experiments,
+            marketing campaigns, UI design, and pricing strategies.
+            You will learn how to formally test whether one variant performs better than another.
+        </p>
+
+        <p class="body-text">
+            Core concepts covered:
+            <ul>
+                <li>null vs alternative hypothesis</li>
+                <li>type I and type II errors</li>
+                <li>statistical power and sample size</li>
+                <li>minimum detectable effect (MDE)</li>
+                <li>p-hacking and false discovery control</li>
+            </ul>
+        </p>
+
+        <div class="pro-note">
+            <b>Correct interpretation of p-values:</b><br>
+            A p-value does NOT tell you the probability that your hypothesis is true.<br>
+            It tells you how surprising your observed data would be if the null hypothesis were true.
+        </div>
+
+        <!-- Bayesian -->
+        <h3 class="section-head">3. Bayesian vs Frequentist Probability</h3>
+
+        <p class="body-text">
+            There are two major schools of statistical thinking.
+        </p>
+
+        <div class="pro-note">
+            <ul>
+                <li><b>Frequentist:</b> probability = long-run frequency of events</li>
+                <li><b>Bayesian:</b> probability = belief updated as evidence arrives</li>
+            </ul>
+        </div>
+
+        <p class="body-text">
+            Using <b>Bayes' Theorem</b>,
+            you will learn how to update prior beliefs when new data is observed.
+            This has direct application in:
+            <ul>
+                <li>spam filtering</li>
+                <li>medical diagnosis</li>
+                <li>fraud detection</li>
+                <li>recommender systems</li>
+            </ul>
+        </p>
+
+        <!-- NEW TOPIC -->
+        <h3 class="section-head">4. Confidence Intervals & Real-World Reporting</h3>
+
+        <p class="body-text">
+            Professionals never report “the mean is 45”.
+            They report:
+            <b>the mean is 45 ± 2.1 with 95% confidence</b>.
+            You will learn how to compute and interpret confidence intervals
+            for means, proportions, and regression coefficients.
+        </p>
+
+        <p class="body-text">
+            You will also understand the difference between:
+            <ul>
+                <li>confidence intervals</li>
+                <li>prediction intervals</li>
+                <li>credible intervals (Bayesian)</li>
+            </ul>
+        </p>
+
+        <p class="body-text">
+            By the end of this module you will think like a statistician —
+            questioning claims, validating evidence, and measuring uncertainty rigorously.
+        </p>
+
+        <button class="btn-premium" onclick="completeModule()">Unlock Module 04 <i class="fas fa-lock-open"></i></button>
+    `
+},
+
+ {
+    title: "Module 04: Supervised Learning (Regression)",
+    content: `
+        <span class="module-tag">Predictive Modeling</span>
+        <h2 class="mod-title">Linear Systems, Cost Functions & Regularization</h2>
+
+        <p class="body-text">
+            Regression is not about drawing a best-fit line. It is about modeling the
+            quantitative relationship between features and a continuous target variable.
+            In this module, we mathematically connect
+            <b>optimization</b>, <b>geometry</b>, and <b>statistics</b> to build robust predictive systems.
+        </p>
+
+        <p class="body-text">
+            You will learn how to:
+            <ul>
+                <li>formulate regression as a linear algebra problem</li>
+                <li>minimize cost functions using calculus</li>
+                <li>regularize models to avoid overfitting</li>
+                <li>evaluate regression beyond simple R-squared</li>
+            </ul>
+        </p>
+
+        <!-- OLS -->
+        <h3 class="section-head">1. The Math of Ordinary Least Squares (OLS)</h3>
+
+        <p class="body-text">
+            Ordinary Least Squares estimates parameters by minimizing the squared error 
+            between predicted and actual values. You will learn the 
+            <b>normal equation</b> and how gradient descent reaches the same solution iteratively.
+        </p>
+
+        <div class="pro-note">
+            <b>Geometric intuition:</b>
+            Regression projects the target vector onto the subspace spanned
+            by the feature columns. Multicollinearity makes this projection unstable,
+            causing coefficients to explode and interpretability to collapse.
+        </div>
+
+        <p class="body-text">
+            Topics covered:
+            <ul>
+                <li>matrix formulation of regression</li>
+                <li>rank deficiency and singular matrices</li>
+                <li>Variance Inflation Factor (VIF)</li>
+                <li>feature scaling and normalization</li>
+            </ul>
+        </p>
+
+        <!-- Bias Variance -->
+        <h3 class="section-head">2. Bias–Variance Tradeoff & Overfitting</h3>
+
+        <p class="body-text">
+            A good model does not just fit the training data — it generalizes.
+            The bias–variance tradeoff explains why overly complex models overfit,
+            while oversimplified ones underfit. We mathematically analyze how error components split into:
+            <b>bias² + variance + irreducible noise</b>.
+        </p>
+
+        <div class="pro-note">
+            <b>Regularization in practice:</b>
+            <ul>
+                <li><b>L1 (Lasso):</b> drives some coefficients exactly to zero → feature selection</li>
+                <li><b>L2 (Ridge):</b> shrinks coefficients smoothly → stabilizes training</li>
+                <li><b>Elastic Net:</b> hybrid of both for real-world robustness</li>
+            </ul>
+        </div>
+
+        <p class="body-text">
+            You will implement and compare:
+            <ul>
+                <li>Batch vs Stochastic Gradient Descent</li>
+                <li>Learning rate scheduling</li>
+                <li>Early stopping to prevent overfitting</li>
+            </ul>
+        </p>
+
+        <!-- Metrics -->
+        <h3 class="section-head">3. Advanced Regression Evaluation Metrics</h3>
+
+        <p class="body-text">
+            R-squared alone can be misleading. Professional modeling requires deeper diagnostics.
+            We expand into:
+        </p>
+
+        <p class="body-text">
+            <ul>
+                <li><b>Adjusted R²</b> — penalizes unnecessary features</li>
+                <li><b>MSE / RMSE / MAE</b> — error-based metrics</li>
+                <li><b>AIC & BIC</b> — information-theoretic model selection</li>
+                <li><b>MAPE</b> — business-friendly percentage error</li>
+            </ul>
+        </p>
+
+        <div class="pro-note">
+            <b>Residual analysis:</b>
+            We visually test assumptions such as:
+            <ul>
+                <li>linearity</li>
+                <li>homoscedasticity (equal variance)</li>
+                <li>independence of errors</li>
+                <li>normality of residuals</li>
+            </ul>
+            Real-world regression is invalid if these assumptions are broken.
+        </div>
+
+        <!-- NEW SECTION -->
+        <h3 class="section-head">4. Polynomial & Regularized Regression in Production</h3>
+
+        <p class="body-text">
+            Real systems are rarely perfectly linear.
+            We extend linear regression into <b>Polynomial Regression</b>
+            and show how to control exploding coefficients with <b>regularization</b>.
+        </p>
+
+        <p class="body-text">
+            Practical applications covered:
+            <ul>
+                <li>price prediction</li>
+                <li>demand forecasting</li>
+                <li>risk modeling</li>
+                <li>healthcare progression modeling</li>
+            </ul>
+        </p>
+
+        <p class="body-text">
+            By the end of this module, you will be able to design,
+            train, debug, and validate regression models that behave reliably in production environments.
+        </p>
+
+        <button class="btn-premium" onclick="completeModule()">Unlock Module 05 <i class="fas fa-lock-open"></i></button>
+    `
+},
+
+ {
         title: "Module 05: Gradient Boosting Machines",
         content: `
             <span class="module-tag">SOTA Algorithms</span>
             <h2 class="mod-title">XGBoost, LightGBM, and Hyperparameter Optimization</h2>
-            <p class="body-text">Boosting is the dominant paradigm for tabular data. We explore the evolution from Decision Trees to <b>Gradient Boosted Decision Trees (GBDT)</b>.</p>
+            <p class="body-text">Gradient Boosting is the gold standard for tabular datasets in industry. From credit scoring to fraud detection and recommendation engines — GBMs consistently outperform deep learning on structured data.</p>
             
             <h3 class="section-head">1. The Boosting Mechanism</h3>
-            <p class="body-text">Unlike Random Forest (which uses Bagging), Boosting is sequential. Each tree is trained to predict the <b>Residual Errors</b> of the previous ensemble. We dive into <b>Learning Rates</b> and <b>Tree Shrinkage</b>.</p>
+            <p class="body-text">
+                Boosting builds models sequentially. Every next tree focuses on the errors of the previous tree.<br>
+                We deeply understand:<br>
+                • Residual learning<br>
+                • Additive model building<br>
+                • Gradient Descent in function space<br><br>
+                You will see how the model learns:<br>
+                <b>Prediction = Σ (weak learners × learning rate)</b>
+            </p>
 
-            <h3 class="section-head">2. Feature Importance & SHAP Values</h3>
-            <p class="body-text">Black-box models are useless in regulated industries. We use <b>SHAP (SHapley Additive exPlanations)</b> values, based on cooperative game theory, to explain exactly how much each feature contributed to a specific prediction.</p>
+            <h3 class="section-head">2. Why Boosting Beats Bagging</h3>
+            <p class="body-text">
+                Random Forests reduce variance using bagging.<br>
+                Boosting reduces both <b>bias + variance</b> together.<br><br>
+                We compare:
+                • Random Forest vs Gradient Boosting<br>
+                • Independent vs sequential trees<br>
+                • Majority vote vs weighted sum<br>
+            </p>
 
-            <h3 class="section-head">3. Automated Tuning with Optuna</h3>
-            <p class="body-text">Forget manual tuning. We implement <b>Bayesian Optimization</b> using Optuna to efficiently search the hyperparameter space (max_depth, subsample, colsample_bytree) to find the global minimum of our loss function.</p>
-            
+            <h3 class="section-head">3. Handling Imbalanced & Noisy Data</h3>
+            <p class="body-text">
+                Real-world data is never clean. You learn:<br>
+                • scale_pos_weight tuning<br>
+                • class-weight approaches<br>
+                • label smoothing<br>
+                • robust loss functions (Huber, Quantile)<br><br>
+                Use cases:<br>
+                • fraud detection<br>
+                • medical diagnosis<br>
+                • churn prediction<br>
+            </p>
+
+            <h3 class="section-head">4. Feature Importance & SHAP Values</h3>
+            <p class="body-text">
+                We don’t just build models — we explain them.<br>
+                You will understand:<br>
+                • Global feature importance<br>
+                • Local (per-prediction) explanations<br>
+                • SHAP summary plots & dependence plots<br><br>
+                This is critical for:<br>
+                • Finance & banking regulations<br>
+                • Healthcare models<br>
+                • Any high-stakes AI system<br>
+            </p>
+
+            <h3 class="section-head">5. Regularization & Overfitting Control</h3>
+            <p class="body-text">
+                Boosting can easily overfit if uncontrolled.<br>
+                We master:<br>
+                • learning_rate<br>
+                • max_depth<br>
+                • min_child_weight<br>
+                • gamma<br>
+                • subsample & colsample_bytree<br><br>
+                You learn how to create models that<br>
+                <b>generalize well in the real world</b>.
+            </p>
+
+            <h3 class="section-head">6. Automated Hyperparameter Tuning with Optuna</h3>
+            <p class="body-text">
+                You will not tune models manually — you automate.<br>
+                We implement:<br>
+                • Bayesian optimization<br>
+                • Pruning bad trials<br>
+                • Searching high-dimensional spaces<br><br>
+                Objective functions minimize:<br>
+                • Logloss<br>
+                • RMSE<br>
+                • AUC-ROC<br>
+            </p>
+
+            <h3 class="section-head">7. Deployment & Production Considerations</h3>
+            <p class="body-text">
+                ML is useless unless deployed.<br>
+                We cover:<br>
+                • model compression<br>
+                • inference latency optimization<br>
+                • handling concept drift<br>
+                • retraining pipelines<br><br>
+                You will know how GBMs work in:<br>
+                • fintech apps<br>
+                • recommendation systems<br>
+                • real-time scoring APIs<br>
+            </p>
+
             <button class="btn-premium" onclick="completeModule()">Unlock Module 06 <i class="fas fa-lock-open"></i></button>
         `
-    },
-    {
+},
+{
         title: "Module 06: Dimensionality Reduction",
         content: `
             <span class="module-tag">Unsupervised Learning</span>
-            <h2 class="mod-title">PCA, t-SNE, and Manifold Learning</h2>
-            <p class="body-text">High-dimensional data suffers from the <b>Curse of Dimensionality</b>. As features increase, data points become sparse, and distance metrics fail.</p>
-            
-            <h3 class="section-head">1. Principal Component Analysis (PCA)</h3>
-            <p class="body-text">We use linear algebra (Eigenvalues and Eigenvectors) to project data into a lower-dimensional space while retaining the maximum <b>Explained Variance</b>. This is critical for noise reduction and data visualization.</p>
+            <h2 class="mod-title">PCA, t-SNE, UMAP, and Manifold Learning</h2>
+            <p class="body-text">
+                Real-world datasets often contain hundreds or thousands of features. This leads to the <b>Curse of Dimensionality</b>: models overfit, distance metrics break down, and visualization becomes impossible. Dimensionality Reduction converts high-dimensional data into compact, meaningful representations without losing important structure.
+            </p>
 
-            
+            <h3 class="section-head">1. Principal Component Analysis (PCA)</h3>
+            <p class="body-text">
+                PCA is the workhorse of dimensionality reduction. It is a linear transformation technique that rotates the feature space to new axes called <b>Principal Components</b>.<br><br>
+                You will learn:
+                • Eigenvalues & Eigenvectors<br>
+                • Covariance matrix construction<br>
+                • Scree plots & Explained Variance Ratio<br>
+                • Whitening transformations<br><br>
+                Applications:
+                • noise reduction<br>
+                • feature compression before ML<br>
+                • visualization of 100D data in 2D<br>
+                • speeding up training time dramatically
+            </p>
+
+            <div class="pro-note">
+                <b>Pro Insight:</b> PCA is not just compression — it reveals hidden structure by aligning axes in the direction of maximum variance. In finance, PCA is used to extract risk factors from correlated assets.
+            </div>
 
             <h3 class="section-head">2. Nonlinear Embedding: t-SNE & UMAP</h3>
-            <p class="body-text">PCA is linear. For complex, manifold structures, we use <b>t-SNE</b> or <b>UMAP</b>. These algorithms preserve local neighborhoods, allowing us to visualize clusters in 2D or 3D that are invisible in the original 100D space.</p>
-            
+            <p class="body-text">
+                PCA fails when the underlying data lies on a nonlinear manifold. For such complex geometry we use:<br>
+                • <b>t-SNE (t-Distributed Stochastic Neighbor Embedding)</b><br>
+                • <b>UMAP (Uniform Manifold Approximation and Projection)</b><br><br>
+                These techniques preserve <b>local neighborhood structure</b> instead of global distances, allowing clusters to emerge visually.<br><br>
+                Use cases:
+                • visualizing word embeddings<br>
+                • customer segmentation<br>
+                • genomic data exploration<br>
+                • image feature visualization from CNNs
+            </p>
+
+            <h3 class="section-head">3. When & Why to Reduce Dimensions</h3>
+            <p class="body-text">
+                Dimensionality reduction is not only for visualization — it directly improves model quality.<br><br>
+                Benefits include:<br>
+                • reduced overfitting<br>
+                • faster training & inference<br>
+                • removal of multicollinearity<br>
+                • lower memory footprint<br><br>
+                You also learn when <b>not</b> to reduce dimensions:
+                • interpretability loss is critical<br>
+                • when features are already sparse encoded<br>
+                • when autoencoders are preferable
+            </p>
+
+            <h3 class="section-head">4. Linear vs Nonlinear Manifold Learning</h3>
+            <p class="body-text">
+                We compare:<br>
+                • Linear methods (PCA, SVD)<br>
+                • Nonlinear embeddings (Isomap, LLE, UMAP, t-SNE)<br><br>
+                You will understand how data can actually live on a <b>lower-dimensional curved surface</b> embedded inside high-dimensional space — the core idea of manifold learning.
+            </p>
+
             <button class="btn-premium" onclick="completeModule()">Unlock Module 07 <i class="fas fa-lock-open"></i></button>
         `
-    },
-    {
+},
+
+
+{
         title: "Module 07: Deep Learning & Neural Networks",
         content: `
             <span class="module-tag">Artificial Intelligence</span>
-            <h2 class="mod-title">Backpropagation & Computational Graphs</h2>
-            <p class="body-text">Understand the "Engine" of AI. We build a neural network from scratch to understand the <b>Chain Rule</b> of calculus.</p>
-            
-            <h3 class="section-head">1. Activation Functions & Vanishing Gradients</h3>
-            <p class="body-text">We compare Sigmoid, Tanh, and <b>ReLU</b>. You will learn why ReLU became the standard for deep networks and how it prevents the gradient from disappearing during backpropagation.</p>
+            <h2 class="mod-title">Backpropagation, Computational Graphs & Modern Architectures</h2>
+            <p class="body-text">
+                Deep Learning powers recommendation systems, ChatGPT, self-driving cars, and medical imaging. In this module, you move from using libraries to
+                <b>understanding the mathematics that drives them</b>. We construct neural networks from scratch to truly understand gradients, weights, and loss functions.
+            </p>
 
-            <h3 class="section-head">2. Optimizer Architectures</h3>
-            <p class="body-text">Moving beyond simple Stochastic Gradient Descent (SGD). We analyze <b>Adam (Adaptive Moment Estimation)</b>, RMSprop, and Momentum-based optimizers that adjust the learning rate dynamically for each parameter.</p>
-            
+            <h3 class="section-head">1. Activation Functions & Vanishing Gradients</h3>
+            <p class="body-text">
+                Activation functions give neural networks the ability to learn nonlinear patterns. We compare:<br>
+                • Sigmoid<br>
+                • Tanh<br>
+                • <b>ReLU</b> and Leaky-ReLU<br>
+                • GELU and Swish (modern activations)<br><br>
+                Core concepts you master:<br>
+                • why Sigmoid saturates and causes vanishing gradients<br>
+                • how ReLU solves this issue in deep networks<br>
+                • dead ReLU problem and when to use Leaky-ReLU<br>
+                • gradient flow across multiple hidden layers
+            </p>
+
+            <div class="pro-note">
+                <b>Pro Insight:</b> Vanishing gradients destroy learning in very deep networks. Residual Networks (ResNets) introduced skip connections to allow gradients to flow backward efficiently.
+            </div>
+
+            <h3 class="section-head">2. Backpropagation & Computational Graphs</h3>
+            <p class="body-text">
+                Backpropagation is simply repeated application of the <b>Chain Rule</b> of calculus over a computational graph.<br><br>
+                We break down:
+                • forward pass (prediction)<br>
+                • loss computation (error)<br>
+                • backward pass (gradient propagation)<br>
+                • weight updates using optimizers<br><br>
+                You will implement a mini neural network with:<br>
+                • manual gradients<br>
+                • no frameworks<br>
+                • full step-by-step matrix math<br><br>
+                After this, TensorFlow and PyTorch become intuitive rather than magical.
+            </p>
+
+            <h3 class="section-head">3. Optimizer Architectures</h3>
+            <p class="body-text">
+                Training speed and stability depend on the optimizer. We compare:<br>
+                • SGD (Stochastic Gradient Descent)<br>
+                • Momentum<br>
+                • RMSProp<br>
+                • <b>Adam (Adaptive Moment Estimation)</b><br><br>
+                You learn:<br>
+                • exploding vs vanishing gradients<br>
+                • why Adam works well for sparse gradients<br>
+                • learning rate scheduling and warm restarts<br>
+                • cosine annealing vs step decay
+            </p>
+
+            <h3 class="section-head">4. Modern Deep Network Architectures</h3>
+            <p class="body-text">
+                We introduce the architectures driving modern AI:<br>
+                • Convolutional Neural Networks (CNNs) for images<br>
+                • Recurrent Neural Networks (RNNs) & LSTMs for sequences<br>
+                • Transformers & Attention mechanisms for language models<br><br>
+                You will understand conceptually how ChatGPT-like models use:<br>
+                • self-attention<br>
+                • positional encoding<br>
+                • multi-head attention blocks
+            </p>
+
+            <h3 class="section-head">5. Regularization & Generalization</h3>
+            <p class="body-text">
+                Deep networks overfit easily. We implement:<br>
+                • Dropout<br>
+                • Batch Normalization<br>
+                • Data Augmentation<br><br>
+                You learn how these techniques improve stability and reduce test-set error while keeping high accuracy.
+            </p>
+
             <button class="btn-premium" onclick="completeModule()">Unlock Module 08 <i class="fas fa-lock-open"></i></button>
         `
-    },
-    {
+},
+
+ {
         title: "Module 08: Natural Language Processing (NLP)",
         content: `
             <span class="module-tag">Language Modeling</span>
-            <h2 class="mod-title">The Transformer Revolution & LLMs</h2>
-            <p class="body-text">Language is context. We transition from simple Word Embeddings to the <b>Self-Attention mechanism</b> that powers GPT-4.</p>
-            
+            <h2 class="mod-title">The Transformer Revolution & Large Language Models (LLMs)</h2>
+            <p class="body-text">
+                NLP has moved from rule-based systems to deep neural architectures. Modern systems like ChatGPT,
+                Gemini, and Claude are powered by <b>Transformers</b>, which learn contextual representations of language
+                at massive scale.
+            </p>
+
             <h3 class="section-head">1. Attention is All You Need</h3>
-            <p class="body-text">Learn how Transformers process entire sequences in parallel, unlike RNNs. We dive into <b>Multi-Head Attention</b>, <b>Positional Encoding</b>, and <b>Layer Normalization</b>.</p>
+            <p class="body-text">
+                Transformers replaced RNNs and LSTMs by removing sequential dependency in training.<br><br>
+                You will understand:
+                • Self-Attention mechanism<br>
+                • Multi-Head Attention<br>
+                • Query–Key–Value matrix operations<br>
+                • Residual connections and Layer Normalization<br>
+                • Positional Encoding (how models understand order without recurrence)<br><br>
+                Key takeaway:
+                Transformers process entire sequences <b>in parallel</b>, making them scalable for billion-parameter models.
+            </p>
 
-            
+            <h3 class="section-head">2. Word Embeddings to Contextual Embeddings</h3>
+            <p class="body-text">
+                We transition from shallow NLP to deep representations:<br>
+                • Bag-of-Words<br>
+                • TF–IDF<br>
+                • Word2Vec & GloVe (static embeddings)<br>
+                • BERT-style contextual embeddings (meaning changes with sentence context)<br><br>
+                You learn why “bank” means something different in:<br>
+                • “river bank”<br>
+                • “savings bank”
+            </p>
 
-            <h3 class="section-head">2. Fine-Tuning & Prompt Engineering</h3>
-            <p class="body-text">Learn to adapt pre-trained models (BERT, RoBERTa, T5) for specific business tasks like Sentiment Analysis or Named Entity Recognition (NER) using <b>Transfer Learning</b>.</p>
-            
+            <h3 class="section-head">3. Fine-Tuning & Prompt Engineering</h3>
+            <p class="body-text">
+                Instead of training from scratch, enterprises fine-tune foundation models.<br><br>
+                You will practice:
+                • fine-tuning BERT, RoBERTa, and T5<br>
+                • sentiment analysis, text classification, NER<br>
+                • instruction-tuning and RLHF intuition<br><br>
+                Prompt engineering concepts covered:<br>
+                • zero-shot prompting<br>
+                • few-shot prompting<br>
+                • chain-of-thought prompting<br>
+                • system prompts vs user prompts
+            </p>
+
+            <h3 class="section-head">4. Building Real-World NLP Applications</h3>
+            <p class="body-text">
+                We apply NLP to business use-cases:<br>
+                • chatbot & virtual assistants<br>
+                • resume parsing & job-matching systems<br>
+                • document summarization<br>
+                • spam detection & fraud messaging systems<br><br>
+                You learn evaluation metrics:<br>
+                • BLEU<br>
+                • ROUGE<br>
+                • perplexity
+            </p>
+
+            <h3 class="section-head">5. Ethics, Bias & Hallucination</h3>
+            <p class="body-text">
+                LLMs are powerful but imperfect. We study:<br>
+                • dataset bias<br>
+                • toxicity filtering<br>
+                • hallucination in LLMs<br>
+                • responsible AI development
+            </p>
+
             <button class="btn-premium" onclick="completeModule()">Unlock Module 09 <i class="fas fa-lock-open"></i></button>
         `
-    },
-    {
+},
+
+{
         title: "Module 09: Computer Vision",
         content: `
             <span class="module-tag">Visual Perception</span>
-            <h2 class="mod-title">Convolutional Neural Networks (CNNs)</h2>
-            <p class="body-text">Computers see pixels, but we need them to see objects. We study how <b>Convolutional Layers</b> act as automated feature extractors.</p>
-            
+            <h2 class="mod-title">Convolutional Neural Networks (CNNs) & Visual Intelligence</h2>
+            <p class="body-text">
+                Images are just matrices of pixel intensities — but AI learns to see <b>objects, faces, scenes, and emotions</b>.
+                In this module, we move from raw pixels to high-level visual understanding using deep learning.
+            </p>
+
             <h3 class="section-head">1. Kernels, Stride, and Padding</h3>
-            <p class="body-text">Understand the mathematics of the convolution operation. We explore how different filters can detect horizontal edges, vertical edges, and complex textures.</p>
+            <p class="body-text">
+                Convolutional layers extract features automatically, replacing manual feature engineering.<br><br>
+                You will learn:
+                • convolution operation mathematics<br>
+                • kernel/filter design<br>
+                • stride & receptive field<br>
+                • padding vs valid convolution<br>
+                • max-pooling vs average-pooling<br><br>
+                We visualize how filters detect:
+                • edges<br>
+                • corners<br>
+                • textures<br>
+                • high-level features (eyes, wheels, faces)
+            </p>
 
-            
+            <h3 class="section-head">2. CNN Architecture Pipeline</h3>
+            <p class="body-text">
+                We build the full vision pipeline step-by-step:<br>
+                • input image normalization<br>
+                • feature extraction layers<br>
+                • flattening & fully connected layers<br>
+                • softmax output for classification<br><br>
+                Datasets used:
+                • MNIST<br>
+                • CIFAR-10<br>
+                • ImageNet (conceptually)
+            </p>
 
-            <h3 class="section-head">2. SOTA Architectures: ResNet & EfficientNet</h3>
-            <p class="body-text">We study <b>Residual Connections</b> which allow us to train networks with hundreds of layers without losing the gradient signal.</p>
-            
+            <h3 class="section-head">3. SOTA Architectures: ResNet, EfficientNet & MobileNet</h3>
+            <p class="body-text">
+                Real-world AI requires accuracy + computation efficiency.<br><br>
+                You will understand:
+                • Residual Connections (ResNet skip connections)<br>
+                • depth vs width scaling (EfficientNet)<br>
+                • lightweight models for mobile (MobileNet & depthwise separable convolutions)<br><br>
+                Key outcome:
+                You learn why deeper networks DON'T always mean better — 
+                and how residual learning solved the vanishing gradient problem.
+            </p>
+
+            <h3 class="section-head">4. Object Detection & Segmentation</h3>
+            <p class="body-text">
+                Beyond classification, we detect and localize objects.<br><br>
+                Methods covered:<br>
+                • YOLO family (You Only Look Once)<br>
+                • Faster R-CNN intuition<br>
+                • Semantic vs Instance Segmentation<br><br>
+                Real-world applications:
+                • self-driving cars<br>
+                • medical diagnosis<br>
+                • CCTV monitoring<br>
+                • retail analytics
+            </p>
+
+            <h3 class="section-head">5. Data Augmentation & Transfer Learning</h3>
+            <p class="body-text">
+                Training CNNs from scratch is expensive — so we reuse knowledge.<br><br>
+                You will practice:<br>
+                • image flipping, rotation, cropping<br>
+                • color jitter & normalization<br>
+                • using pre-trained models (ImageNet weights)<br>
+                • freezing & fine-tuning layers<br><br>
+                Result:
+                Build high-accuracy models with <b>small datasets</b>.
+            </p>
+
+            <h3 class="section-head">6. Evaluating Vision Models</h3>
+            <p class="body-text">
+                We analyze performance using:<br>
+                • confusion matrix<br>
+                • precision & recall<br>
+                • Intersection over Union (IoU)<br>
+                • mAP (mean Average Precision)
+            </p>
+
             <button class="btn-premium" onclick="completeModule()">Unlock Module 10 <i class="fas fa-lock-open"></i></button>
         `
-    },
-    {
-        title: "Module 10: MLOps & Production Engineering",
-        content: `
-            <span class="module-tag">Deployment & ROI</span>
-            <h2 class="mod-title">Model Serving, CI/CD, and Monitoring</h2>
-            <p class="body-text">The final step is turning a model into a <b>Product</b>. This is the difference between a data scientist and an ML Engineer.</p>
-            
-            <h3 class="section-head">1. API Development with FastAPI</h3>
-            <p class="body-text">We build high-performance, asynchronous APIs to serve model predictions. We implement <b>Pydantic</b> for strict data validation at the entry point.</p>
+},
 
-            <h3 class="section-head">2. Containerization with Docker</h3>
-            <p class="body-text">Learn to wrap your entire environment—OS, Python version, Libraries—into a single <b>Docker Image</b>. This ensures "it works on my machine" means "it works in production."</p>
+{
+    title: "Module 10: MLOps & Production Engineering",
+    content: `
+        <span class="module-tag">Deployment & ROI</span>
+        <h2 class="mod-title">Model Serving, CI/CD, and Monitoring</h2>
+        <p class="body-text">The final step is turning a model into a <b>Product</b>. This is what separates a hobby project from real-world AI systems generating business value.</p>
+        
+        <h3 class="section-head">1. API Development with FastAPI</h3>
+        <p class="body-text">We build high-performance, asynchronous APIs to serve real-time predictions. You will design request/response schemas using <b>Pydantic</b>, implement batch prediction endpoints, and handle exceptions gracefully.</p>
 
-            <h3 class="section-head">3. Model Drift & Monitoring</h3>
-            <p class="body-text">Models decay over time as the world changes. We implement monitoring for <b>Concept Drift</b> and <b>Data Drift</b>, triggering automated retraining pipelines when performance falls below a threshold.</p>
-            
-            <button class="btn-premium" onclick="completeModule()">Generate Final Credential <i class="fas fa-certificate"></i></button>
-        `
-    }
+        <h3 class="section-head">2. Containerization with Docker</h3>
+        <p class="body-text">Package your complete ML environment — OS, Python version, dependencies, and model artifacts — into a <b>Docker Image</b>. Learn to work with Docker Hub, multi-stage builds, and GPU-enabled containers.</p>
+
+        <h3 class="section-head">3. CI/CD for Machine Learning</h3>
+        <p class="body-text">We implement automated pipelines using <b>GitHub Actions</b> and <b>GitLab CI</b>. Every code push triggers testing, linting, model validation, and deployment to staging or production environments.</p>
+
+        <h3 class="section-head">4. Model Drift & Monitoring</h3>
+        <p class="body-text">Models degrade as real-world data changes. You will track <b>Concept Drift</b>, <b>Data Drift</b>, latency, and failure rates using tools like Prometheus & Grafana — and trigger automated retraining when thresholds fail.</p>
+
+        <h3 class="section-head">5. Scalable Deployment</h3>
+        <p class="body-text">Serve millions of inferences using <b>Kubernetes</b>, <b>Ray Serve</b>, and serverless platforms. Understand auto-scaling, load balancing, blue–green deployment, and A/B testing of models in production.</p>
+
+        <button class="btn-premium" onclick="completeModule()">Generate Final Credential <i class="fas fa-certificate"></i></button>
+    `
+}
+
 ];
 
         function toggleSidebar() {
