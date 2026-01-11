@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Internadda Elite Certificate</title>
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
@@ -178,10 +179,12 @@ body {
 const name = localStorage.getItem("internadda_cert_name");
 const courseName = localStorage.getItem("internadda_course_name");
 
+// Set the recipient name if it exists in storage
 if (name) {
     document.getElementById("recipient-name").innerText = name;
 }
 
+// Set the course title if it exists in storage to fix the "Data Science" hardcoding
 if (courseName) {
     document.getElementById("course-title").innerText = courseName;
 }
@@ -196,7 +199,7 @@ document.getElementById("cert-date").innerText =
 
 /* 3. Generate Unique Certificate ID */
 function generateCertID() {
-    // We add the course initials to the ID to make it unique
+    // Adds course initials to the ID to ensure uniqueness per program
     const prefix = courseName ? courseName.substring(0,2).toUpperCase() : "IA";
     return "IA-" + prefix + "-" +
         Math.random().toString(36).substring(2, 6).toUpperCase() +
