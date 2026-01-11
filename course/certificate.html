@@ -4,10 +4,8 @@
 <meta charset="UTF-8">
 <title>Internadda Elite Certificate</title>
 
-<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-<!-- PDF Library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
@@ -132,7 +130,6 @@ body {
     font-weight: 700;
     margin-bottom: 6px;
 }
-
 </style>
 </head>
 
@@ -140,28 +137,23 @@ body {
 
 <div id="certificate" class="certificate-wrapper">
 
-    <!-- HEADER -->
     <div class="header">
         <img src="https://internadda.com/images/logo.jpg" class="logo" alt="Internadda Logo">
         <div class="badge">OFFICIAL CREDENTIAL</div>
     </div>
 
-    <!-- TITLE -->
     <div class="title">Certificate of Completion</div>
     <div class="subtitle">Internadda Elite Program</div>
 
-    <!-- BODY -->
     <div class="presented">This certificate is proudly presented to</div>
     <div id="recipient-name">Recipient Name</div>
 
     <div class="description">
-        for successfully completing the <b>Data Science Specialization</b> under the
+        for successfully completing the <b id="course-title">Data Science Specialization</b> under the
         <b>Internadda Elite Program</b>. This certification confirms professional
-        competency in Python Engineering, Data Science, Machine Learning,
-        Deep Learning, and MLOps practices.
+        competency in the specialized domain and industry standard practices.
     </div>
 
-    <!-- FOOTER -->
     <div class="footer">
         <div class="footer-box">
             <b>Date Issued</b>
@@ -179,17 +171,22 @@ body {
         </div>
     </div>
 
-
 </div>
 
 <script>
-/* Load Name */
+/* 1. Load Name and Course from LocalStorage */
 const name = localStorage.getItem("internadda_cert_name");
+const courseName = localStorage.getItem("internadda_course_name");
+
 if (name) {
     document.getElementById("recipient-name").innerText = name;
 }
 
-/* Date */
+if (courseName) {
+    document.getElementById("course-title").innerText = courseName;
+}
+
+/* 2. Set Current Date */
 document.getElementById("cert-date").innerText =
     new Date().toLocaleDateString("en-IN", {
         day: "numeric",
@@ -197,15 +194,16 @@ document.getElementById("cert-date").innerText =
         year: "numeric"
     });
 
-/* Certificate ID */
+/* 3. Generate Unique Certificate ID */
 function generateCertID() {
-    return "IA-DS-" +
+    // We add the course initials to the ID to make it unique
+    const prefix = courseName ? courseName.substring(0,2).toUpperCase() : "IA";
+    return "IA-" + prefix + "-" +
         Math.random().toString(36).substring(2, 6).toUpperCase() +
         "-" +
         Date.now().toString().slice(-5);
 }
 document.getElementById("cert-id").innerText = generateCertID();
-
 </script>
 
 </body>
