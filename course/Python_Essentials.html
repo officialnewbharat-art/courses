@@ -2308,23 +2308,27 @@ def log_request(input_data, prediction):
     window.location.href = "certificate.html";
     }
 
-        function generateCredential() {
-            const name = document.getElementById('cert-name').value.trim();
-            if (!name) {
-                Swal.fire('Error', 'Please enter your full name.', 'error');
-                return;
-            }
-            localStorage.setItem("internadda_cert_name", name);
-            Swal.fire({
-                title: 'Certificate Generated!',
-                text: `Official Python Specialization Credential issued to ${name}.`,
-                icon: 'success',
-                confirmButtonText: 'View Certificate',
-                confirmButtonColor: '#4338ca'
-            }).then(() => {
-                window.location.href = "certificate.html";
-            });
+    function generateCredential() {
+        const name = document.getElementById('cert-name').value.trim();
+        if (!name) {
+            Swal.fire('Error', 'Please enter your full name.', 'error');
+            return;
         }
-    </script>
+        
+        // SAVE BOTH NAME AND COURSE TITLE
+        localStorage.setItem("internadda_cert_name", name);
+        localStorage.setItem("internadda_course_name", "Python Essentials Program"); 
+    
+        Swal.fire({
+            title: 'Certificate Generated!',
+            text: `Official Python Specialization Credential issued to ${name}.`,
+            icon: 'success',
+            confirmButtonText: 'View Certificate',
+            confirmButtonColor: '#4338ca'
+        }).then(() => {
+            window.location.href = "certificate.html";
+        });
+    }
+        </script>
 </body>
 </html>
