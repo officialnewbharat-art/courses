@@ -1,0 +1,11 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/Python_Essentials.html", "destination": "/Python_Essentials.html.html", "statusCode": 200 },
+    { "source": "/Essential%20Data%20Science%20Intern%20Course", "destination": "/Essential%20Data%20Science%20Intern%20Course.html", "statusCode": 200 },
+    { "source": "/Cloud-DevOps-Essentials", "destination": "/Cloud-DevOps-Essentials.html", "statusCode": 200 },
+    { "source": "/Generative-AI-Prompt-Engineering-Masterclass", "destination": "/Generative-AI-Prompt-Engineering-Masterclass.html", "statusCode": 200 },
+    { "source": "/Ethical-Hacking-Mastery", "destination": "/Ethical-Hacking-Mastery.html", "statusCode": 200 },
+  ]
+}
