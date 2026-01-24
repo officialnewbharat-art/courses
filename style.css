@@ -196,125 +196,91 @@ header {
    ========================================= */
 /* --- Course Grid Adjustments --- */
 /* --- Course Grid: 4 Desktop / 2 Mobile --- */
+/* --- Course Grid Layout --- */
 .course-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px; /* Tighter gap for small cards */
-    padding-bottom: 60px;
+    grid-template-columns: repeat(4, 1fr); /* 4 Cards per row on Desktop */
+    gap: 20px;
 }
 
-/* --- Small Compact Card --- */
+/* --- Compact Image Card --- */
 .course-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
+    position: relative;
+    border-radius: 12px;
     overflow: hidden;
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
+    background: #fff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    display: none; /* Controlled by script.js */
+}
+
+.course-card.visible {
+    display: block;
+    animation: revealCard 0.6s ease forwards;
+}
+
+@keyframes revealCard {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.course-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.6s ease;
 }
 
 .course-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    border-color: #4338ca;
+    transform: translateY(-8px);
+    box-shadow: 0 20px 30px rgba(0,0,0,0.1);
 }
 
-.card-image-wrapper {
-    position: relative;
-    aspect-ratio: 16 / 9;
+.course-card:hover img {
+    transform: scale(1.05);
 }
 
-.badge-premium {
+/* --- Professional Free Badge --- */
+.badge-free {
     position: absolute;
-    top: 8px;
-    right: 8px;
-    background: #4338ca;
-    color: #fff;
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 0.65rem;
-    font-weight: 700;
-}
-
-.card-body {
-    padding: 12px;
-}
-
-.category-tag {
-    font-size: 0.6rem;
-    padding: 2px 6px;
-    border-radius: 4px;
+    top: 12px;
+    right: 12px;
+    background: #10b981; /* Emerald Green */
+    color: #ffffff;
+    padding: 4px 12px;
+    font-size: 0.7rem;
     font-weight: 800;
-    background: #f1f5f9;
-    color: #475569;
+    letter-spacing: 0.5px;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+    z-index: 2;
 }
 
-.course-title {
+/* --- View More Action --- */
+.view-more-action {
+    background: #4338ca;
+    color: #ffffff;
+    border: none;
+    padding: 14px 40px;
     font-size: 0.95rem;
     font-weight: 700;
-    margin: 8px 0;
-    color: #1e293b;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(67, 56, 202, 0.2);
 }
 
-.course-stats {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.7rem;
-    color: #64748b;
-    margin-bottom: 12px;
-}
-
-.price-container {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-}
-
-.current-price {
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: #15803d; /* Professional Green */
-}
-
-.original-price {
-    font-size: 0.75rem;
-    text-decoration: line-through !important;
-    color: #94a3b8;
-}
-
-.view-btn {
-    width: 100%;
-    background: #f8fafc;
-    color: #4338ca !important;
-    border: 1px solid #e2e8f0;
-    padding: 8px;
-    text-align: center;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    transition: all 0.2s ease;
-}
-
-.view-btn:hover {
-    background: #4338ca;
-    color: #ffffff !important;
+.view-more-action:hover {
+    background: #3730a3;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px rgba(67, 56, 202, 0.3);
 }
 
 /* --- Mobile View (2 Cards per Row) --- */
 @media (max-width: 768px) {
     .course-grid {
         grid-template-columns: repeat(2, 1fr) !important;
-        gap: 10px;
-        padding: 0 10px;
-    }
-    
-    .course-title {
-        font-size: 0.85rem;
+        gap: 12px;
     }
 }
 /* --- Sample Certificate Section --- */
