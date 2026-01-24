@@ -338,7 +338,7 @@ header {
     .courses-hero h1 { font-size: 1.8rem; }
     .courses-hero p { font-size: 1rem; }
     
-    /* Hamburger Icon Alignment */
+    /* 1. Hamburger Icon Alignment */
     .mobile-menu-btn { 
         display: block; 
         z-index: 1002; 
@@ -347,7 +347,7 @@ header {
         padding: 5px;
     }
 
-    /* 2. Menu Container - Fixed Spacing (Gap 0) */
+    /* 2. Menu Container - FIXED SPACING (Gap 0) */
     .nav-links {
         position: absolute; 
         top: 80px; 
@@ -357,7 +357,7 @@ header {
         flex-direction: column; 
         align-items: flex-start;
         padding: 0; 
-        gap: 0;               /* Reset gap for mobile */
+        gap: 0;               /* REMOVED GAP FOR 100% MATCH */
         max-height: 0; 
         overflow: hidden; 
         opacity: 0;
@@ -374,10 +374,10 @@ header {
         overflow-y: auto;
     }
 
-    /* 3. Nav Items - Tightened Spacing */
+    /* 3. Menu Items - Tight Spacing & Borders */
     .nav-item {
         width: 100%; 
-        padding: 14px 24px;   /* Tight professional padding */
+        padding: 14px 24px;   /* Your saved spacing */
         font-size: 1.05rem;
         font-weight: 600;
         color: #334155;
@@ -395,7 +395,7 @@ header {
         text-align: center;
     }
 
-    /* 4. Dropdown Accordion Style */
+    /* 4. Dropdown Spacing */
     .dropdown { width: 100%; }
     
     .dropdown > span { 
@@ -417,6 +417,7 @@ header {
         border: none;
         background-color: #f8fafc; 
         padding: 0;
+        animation: none;
     }
     
     .dropdown.active .dropdown-content { 
@@ -434,6 +435,11 @@ header {
     .dropdown-content a:last-child {
         border-bottom: none;
     }
+
+    .nav-item.active {
+        color: #4338ca !important;
+        font-weight: 700;
+    }
 }
 
 @media (max-width: 650px) {
@@ -444,7 +450,7 @@ header {
 }
 
 /* =========================================
-   6. FOOTER STYLES (BALANCED)
+   6. FOOTER STYLES (BALANCED & TIGHT)
    ========================================= */
 footer {
     background-color: #0f172a;
@@ -455,10 +461,13 @@ footer {
 
 .footer-grid {
     display: grid;
-    /* Clean column distribution */
+    /* Brand ko space di aur links tight columns mein */
     grid-template-columns: 1.8fr repeat(5, 1fr); 
     gap: 25px;
     margin-bottom: 60px;
+    max-width: 1320px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .footer-brand { padding-right: 20px; }
