@@ -1,536 +1,604 @@
-/* =========================================
-   1. GLOBAL VARIABLES & RESET
-   ========================================= */
-:root {
-    --primary: #4338ca;       /* Indigo 700 */
-    --primary-hover: #3730a3; /* Indigo 800 */
-    --secondary: #4c51bf;     /* Indigo 600 */
-    --dark-bg: #0f172a;       /* Slate 900 */
-    --dark-card: #1e293b;     /* Slate 800 */
-    --text-main: #1a202c;     /* Gray 900 */
-    --text-light: #718096;    /* Gray 500 */
-    --white: #ffffff;
-    --font-family: 'Inter', sans-serif;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    text-decoration: none !important; /* Removes all underlines */
-}
-
-body {
-    font-family: var(--font-family);
-    color: var(--text-main);
-    line-height: 1.6;
-    background-color: #f8faff;
-    overflow-x: hidden;
-}
-
-ul { list-style: none; }
-img { max-width: 100%; display: block; }
-
-/* FIXED CONTAINER: Perfect for 14-inch and Large Desktops */
-.container {
-    width: 100%;
-    max-width: 1320px;     /* Professional standard width */
-    margin: 0 auto;
-    padding: 0 40px;       /* Balanced side padding */
-    position: relative;
-}
-
-/* =========================================
-   2. HEADER & NAVIGATION
-   ========================================= */
-header {
-    background: #fff;
-    border-bottom: 1px solid #f1f5f9;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-}
-
-.nav-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 80px;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.logo span {
-    font-weight: 800;
-    font-size: 1.4rem;
-    color: #1a202c;
-    letter-spacing: -0.5px;
-}
-
-.nav-links {
-    display: flex;
-    gap: 25px;             /* Professional tight spacing */
-    align-items: center;
-}
-
-.nav-item {
-    font-weight: 500;
-    color: #4a5568;
-    position: relative;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s ease;
-}
-
-.nav-item i { display: none; }
-.nav-item:hover { color: var(--primary); }
-
-/* --- ACTIVE COURSES GLOW EFFECT --- */
-.active-glow {
-    color: #4338ca !important;
-    font-weight: 700 !important;
-    text-shadow: 0 0 8px rgba(67, 56, 202, 0.4), 0 0 15px rgba(67, 56, 202, 0.2);
-    position: relative;
-}
-
-.active-glow::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: #4338ca;
-    box-shadow: 0 0 10px rgba(67, 56, 202, 0.6);
-    border-radius: 2px;
-}
-
-/* --- DROPDOWN MENU --- */
-.dropdown { position: relative; display: inline-block; }
-.dropdown > span { display: flex; align-items: center; cursor: pointer; user-select: none; padding: 5px 0; }
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #ffffff;
-    min-width: 260px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    border-radius: 12px;
-    border: 1px solid #e2e8f0;
-    z-index: 1001;
-    top: 140%;
-    right: 0;
-    padding: 8px 0;
-}
-
-.dropdown.active .dropdown-content { display: block; }
-
-.dropdown-content a {
-    color: #4a5568;
-    padding: 12px 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.95rem;
-}
-
-.dropdown-content a:hover { background-color: #f8fafc; color: var(--primary); }
-
-.mobile-menu-btn {
-    display: none;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: #1a202c;
-    cursor: pointer;
-}
-
-/* =========================================
-   3. HERO SECTION (BALANCED)
-   ========================================= */
-.courses-hero {
-    padding: 60px 0 40px; 
-    text-align: center;
-    background: linear-gradient(180deg, #ffffff 0%, #f8faff 100%);
-}
-
-.courses-hero h1 {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: #1e293b;
-    margin-bottom: 15px;
-    letter-spacing: -1px;
-    max-width: 800px;      /* Prevents stretching */
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.courses-hero p {
-    font-size: 1.1rem;
-    color: #64748b;
-    max-width: 550px;      /* Professional readable width */
-    margin: 0 auto;
-}
-
-/* =========================================
-   4. COURSE GRID & CARDS
-   ========================================= */
-.course-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
-    gap: 30px;             /* Balanced gap */
-    padding-bottom: 80px;
-    margin-top: 20px;
-}
-
-.course-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 20px;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-}
-
-.course-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
-
-.card-image-wrapper {
-    position: relative;
-    height: 200px;
-    overflow: hidden;
-}
-
-.card-image-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-.course-card:hover .card-image-wrapper img {
-    transform: scale(1.1);
-}
-
-.badge-premium {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
-    color: white;
-    padding: 6px 14px;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    box-shadow: 0 4px 10px rgba(67, 56, 202, 0.3);
-}
-
-.card-body {
-    padding: 24px;
-}
-
-.category-tag {
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 4px 12px;
-    border-radius: 6px;
-    text-transform: uppercase;
-}
-
-.tag-dev { background: #eef2ff; color: #4338ca; }
-.tag-data { background: #ecfdf5; color: #059669; }
-
-.course-title {
-    font-size: 1.3rem;
-    color: #1e293b;
-    margin: 12px 0 4px;
-    font-weight: 800;
-}
-
-.instructor {
-    font-size: 0.85rem;
-    color: #64748b;
-    margin-bottom: 15px;
-}
-
-.course-stats {
-    display: flex;
-    gap: 15px;
-    padding: 12px 0;
-    border-top: 1px solid #f1f5f9;
-    border-bottom: 1px solid #f1f5f9;
-    margin-bottom: 15px;
-}
-
-.course-stats span {
-    font-size: 0.85rem;
-    color: #475569;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.course-stats i { color: #4338ca; }
-
-.price-container {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-}
-
-.original-price {
-    text-decoration: line-through !important;
-    color: #94a3b8;
-    font-size: 1.1rem;
-}
-
-.current-price {
-    color: #059669;
-    font-weight: 800;
-    font-size: 1.4rem;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-}
-
-.view-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background: #1e293b;
-    color: white !important;
-    padding: 12px;
-    border-radius: 10px;
-    font-weight: 600;
-    transition: background 0.3s;
-}
-
-.view-btn:hover {
-    background: #4338ca;
-}
-
-/* =========================================
-   5. RESPONSIVE ADJUSTMENTS (100% Mobile Match)
-   ========================================= */
-@media (max-width: 1024px) {
-    .course-grid { 
-        grid-template-columns: repeat(2, 1fr); 
-        gap: 30px;
+    /* =========================================
+       1. GLOBAL VARIABLES & RESET
+       ========================================= */
+    :root {
+        --primary: #4338ca;       /* Indigo 700 */
+        --primary-hover: #3730a3; /* Indigo 800 */
+        --secondary: #4c51bf;     /* Indigo 600 */
+        --dark-bg: #0f172a;       /* Slate 900 */
+        --dark-card: #1e293b;     /* Slate 800 */
+        --text-main: #1a202c;     /* Gray 900 */
+        --text-light: #718096;    /* Gray 500 */
+        --white: #ffffff;
+        --font-family: 'Inter', sans-serif;
     }
-    .courses-hero h1 { font-size: 2.2rem; }
-}
 
-@media (max-width: 768px) {
-    .container { padding: 0 20px; }
-    .courses-hero { padding: 40px 0 30px; }
-    .courses-hero h1 { font-size: 1.8rem; }
-    .courses-hero p { font-size: 1rem; }
-    
-    /* 1. Hamburger Icon Alignment */
-    .mobile-menu-btn { 
-        display: block; 
-        z-index: 1002; 
-        font-size: 1.4rem;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        text-decoration: none !important; /* Removes all underlines */
+    }
+
+    body {
+        font-family: var(--font-family);
         color: var(--text-main);
-        padding: 5px;
+        line-height: 1.6;
+        background-color: #f8faff;
+        overflow-x: hidden;
     }
 
-    /* 2. Menu Container - FIXED SPACING (Gap 0) */
-    .nav-links {
-        position: absolute; 
-        top: 80px; 
-        left: 0; 
+    ul { list-style: none; }
+    img { max-width: 100%; display: block; }
+
+    /* FIXED CONTAINER: Perfect for 14-inch and Large Desktops */
+    .container {
         width: 100%;
-        background: #ffffff; 
-        flex-direction: column; 
-        align-items: flex-start;
-        padding: 0; 
-        gap: 0;               /* REMOVED GAP FOR 100% MATCH */
-        max-height: 0; 
-        overflow: hidden; 
-        opacity: 0;
-        transform: translateY(-10px);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-        border-top: 1px solid #f1f5f9;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        max-width: 1320px;     /* Professional standard width */
+        margin: 0 auto;
+        padding: 0 40px;       /* Balanced side padding */
+        position: relative;
     }
 
-    .nav-links.active { 
-        max-height: 85vh; 
-        opacity: 1; 
-        transform: translateY(0);
-        overflow-y: auto;
-    }
-
-    /* 3. Menu Items - Tight Spacing & Borders */
-    .nav-item {
-        width: 100%; 
-        padding: 14px 24px;   /* Your saved spacing */
-        font-size: 1.05rem;
-        font-weight: 600;
-        color: #334155;
+    /* =========================================
+       2. HEADER & NAVIGATION
+       ========================================= */
+    header {
+        background: #fff;
         border-bottom: 1px solid #f1f5f9;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .nav-container {
         display: flex;
-        justify-content: flex-start;
+        justify-content: space-between;
+        align-items: center;
+        height: 80px;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .logo span {
+        font-weight: 800;
+        font-size: 1.4rem;
+        color: #1a202c;
+        letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 25px;             /* Professional tight spacing */
         align-items: center;
     }
 
-    .nav-item i { 
-        display: inline-block; 
-        width: 24px; 
-        color: var(--primary); 
-        margin-right: 12px; 
-        text-align: center;
+    .nav-item {
+        font-weight: 500;
+        color: #4a5568;
+        position: relative;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
     }
 
-    /* 4. Dropdown Spacing */
-    .dropdown { width: 100%; }
-    
-    .dropdown > span { 
-        width: 100%; 
-        padding: 14px 24px;   /* Match nav-item padding */
-        justify-content: space-between; 
-        border-bottom: 1px solid #f1f5f9; 
-    }
-    
-    .dropdown.active > span i.fa-chevron-down {
-        transform: rotate(180deg);
-        transition: transform 0.3s;
+    .nav-item i { display: none; }
+    .nav-item:hover { color: var(--primary); }
+
+    /* --- ACTIVE COURSES GLOW EFFECT --- */
+    .active-glow {
+        color: #4338ca !important;
+        font-weight: 700 !important;
+        text-shadow: 0 0 8px rgba(67, 56, 202, 0.4), 0 0 15px rgba(67, 56, 202, 0.2);
+        position: relative;
     }
 
-    .dropdown-content { 
-        position: static; 
-        display: none; 
-        box-shadow: none; 
-        border: none;
-        background-color: #f8fafc; 
-        padding: 0;
-        animation: none;
+    .active-glow::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: #4338ca;
+        box-shadow: 0 0 10px rgba(67, 56, 202, 0.6);
+        border-radius: 2px;
     }
-    
-    .dropdown.active .dropdown-content { 
-        display: block; 
-        border-bottom: 1px solid #f1f5f9;
+
+    /* --- DROPDOWN MENU --- */
+    .dropdown { position: relative; display: inline-block; }
+    .dropdown > span { display: flex; align-items: center; cursor: pointer; user-select: none; padding: 5px 0; }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #ffffff;
+        min-width: 260px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        z-index: 1001;
+        top: 140%;
+        right: 0;
+        padding: 8px 0;
     }
+
+    .dropdown.active .dropdown-content { display: block; }
 
     .dropdown-content a {
-        padding: 12px 24px 12px 50px; /* Indented Sub-links */
+        color: #4a5568;
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
         font-size: 0.95rem;
+    }
+
+    .dropdown-content a:hover { background-color: #f8fafc; color: var(--primary); }
+
+    .mobile-menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #1a202c;
+        cursor: pointer;
+    }
+
+    /* =========================================
+       3. HERO SECTION (BALANCED)
+       ========================================= */
+    .courses-hero {
+        padding: 60px 0 40px; 
+        text-align: center;
+        background: linear-gradient(180deg, #ffffff 0%, #f8faff 100%);
+    }
+
+    .courses-hero h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #1e293b;
+        margin-bottom: 15px;
+        letter-spacing: -1px;
+        max-width: 800px;      /* Prevents stretching */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .courses-hero p {
+        font-size: 1.1rem;
         color: #64748b;
-        border-bottom: 1px solid #e2e8f0;
+        max-width: 550px;      /* Professional readable width */
+        margin: 0 auto;
     }
 
-    .dropdown-content a:last-child {
-        border-bottom: none;
+    /* =========================================
+       4. COURSE GRID & CARDS
+       ========================================= */
+    .course-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
+        gap: 30px;             /* Balanced gap */
+        padding-bottom: 80px;
+        margin-top: 20px;
     }
 
-    .nav-item.active {
-        color: #4338ca !important;
+    .course-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .course-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    .card-image-wrapper {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .card-image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .course-card:hover .card-image-wrapper img {
+        transform: scale(1.1);
+    }
+
+    .badge-premium {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
+        color: white;
+        padding: 6px 14px;
+        border-radius: 50px;
+        font-size: 0.75rem;
         font-weight: 700;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 10px rgba(67, 56, 202, 0.3);
     }
-}
 
-@media (max-width: 650px) {
-    .course-grid { 
-        grid-template-columns: 1fr; 
-        gap: 25px;
+    .card-body {
+        padding: 24px;
     }
-}
 
-/* =========================================
-   6. PROFESSIONAL MOBILE MENU (Accordion Style)
-   ========================================= */
+    .category-tag {
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 6px;
+        text-transform: uppercase;
+    }
+
+    .tag-dev { background: #eef2ff; color: #4338ca; }
+    .tag-data { background: #ecfdf5; color: #059669; }
+
+    .course-title {
+        font-size: 1.3rem;
+        color: #1e293b;
+        margin: 12px 0 4px;
+        font-weight: 800;
+    }
+
+    .instructor {
+        font-size: 0.85rem;
+        color: #64748b;
+        margin-bottom: 15px;
+    }
+
+    .course-stats {
+        display: flex;
+        gap: 15px;
+        padding: 12px 0;
+        border-top: 1px solid #f1f5f9;
+        border-bottom: 1px solid #f1f5f9;
+        margin-bottom: 15px;
+    }
+
+    .course-stats span {
+        font-size: 0.85rem;
+        color: #475569;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .course-stats i { color: #4338ca; }
+
+    .price-container {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .original-price {
+        text-decoration: line-through !important;
+        color: #94a3b8;
+        font-size: 1.1rem;
+    }
+
+    .current-price {
+        color: #059669;
+        font-weight: 800;
+        font-size: 1.4rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+
+    .view-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: #1e293b;
+        color: white !important;
+        padding: 12px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: background 0.3s;
+    }
+
+    .view-btn:hover {
+        background: #4338ca;
+    }
+
+    /* =========================================
+       5. RESPONSIVE ADJUSTMENTS (100% Mobile Match)
+       ========================================= */
+    @media (max-width: 1024px) {
+        .course-grid { 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 30px;
+        }
+        .courses-hero h1 { font-size: 2.2rem; }
+    }
+
+    @media (max-width: 768px) {
+        .container { padding: 0 20px; }
+        .courses-hero { padding: 40px 0 30px; }
+        .courses-hero h1 { font-size: 1.8rem; }
+        .courses-hero p { font-size: 1rem; }
+        
+        /* 1. Hamburger Icon Alignment */
+        .mobile-menu-btn { 
+            display: block; 
+            z-index: 1002; 
+            font-size: 1.4rem;
+            color: var(--text-main);
+            padding: 5px;
+        }
+
+        /* 2. Menu Container - FIXED SPACING (Gap 0) */
+        .nav-links {
+            position: absolute; 
+            top: 80px; 
+            left: 0; 
+            width: 100%;
+            background: #ffffff; 
+            flex-direction: column; 
+            align-items: flex-start;
+            padding: 0; 
+            gap: 0;               /* REMOVED GAP FOR 100% MATCH */
+            max-height: 0; 
+            overflow: hidden; 
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            border-top: 1px solid #f1f5f9;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .nav-links.active { 
+            max-height: 85vh; 
+            opacity: 1; 
+            transform: translateY(0);
+            overflow-y: auto;
+        }
+
+        /* 3. Menu Items - Tight Spacing & Borders */
+        .nav-item {
+            width: 100%; 
+            padding: 14px 24px;   /* Your saved spacing */
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .nav-item i { 
+            display: inline-block; 
+            width: 24px; 
+            color: var(--primary); 
+            margin-right: 12px; 
+            text-align: center;
+        }
+
+        /* 4. Dropdown Spacing */
+        .dropdown { width: 100%; }
+        
+        .dropdown > span { 
+            width: 100%; 
+            padding: 14px 24px;   /* Match nav-item padding */
+            justify-content: space-between; 
+            border-bottom: 1px solid #f1f5f9; 
+        }
+        
+        .dropdown.active > span i.fa-chevron-down {
+            transform: rotate(180deg);
+            transition: transform 0.3s;
+        }
+
+        .dropdown-content { 
+            position: static; 
+            display: none; 
+            box-shadow: none; 
+            border: none;
+            background-color: #f8fafc; 
+            padding: 0;
+            animation: none;
+        }
+        
+        .dropdown.active .dropdown-content { 
+            display: block; 
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .dropdown-content a {
+            padding: 12px 24px 12px 50px; /* Indented Sub-links */
+            font-size: 0.95rem;
+            color: #64748b;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+
+        .nav-item.active {
+            color: #4338ca !important;
+            font-weight: 700;
+        }
+    }
+
+    @media (max-width: 650px) {
+        .course-grid { 
+            grid-template-columns: 1fr; 
+            gap: 25px;
+        }
+    }
+
+    /* =========================================
+       6. PROFESSIONAL MOBILE MENU (Accordion Style)
+       ========================================= */
 @media (max-width: 768px) {
+    /* Footer Mobile Fix */
+    .footer-grid {
+        grid-template-columns: 1fr 1fr; 
+        gap: 40px 20px;
+    }
     
-    .mobile-menu-btn { display: block; z-index: 1002; color: var(--text-main); padding: 5px; }
+    .footer-brand {
+        grid-column: span 2;
+        text-align: center;
+    }
+    
+    .footer-description {
+        margin: 0 auto 25px;
+    }
 
+    /* Mobile Menu Spacing Fix */
     .nav-links {
         position: absolute;
-        top: 80px; 
+        top: 80px;
         left: 0;
         width: 100%;
         background: #ffffff;
         flex-direction: column;
-        align-items: flex-start;
-        padding: 0;
-        gap: 0;               /* Gap 0 for seamless rows */
+        gap: 0; /* Tight Accordion */
         max-height: 0;
         overflow: hidden;
         opacity: 0;
-        transform: translateY(-10px);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border-top: 1px solid #f1f5f9;
         box-shadow: 0 15px 40px rgba(0,0,0,0.1);
     }
 
-    .nav-links.active { max-height: 90vh; overflow-y: auto; opacity: 1; transform: translateY(0); }
+    .nav-links.active {
+        max-height: 90vh;
+        opacity: 1;
+    }
 
-    .nav-item {
+    .nav-item, .dropdown > span {
         width: 100%;
-        padding: 14px 24px;   /* SAVED SPACING: Compact & professional */
-        font-size: 1.05rem;
-        font-weight: 600;
-        color: #334155;
+        padding: 14px 24px;
         border-bottom: 1px solid #f1f5f9;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
+    }
+}
+
+        /* "More" Accordion Logic */
+        .dropdown { display: block; width: 100%; padding: 0; }
+
+        .dropdown > span {
+            width: 100%;
+            padding: 14px 24px; 
+            display: flex;
+            align-items: center;
+            justify-content: space-between; 
+            border-bottom: 1px solid #f1f5f9;
+            font-weight: 600;
+            color: #334155;
+        }
+        
+        .dropdown.active > span i.fa-chevron-down {
+            transform: rotate(180deg);
+            transition: transform 0.3s;
+        }
+
+        .dropdown-content {
+            position: static;      /* Pushes menu down */
+            display: none;
+            width: 100%;
+            background-color: #f8fafc; 
+            padding: 0;
+            box-shadow: none;
+            border: none;
+        }
+
+        .dropdown.active .dropdown-content { display: block; border-bottom: 1px solid #f1f5f9; }
+
+        .dropdown-content a {
+            padding: 12px 24px 12px 50px; /* INDENTED SAVED SPACING */
+            font-size: 0.95rem;
+            color: #64748b;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .dropdown-content a:last-child { border-bottom: none; }
+        .dropdown-content::before { display: none; } /* Hide desktop triangle */
+
+        .nav-item.active { color: #4338ca !important; font-weight: 700; }
     }
 
-    .nav-item i { display: inline-block; width: 24px; margin-right: 12px; color: var(--primary); }
 
-    /* "More" Accordion Logic */
-    .dropdown { display: block; width: 100%; padding: 0; }
 
-    .dropdown > span {
-        width: 100%;
-        padding: 14px 24px; 
-        display: flex;
-        align-items: center;
-        justify-content: space-between; 
-        border-bottom: 1px solid #f1f5f9;
-        font-weight: 600;
-        color: #334155;
-    }
-    
-    .dropdown.active > span i.fa-chevron-down {
-        transform: rotate(180deg);
-        transition: transform 0.3s;
-    }
+    /* =========================================
+   7. FOOTER STYLES (FIXED)
+   ========================================= */
+footer {
+    background-color: #0f172a;
+    color: #cbd5e0;
+    padding: 80px 0 20px;
+    font-size: 0.95rem;
+}
 
-    .dropdown-content {
-        position: static;      /* Pushes menu down */
-        display: none;
-        width: 100%;
-        background-color: #f8fafc; 
-        padding: 0;
-        box-shadow: none;
-        border: none;
-    }
+.footer-grid {
+    display: grid;
+    /* Brand gets more space, links stay tight */
+    grid-template-columns: 2fr repeat(4, 1fr); 
+    gap: 30px;
+    margin-bottom: 60px;
+}
 
-    .dropdown.active .dropdown-content { display: block; border-bottom: 1px solid #f1f5f9; }
+.footer-logo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 15px;
+    display: block;
+}
 
-    .dropdown-content a {
-        padding: 12px 24px 12px 50px; /* INDENTED SAVED SPACING */
-        font-size: 0.95rem;
-        color: #64748b;
-        border-bottom: 1px solid #e2e8f0;
-    }
-    
-    .dropdown-content a:last-child { border-bottom: none; }
-    .dropdown-content::before { display: none; } /* Hide desktop triangle */
+.footer-description {
+    color: #94a3b8;
+    line-height: 1.6;
+    max-width: 320px;
+    margin-bottom: 25px;
+}
 
-    .nav-item.active { color: #4338ca !important; font-weight: 700; }
+.footer-links-title {
+    color: white;
+    font-weight: 700;
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+.footer-links li { margin-bottom: 12px; }
+
+.footer-links a {
+    color: #94a3b8;
+    transition: all 0.2s ease;
+}
+
+.footer-links a:hover {
+    color: var(--secondary);
+    padding-left: 5px;
+}
+
+.footer-bottom {
+    border-top: 1px solid #1e293b;
+    padding-top: 30px;
+    text-align: center;
+    color: #64748b;
+    font-size: 0.9rem;
 }
