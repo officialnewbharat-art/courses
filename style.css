@@ -197,90 +197,61 @@ header {
 /* --- Course Grid Adjustments --- */
 /* --- Course Grid: 4 Desktop / 2 Mobile --- */
 /* --- Course Grid Layout --- */
+/* --- 1:1 Ratio and Smaller Card Size --- */
 .course-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 Cards per row on Desktop */
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Smaller min-width for cards */
     gap: 20px;
 }
 
-/* --- Compact Image Card --- */
 .course-card {
+    aspect-ratio: 1 / 1; /* Forces 1:1 Square Shape */
+    display: flex;
+    flex-direction: column;
     position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-    background: #fff;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    display: none; /* Controlled by script.js */
 }
 
-.course-card.visible {
+.course-card a {
     display: block;
-    animation: revealCard 0.6s ease forwards;
-}
-
-@keyframes revealCard {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    height: 100%;
+    width: 100%;
 }
 
 .course-card img {
     width: 100%;
-    height: auto;
-    display: block;
-    transition: transform 0.6s ease;
+    height: 100%;
+    object-fit: cover; /* Ensures image fills the square without distortion */
 }
 
-.course-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 30px rgba(0,0,0,0.1);
-}
-
-.course-card:hover img {
-    transform: scale(1.05);
-}
-
-/* --- Professional Free Badge --- */
-.badge-free {
+/* --- Glowing Certificate Badge --- */
+.cert-glow-badge {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    background: #10b981; /* Emerald Green */
-    color: #ffffff;
-    padding: 4px 12px;
-    font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 0.5px;
-    border-radius: 6px;
-    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
-    z-index: 2;
-}
-
-/* --- View More Action --- */
-.view-more-action {
-    background: #4338ca;
-    color: #ffffff;
-    border: none;
-    padding: 14px 40px;
-    font-size: 0.95rem;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(67, 56, 202, 0.9);
+    color: #fff;
+    padding: 5px 12px;
+    font-size: 0.65rem;
     font-weight: 700;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 10px 20px rgba(67, 56, 202, 0.2);
+    border-radius: 20px;
+    white-space: nowrap;
+    z-index: 3;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 15px rgba(67, 56, 202, 0.6);
+    animation: badgeGlow 2s infinite alternate;
 }
 
-.view-more-action:hover {
-    background: #3730a3;
-    transform: translateY(-2px);
-    box-shadow: 0 15px 25px rgba(67, 56, 202, 0.3);
-}
-
-/* --- Mobile View (2 Cards per Row) --- */
-@media (max-width: 768px) {
-    .course-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 12px;
+@keyframes badgeGlow {
+    from {
+        box-shadow: 0 0 5px rgba(67, 56, 202, 0.4), 0 0 10px rgba(67, 56, 202, 0.2);
+        transform: translateX(-50%) scale(1);
+    }
+    to {
+        box-shadow: 0 0 15px rgba(67, 56, 202, 0.8), 0 0 25px rgba(67, 56, 202, 0.4);
+        transform: translateX(-50%) scale(1.05);
     }
 }
 /* --- Sample Certificate Section --- */
@@ -320,6 +291,23 @@ header {
     display: flex;
     align-items: center;
     gap: 8px;
+}
+
+
+/* --- Professional Free Badge --- */
+.badge-free {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #10b981; /* Emerald Green */
+    color: #ffffff;
+    padding: 4px 12px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+    z-index: 2;
 }
 
 .trust-badge i { color: #059669; }
