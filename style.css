@@ -194,37 +194,133 @@ header {
 /* =========================================
    4. COURSE GRID & CARDS
    ========================================= */
+/* --- Course Grid Adjustments --- */
 .course-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    padding-bottom: 80px;
+    /* Desktop: 4 columns */
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 20px;
+    padding-bottom: 60px;
     margin-top: 20px;
 }
 
+/* --- Compact & Trustworthy Course Card --- */
 .course-card {
     background: #ffffff;
     border: 1px solid #e2e8f0;
-    border-radius: 20px;
+    border-radius: 12px; /* Slightly sharper for professional look */
     overflow: hidden;
-    transition: all 0.4s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.course-card:hover { transform: translateY(-10px); }
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.1);
+    border-color: var(--primary);
+}
 
-.badge-premium {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
-    color: white;
-    padding: 6px 14px;
-    border-radius: 50px;
-    font-size: 0.75rem;
+.card-image-wrapper {
+    position: relative;
+    aspect-ratio: 16 / 10;
+}
+
+.card-body {
+    padding: 16px; /* Reduced padding for smaller size */
+}
+
+.course-title {
+    font-size: 1rem; /* Smaller font for 4-grid layout */
     font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 8px;
+    height: 2.6em; /* Ensures alignment */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
-.card-body { padding: 24px; }
+.course-stats {
+    font-size: 0.75rem;
+    margin: 10px 0;
+    color: #64748b;
+}
+
+.current-price {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #059669;
+}
+
+.view-btn {
+    padding: 10px;
+    font-size: 0.85rem;
+    border-radius: 8px;
+}
+
+/* --- Sample Certificate Section --- */
+.certificate-section {
+    background: #f8fafc;
+    padding: 60px 0;
+    border-top: 1px solid #e2e8f0;
+}
+
+.cert-showcase {
+    max-width: 800px;
+    margin: 30px auto;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.cert-showcase img {
+    width: 100%;
+    border-radius: 4px;
+}
+
+.trust-bar {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.trust-badge {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.trust-badge i { color: #059669; }
+
+/* --- Mobile View: 2 Cards per row --- */
+@media (max-width: 768px) {
+    .course-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px;
+    }
+    
+    .course-title {
+        font-size: 0.9rem;
+    }
+    
+    .card-body {
+        padding: 12px;
+    }
+    
+    .course-hero h1 {
+        font-size: 1.8rem;
+    }
+}
 
 
         /* =========================================
