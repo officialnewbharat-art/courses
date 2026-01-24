@@ -1,576 +1,269 @@
-    /* =========================================
-       1. GLOBAL VARIABLES & RESET
-       ========================================= */
-    :root {
-        --primary: #4338ca;       /* Indigo 700 */
-        --primary-hover: #3730a3; /* Indigo 800 */
-        --secondary: #4c51bf;     /* Indigo 600 */
-        --dark-bg: #0f172a;       /* Slate 900 */
-        --dark-card: #1e293b;     /* Slate 800 */
-        --text-main: #1a202c;     /* Gray 900 */
-        --text-light: #718096;    /* Gray 500 */
-        --white: #ffffff;
-        --font-family: 'Inter', sans-serif;
-    }
+/* =========================================
+   1. GLOBAL VARIABLES & RESET
+   ========================================= */
+:root {
+    --primary: #4338ca;       /* Indigo 700 */
+    --primary-hover: #3730a3; /* Indigo 800 */
+    --secondary: #4c51bf;     /* Indigo 600 */
+    --dark-bg: #0f172a;       /* Slate 900 */
+    --dark-card: #1e293b;     /* Slate 800 */
+    --text-main: #1a202c;     /* Gray 900 */
+    --text-light: #718096;    /* Gray 500 */
+    --white: #ffffff;
+    --font-family: 'Inter', sans-serif;
+}
 
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        text-decoration: none !important; /* Removes all underlines */
-    }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none !important;
+}
 
-    body {
-        font-family: var(--font-family);
-        color: var(--text-main);
-        line-height: 1.6;
-        background-color: #f8faff;
-        overflow-x: hidden;
-    }
+body {
+    font-family: var(--font-family);
+    color: var(--text-main);
+    line-height: 1.6;
+    background-color: #f8faff;
+    overflow-x: hidden;
+}
 
-    ul { list-style: none; }
-    img { max-width: 100%; display: block; }
+a { transition: color 0.2s; color: inherit; }
+ul { list-style: none; }
+img { max-width: 100%; display: block; }
 
-    /* FIXED CONTAINER: Perfect for 14-inch and Large Desktops */
+/* Container Utility - Fixed for Professional Look */
+.container {
+    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+@media screen and (max-width: 768px) {
     .container {
-        width: 100%;
-        max-width: 1320px;     /* Professional standard width */
-        margin: 0 auto;
-        padding: 0 40px;       /* Balanced side padding */
-        position: relative;
+        padding: 0 20px;
     }
+}
 
-    /* =========================================
-       2. HEADER & NAVIGATION
-       ========================================= */
-    header {
-        background: #fff;
-        border-bottom: 1px solid #f1f5f9;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
+/* =========================================
+   2. HEADER & NAVIGATION
+   ========================================= */
+header {
+    background: #fff;
+    border-bottom: 1px solid #f1f5f9;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
 
-    .nav-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 80px;
-    }
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+}
 
-    .logo {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
-    .logo span {
-        font-weight: 800;
-        font-size: 1.4rem;
-        color: #1a202c;
-        letter-spacing: -0.5px;
-    }
+.logo span {
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: #1a202c;
+    letter-spacing: -0.5px;
+}
 
-    .nav-links {
-        display: flex;
-        gap: 25px;             /* Professional tight spacing */
-        align-items: center;
-    }
+.nav-links {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
 
-    .nav-item {
-        font-weight: 500;
-        color: #4a5568;
-        position: relative;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        transition: all 0.3s ease;
-    }
+.nav-item {
+    font-weight: 500;
+    color: #4a5568;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-    .nav-item i { display: none; }
-    .nav-item:hover { color: var(--primary); }
+.nav-item i { display: none; }
+.nav-item:hover { color: var(--primary); }
 
-    /* --- ACTIVE COURSES GLOW EFFECT --- */
-    .active-glow {
-        color: #4338ca !important;
-        font-weight: 700 !important;
-        text-shadow: 0 0 8px rgba(67, 56, 202, 0.4), 0 0 15px rgba(67, 56, 202, 0.2);
-        position: relative;
-    }
+/* Active glow effect for course page */
+.nav-links a.nav-item.active-glow {
+    color: #4338ca !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 8px rgba(67, 56, 202, 0.4), 0 0 15px rgba(67, 56, 202, 0.2) !important;
+    position: relative;
+}
 
-    .active-glow::after {
-        content: '';
-        position: absolute;
-        bottom: -5px;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: #4338ca;
-        box-shadow: 0 0 10px rgba(67, 56, 202, 0.6);
-        border-radius: 2px;
-    }
+.nav-links a.nav-item.active-glow::after {
+    content: '' !important;
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #4338ca !important;
+    box-shadow: 0 0 10px rgba(67, 56, 202, 0.6) !important;
+    border-radius: 2px;
+}
 
-    /* --- DROPDOWN MENU --- */
-    .dropdown { position: relative; display: inline-block; }
-    .dropdown > span { display: flex; align-items: center; cursor: pointer; user-select: none; padding: 5px 0; }
+/* DROPDOWN MENU */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
 
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #ffffff;
-        min-width: 260px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        border-radius: 12px;
-        border: 1px solid #e2e8f0;
-        z-index: 1001;
-        top: 140%;
-        right: 0;
-        padding: 8px 0;
-    }
+.dropdown > span {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    padding: 5px 0;
+}
 
-    .dropdown.active .dropdown-content { display: block; }
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    min-width: 260px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    z-index: 1001;
+    top: 140%;
+    right: 0;
+    padding: 8px 0;
+}
 
-    .dropdown-content a {
-        color: #4a5568;
-        padding: 12px 20px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 0.95rem;
-    }
+.dropdown.active .dropdown-content { display: block; }
 
-    .dropdown-content a:hover { background-color: #f8fafc; color: var(--primary); }
+.dropdown-content::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    right: 20px;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border-left: 1px solid #e2e8f0;
+    border-top: 1px solid #e2e8f0;
+    transform: rotate(45deg);
+}
 
-    .mobile-menu-btn {
-        display: none;
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        color: #1a202c;
-        cursor: pointer;
-    }
+.dropdown-content a {
+    color: #4a5568;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+}
 
-    /* =========================================
-       3. HERO SECTION (BALANCED)
-       ========================================= */
-    .courses-hero {
-        padding: 60px 0 40px; 
-        text-align: center;
-        background: linear-gradient(180deg, #ffffff 0%, #f8faff 100%);
-    }
+.dropdown-content a:hover {
+    background-color: #f8fafc;
+    color: var(--primary);
+}
 
-    .courses-hero h1 {
-        font-size: 2.5rem;
-        font-weight: 800;
-        color: #1e293b;
-        margin-bottom: 15px;
-        letter-spacing: -1px;
-        max-width: 800px;      /* Prevents stretching */
-        margin-left: auto;
-        margin-right: auto;
-    }
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #1a202c;
+    cursor: pointer;
+}
 
-    .courses-hero p {
-        font-size: 1.1rem;
-        color: #64748b;
-        max-width: 550px;      /* Professional readable width */
-        margin: 0 auto;
-    }
+/* =========================================
+   3. COURSE HERO & CARDS
+   ========================================= */
+.courses-hero {
+    padding: 80px 0 40px;
+    text-align: center;
+    background: linear-gradient(180deg, #f8faff 0%, #ffffff 100%);
+}
 
-    /* =========================================
-       4. COURSE GRID & CARDS
-       ========================================= */
-    .course-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
-        gap: 30px;             /* Balanced gap */
-        padding-bottom: 80px;
-        margin-top: 20px;
-    }
+.courses-hero h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #1a202c;
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+}
 
-    .course-card {
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 20px;
-        overflow: hidden;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    }
+.courses-hero p {
+    font-size: 1.15rem;
+    color: #4a5568;
+    max-width: 600px;
+    margin: 0 auto;
+}
 
-    .course-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    }
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 40px;
+}
 
-    .card-image-wrapper {
-        position: relative;
-        height: 200px;
-        overflow: hidden;
-    }
+.course-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+}
 
-    .card-image-wrapper img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s ease;
-    }
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
 
-    .course-card:hover .card-image-wrapper img {
-        transform: scale(1.1);
-    }
+.badge-premium {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #22c55e;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    z-index: 2;
+}
 
-    .badge-premium {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
-        color: white;
-        padding: 6px 14px;
-        border-radius: 50px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        box-shadow: 0 4px 10px rgba(67, 56, 202, 0.3);
-    }
+.card-body { padding: 24px; }
 
-    .card-body {
-        padding: 24px;
-    }
-
-    .category-tag {
-        font-size: 0.75rem;
-        font-weight: 700;
-        padding: 4px 12px;
-        border-radius: 6px;
-        text-transform: uppercase;
-    }
-
-    .tag-dev { background: #eef2ff; color: #4338ca; }
-    .tag-data { background: #ecfdf5; color: #059669; }
-
-    .course-title {
-        font-size: 1.3rem;
-        color: #1e293b;
-        margin: 12px 0 4px;
-        font-weight: 800;
-    }
-
-    .instructor {
-        font-size: 0.85rem;
-        color: #64748b;
-        margin-bottom: 15px;
-    }
-
-    .course-stats {
-        display: flex;
-        gap: 15px;
-        padding: 12px 0;
-        border-top: 1px solid #f1f5f9;
-        border-bottom: 1px solid #f1f5f9;
-        margin-bottom: 15px;
-    }
-
-    .course-stats span {
-        font-size: 0.85rem;
-        color: #475569;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .course-stats i { color: #4338ca; }
-
-    .price-container {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 20px;
-    }
-
-    .original-price {
-        text-decoration: line-through !important;
-        color: #94a3b8;
-        font-size: 1.1rem;
-    }
-
-    .current-price {
-        color: #059669;
-        font-weight: 800;
-        font-size: 1.4rem;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-    }
-
-    .view-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        background: #1e293b;
-        color: white !important;
-        padding: 12px;
-        border-radius: 10px;
-        font-weight: 600;
-        transition: background 0.3s;
-    }
-
-    .view-btn:hover {
-        background: #4338ca;
-    }
-
-    /* =========================================
-       5. RESPONSIVE ADJUSTMENTS (100% Mobile Match)
-       ========================================= */
-    @media (max-width: 1024px) {
-        .course-grid { 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 30px;
-        }
-        .courses-hero h1 { font-size: 2.2rem; }
-    }
-
-    @media (max-width: 768px) {
-        .container { padding: 0 20px; }
-        .courses-hero { padding: 40px 0 30px; }
-        .courses-hero h1 { font-size: 1.8rem; }
-        .courses-hero p { font-size: 1rem; }
-        
-        /* 1. Hamburger Icon Alignment */
-        .mobile-menu-btn { 
-            display: block; 
-            z-index: 1002; 
-            font-size: 1.4rem;
-            color: var(--text-main);
-            padding: 5px;
-        }
-
-        /* 2. Menu Container - FIXED SPACING (Gap 0) */
-        .nav-links {
-            position: absolute; 
-            top: 80px; 
-            left: 0; 
-            width: 100%;
-            background: #ffffff; 
-            flex-direction: column; 
-            align-items: flex-start;
-            padding: 0; 
-            gap: 0;               /* REMOVED GAP FOR 100% MATCH */
-            max-height: 0; 
-            overflow: hidden; 
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-            border-top: 1px solid #f1f5f9;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-        }
-
-        .nav-links.active { 
-            max-height: 85vh; 
-            opacity: 1; 
-            transform: translateY(0);
-            overflow-y: auto;
-        }
-
-        /* 3. Menu Items - Tight Spacing & Borders */
-        .nav-item {
-            width: 100%; 
-            padding: 14px 24px;   /* Your saved spacing */
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: #334155;
-            border-bottom: 1px solid #f1f5f9;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-        }
-
-        .nav-item i { 
-            display: inline-block; 
-            width: 24px; 
-            color: var(--primary); 
-            margin-right: 12px; 
-            text-align: center;
-        }
-
-        /* 4. Dropdown Spacing */
-        .dropdown { width: 100%; }
-        
-        .dropdown > span { 
-            width: 100%; 
-            padding: 14px 24px;   /* Match nav-item padding */
-            justify-content: space-between; 
-            border-bottom: 1px solid #f1f5f9; 
-        }
-        
-        .dropdown.active > span i.fa-chevron-down {
-            transform: rotate(180deg);
-            transition: transform 0.3s;
-        }
-
-        .dropdown-content { 
-            position: static; 
-            display: none; 
-            box-shadow: none; 
-            border: none;
-            background-color: #f8fafc; 
-            padding: 0;
-            animation: none;
-        }
-        
-        .dropdown.active .dropdown-content { 
-            display: block; 
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .dropdown-content a {
-            padding: 12px 24px 12px 50px; /* Indented Sub-links */
-            font-size: 0.95rem;
-            color: #64748b;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .dropdown-content a:last-child {
-            border-bottom: none;
-        }
-
-        .nav-item.active {
-            color: #4338ca !important;
-            font-weight: 700;
-        }
-    }
-
-    @media (max-width: 650px) {
-        .course-grid { 
-            grid-template-columns: 1fr; 
-            gap: 25px;
-        }
-    }
-
-    /* =========================================
-       6. PROFESSIONAL MOBILE MENU (Accordion Style)
-       ========================================= */
-    @media (max-width: 768px) {
-        
-        .mobile-menu-btn { display: block; z-index: 1002; color: var(--text-main); padding: 5px; }
-
-        .nav-links {
-            position: absolute;
-            top: 80px; 
-            left: 0;
-            width: 100%;
-            background: #ffffff;
-            flex-direction: column;
-            align-items: flex-start;
-            padding: 0;
-            gap: 0;               /* Gap 0 for seamless rows */
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border-top: 1px solid #f1f5f9;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-        }
-
-        .nav-links.active { max-height: 90vh; overflow-y: auto; opacity: 1; transform: translateY(0); }
-
-        .nav-item {
-            width: 100%;
-            padding: 14px 24px;   /* SAVED SPACING: Compact & professional */
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: #334155;
-            border-bottom: 1px solid #f1f5f9;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-        }
-
-        .nav-item i { display: inline-block; width: 24px; margin-right: 12px; color: var(--primary); }
-
-        /* "More" Accordion Logic */
-        .dropdown { display: block; width: 100%; padding: 0; }
-
-        .dropdown > span {
-            width: 100%;
-            padding: 14px 24px; 
-            display: flex;
-            align-items: center;
-            justify-content: space-between; 
-            border-bottom: 1px solid #f1f5f9;
-            font-weight: 600;
-            color: #334155;
-        }
-        
-        .dropdown.active > span i.fa-chevron-down {
-            transform: rotate(180deg);
-            transition: transform 0.3s;
-        }
-
-        .dropdown-content {
-            position: static;      /* Pushes menu down */
-            display: none;
-            width: 100%;
-            background-color: #f8fafc; 
-            padding: 0;
-            box-shadow: none;
-            border: none;
-        }
-
-        .dropdown.active .dropdown-content { display: block; border-bottom: 1px solid #f1f5f9; }
-
-        .dropdown-content a {
-            padding: 12px 24px 12px 50px; /* INDENTED SAVED SPACING */
-            font-size: 0.95rem;
-            color: #64748b;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .dropdown-content a:last-child { border-bottom: none; }
-        .dropdown-content::before { display: none; } /* Hide desktop triangle */
-
-        .nav-item.active { color: #4338ca !important; font-weight: 700; }
-    }
-
-    /* =========================================
-   7. FOOTER STYLES (Final Clean Version)
+/* =========================================
+   4. FOOTER STYLES
    ========================================= */
 footer {
     background-color: #0f172a;
     color: #cbd5e0;
     padding: 80px 0 20px;
-    font-size: 0.95rem;
 }
 
 .footer-grid {
     display: grid;
-    /* Desktop: Brand column is wider, others are uniform */
-    grid-template-columns: 2fr repeat(4, 1fr); 
-    gap: 30px;
+    grid-template-columns: 1.8fr repeat(5, 1fr);
+    gap: 25px;
     margin-bottom: 60px;
-    max-width: 1320px;
-    margin-left: auto;
-    margin-right: auto;
 }
-
-.footer-brand { padding-right: 20px; }
 
 .footer-logo {
     font-size: 1.8rem;
     font-weight: 800;
     color: white;
     margin-bottom: 15px;
-    letter-spacing: -0.5px;
-}
-
-.footer-description {
-    color: #94a3b8;
-    line-height: 1.6;
-    margin-bottom: 25px;
-    max-width: 320px;
 }
 
 .social-links { display: flex; gap: 15px; }
@@ -599,84 +292,51 @@ footer {
     font-size: 1rem;
 }
 
-.footer-links li { margin-bottom: 12px; }
-
-.footer-links a {
-    color: #94a3b8;
-    transition: all 0.2s ease;
-}
-
 .footer-links a:hover {
     color: var(--secondary);
     padding-left: 5px;
 }
 
-.footer-bottom {
-    border-top: 1px solid #1e293b;
-    padding-top: 30px;
-    text-align: center;
-    color: #64748b;
-    font-size: 0.9rem;
-}
-
 /* =========================================
-   8. FINAL RESPONSIVE OVERRIDES
+   5. PROFESSIONAL MOBILE MENU
    ========================================= */
-@media (max-width: 1200px) {
-    .footer-grid {
-        grid-template-columns: 1.5fr repeat(3, 1fr);
-    }
-}
-
 @media (max-width: 768px) {
-    /* Footer Mobile Alignment */
-    .footer-grid {
-        grid-template-columns: 1fr 1fr; /* 2 Column grid on mobile */
-        gap: 40px 20px;
-    }
+    .mobile-menu-btn { display: block; }
 
-    .footer-brand {
-        grid-column: span 2;
-        text-align: center;
-        border-bottom: 1px solid rgba(255,255,255,0.05);
-        padding-bottom: 30px;
-    }
-
-    .footer-brand .footer-description {
-        margin: 0 auto 20px;
-    }
-
-    .social-links { justify-content: center; }
-
-    /* Mobile Nav Tightening (Gap 0) */
     .nav-links {
+        position: absolute;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        background: #ffffff;
+        flex-direction: column;
         gap: 0;
-        padding: 0;
         max-height: 0;
         overflow: hidden;
+        opacity: 0;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-top: 1px solid #f1f5f9;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
     }
 
-    .nav-links.active {
-        max-height: 90vh;
-        opacity: 1;
-    }
+    .nav-links.active { max-height: 85vh; opacity: 1; overflow-y: auto; }
 
-    .nav-item, .dropdown > span {
+    .nav-item {
         width: 100%;
         padding: 14px 24px;
+        font-weight: 600;
         border-bottom: 1px solid #f1f5f9;
-        display: flex;
-        align-items: center;
     }
-}
 
-@media (max-width: 480px) {
-    .footer-grid {
-        grid-template-columns: 1fr; /* Single column on very small screens */
-        text-align: center;
-    }
-    .footer-links-column { align-items: center; }
-}
+    .nav-item i { display: inline-block; width: 24px; margin-right: 12px; color: var(--primary); }
 
-    
+    .dropdown { width: 100%; }
+    .dropdown > span { padding: 14px 24px; justify-content: space-between; border-bottom: 1px solid #f1f5f9; }
+    .dropdown-content { position: static; display: none; background-color: #f8fafc; box-shadow: none; border: none; }
+    .dropdown.active .dropdown-content { display: block; }
+    .dropdown-content a { padding: 12px 24px 12px 50px; border-bottom: 1px solid #e2e8f0; }
+
+    .course-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .footer-brand { grid-column: span 2; text-align: center; }
+}
