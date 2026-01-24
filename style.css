@@ -513,3 +513,154 @@ footer {
         font-size: 0.85rem; /* Links readability ke liye */
     }
 }
+
+
+
+
+
+/* --- Enhanced Course Cards --- */
+.course-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.course-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border-color: var(--primary);
+}
+
+.card-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+}
+
+.card-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.course-card:hover .card-image-wrapper img {
+    transform: scale(1.05);
+}
+
+.category-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.tag-dev { background: #e0e7ff; color: #4338ca; }
+.tag-data { background: #dcfce7; color: #15803d; }
+.tag-ai { background: #fef9c3; color: #a16207; }
+
+.course-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--dark-bg);
+}
+
+.course-stats {
+    display: flex;
+    gap: 15px;
+    margin: 15px 0;
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+.price-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.current-price {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #059669;
+}
+
+.original-price {
+    text-decoration: line-through !important;
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+.view-btn {
+    display: block;
+    text-align: center;
+    background: var(--primary);
+    color: white !important;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.view-btn:hover {
+    background: var(--primary-hover);
+}
+
+/* --- Certificate Showcase Section --- */
+.certificate-showcase {
+    background: #f1f5f9;
+    padding: 100px 0;
+    text-align: center;
+}
+
+.cert-container {
+    max-width: 900px;
+    margin: 40px auto 0;
+    position: relative;
+    padding: 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.cert-container img {
+    width: 100%;
+    border-radius: 10px;
+    display: block;
+}
+
+.trust-elements {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+}
+
+.trust-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: var(--dark-bg);
+}
+
+.trust-item i {
+    color: #059669;
+    font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+    .cert-container { width: 95%; padding: 10px; }
+    .course-hero h1 { font-size: 2rem; }
+}
