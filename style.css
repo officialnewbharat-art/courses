@@ -452,50 +452,44 @@
     /* =========================================
        6. PROFESSIONAL MOBILE MENU (Accordion Style)
        ========================================= */
-@media (max-width: 768px) {
-    /* Footer Mobile Fix */
-    .footer-grid {
-        grid-template-columns: 1fr 1fr; 
-        gap: 40px 20px;
-    }
-    
-    .footer-brand {
-        grid-column: span 2;
-        text-align: center;
-    }
-    
-    .footer-description {
-        margin: 0 auto 25px;
-    }
+    @media (max-width: 768px) {
+        
+        .mobile-menu-btn { display: block; z-index: 1002; color: var(--text-main); padding: 5px; }
 
-    /* Mobile Menu Spacing Fix */
-    .nav-links {
-        position: absolute;
-        top: 80px;
-        left: 0;
-        width: 100%;
-        background: #ffffff;
-        flex-direction: column;
-        gap: 0; /* Tight Accordion */
-        max-height: 0;
-        overflow: hidden;
-        opacity: 0;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        border-top: 1px solid #f1f5f9;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-    }
+        .nav-links {
+            position: absolute;
+            top: 80px; 
+            left: 0;
+            width: 100%;
+            background: #ffffff;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 0;
+            gap: 0;               /* Gap 0 for seamless rows */
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-top: 1px solid #f1f5f9;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
 
-    .nav-links.active {
-        max-height: 90vh;
-        opacity: 1;
-    }
+        .nav-links.active { max-height: 90vh; overflow-y: auto; opacity: 1; transform: translateY(0); }
 
-    .nav-item, .dropdown > span {
-        width: 100%;
-        padding: 14px 24px;
-        border-bottom: 1px solid #f1f5f9;
-    }
-}
+        .nav-item {
+            width: 100%;
+            padding: 14px 24px;   /* SAVED SPACING: Compact & professional */
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .nav-item i { display: inline-block; width: 24px; margin-right: 12px; color: var(--primary); }
 
         /* "More" Accordion Logic */
         .dropdown { display: block; width: 100%; padding: 0; }
@@ -541,10 +535,8 @@
         .nav-item.active { color: #4338ca !important; font-weight: 700; }
     }
 
-
-
     /* =========================================
-   7. FOOTER STYLES (FIXED)
+   7. FOOTER STYLES (Final Clean Version)
    ========================================= */
 footer {
     background-color: #0f172a;
@@ -555,25 +547,49 @@ footer {
 
 .footer-grid {
     display: grid;
-    /* Brand gets more space, links stay tight */
+    /* Desktop: Brand column is wider, others are uniform */
     grid-template-columns: 2fr repeat(4, 1fr); 
     gap: 30px;
     margin-bottom: 60px;
+    max-width: 1320px;
+    margin-left: auto;
+    margin-right: auto;
 }
+
+.footer-brand { padding-right: 20px; }
 
 .footer-logo {
     font-size: 1.8rem;
     font-weight: 800;
     color: white;
     margin-bottom: 15px;
-    display: block;
+    letter-spacing: -0.5px;
 }
 
 .footer-description {
     color: #94a3b8;
     line-height: 1.6;
-    max-width: 320px;
     margin-bottom: 25px;
+    max-width: 320px;
+}
+
+.social-links { display: flex; gap: 15px; }
+
+.social-link {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.social-link:hover {
+    background: var(--primary);
+    transform: translateY(-3px);
 }
 
 .footer-links-title {
@@ -602,3 +618,65 @@ footer {
     color: #64748b;
     font-size: 0.9rem;
 }
+
+/* =========================================
+   8. FINAL RESPONSIVE OVERRIDES
+   ========================================= */
+@media (max-width: 1200px) {
+    .footer-grid {
+        grid-template-columns: 1.5fr repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    /* Footer Mobile Alignment */
+    .footer-grid {
+        grid-template-columns: 1fr 1fr; /* 2 Column grid on mobile */
+        gap: 40px 20px;
+    }
+
+    .footer-brand {
+        grid-column: span 2;
+        text-align: center;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding-bottom: 30px;
+    }
+
+    .footer-brand .footer-description {
+        margin: 0 auto 20px;
+    }
+
+    .social-links { justify-content: center; }
+
+    /* Mobile Nav Tightening (Gap 0) */
+    .nav-links {
+        gap: 0;
+        padding: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav-links.active {
+        max-height: 90vh;
+        opacity: 1;
+    }
+
+    .nav-item, .dropdown > span {
+        width: 100%;
+        padding: 14px 24px;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        align-items: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-grid {
+        grid-template-columns: 1fr; /* Single column on very small screens */
+        text-align: center;
+    }
+    .footer-links-column { align-items: center; }
+}
+
+    
