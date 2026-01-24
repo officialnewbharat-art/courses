@@ -468,19 +468,19 @@ footer {
    8. RESPONSIVE MOBILE ADJUSTMENTS
    ========================================= */
 @media (max-width: 768px) {
-    /* Main Footer Grid for Mobile */
+    /* Main Footer Grid for Mobile: Forces 2 Columns */
     .footer-grid {
-        grid-template-columns: 1fr 1fr; 
-        gap: 40px 20px;
+        grid-template-columns: repeat(2, 1fr) !important; 
+        gap: 30px 15px;
         text-align: left;
     }
 
-    /* Brand Section: Centering everything here */
+    /* Brand Section: Full width at top, centered */
     .footer-brand {
         grid-column: span 2;
         display: flex;
         flex-direction: column;
-        align-items: center; /* Centers Logo, Text, and Socials */
+        align-items: center; 
         text-align: center;
         padding-bottom: 20px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -488,29 +488,28 @@ footer {
     }
 
     .footer-description {
-        margin: 0 auto 25px; /* Centers the description block */
+        margin: 0 auto 25px;
         max-width: 100%;
     }
 
-    /* Social Links Centering */
     .social-links {
-        justify-content: center; /* This pulls the icons to the center */
+        justify-content: center;
         width: 100%;
-        margin-top: 10px;
-    }
-
-    /* Links Columns remain side-by-side (2 columns) */
-    .footer-links-column {
-        text-align: left;
     }
 }
 
+/* Yahan dhyan dein: 480px par bhi 2 columns hi rahenge */
 @media (max-width: 480px) {
-    /* Optional: Stack everything into 1 column on very small phones */
     .footer-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr) !important; /* Forces 2 columns on small phones too */
+        gap: 25px 10px;
     }
-    .footer-brand {
-        grid-column: span 1;
+
+    .footer-links-title {
+        font-size: 0.9rem; /* Screen choti hai toh title thoda chota */
+    }
+
+    .footer-links a {
+        font-size: 0.85rem; /* Links readability ke liye */
     }
 }
