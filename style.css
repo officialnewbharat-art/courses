@@ -552,3 +552,139 @@ footer {
     .footer-grid { grid-template-columns: 1fr 1fr; }
     .footer-brand { grid-column: span 2; }
 }
+
+/* =========================================
+   7. PROFESSIONAL MOBILE MENU (Accordion Style)
+   ========================================= */
+@media (max-width: 768px) {
+    
+    /* General Mobile Layout Adjustments */
+    .hero-container { flex-direction: column; text-align: center; gap: 40px; }
+    .hero-heading { font-size: 2.5rem; }
+    .hero-cta { justify-content: center; flex-direction: column; }
+    .btn { width: 100%; }
+    .hero-stats { justify-content: center; flex-wrap: wrap; }
+    .hero-image-wrapper { transform: none; width: 100%; }
+
+    /* Hamburger Icon */
+    .mobile-menu-btn { 
+        display: block; 
+        z-index: 1002; 
+        font-size: 1.4rem;
+        color: var(--text-main);
+        padding: 5px;
+    }
+
+    /* Main Navigation Box */
+    .nav-links {
+        position: absolute;
+        top: 80px; 
+        left: 0;
+        width: 100%;
+        background: #ffffff;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0;
+        gap: 0;               /* Gap zero for seamless rows */
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-top: 1px solid #f1f5f9;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    }
+
+    .nav-links.active {
+        max-height: 90vh;
+        overflow-y: auto;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Normal Menu Row Spacing */
+    .nav-item {
+        width: 100%;
+        padding: 16px 24px;   /* Clean professional padding */
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: #334155;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .nav-item i { display: inline-block; width: 24px; margin-right: 12px; color: var(--primary); }
+
+    /* "More" Dropdown Row (Accordion Style) */
+    .dropdown {
+        display: block;
+        width: 100%;
+    }
+
+    .dropdown > span {
+        width: 100%;
+        padding: 16px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between; /* Text left, Arrow right */
+        font-weight: 600;
+        color: #334155;
+        border-bottom: 1px solid #f1f5f9;
+        cursor: pointer;
+    }
+
+    /* Rotate Arrow on Active */
+    .dropdown.active > span i.fa-chevron-down {
+        transform: rotate(180deg);
+        transition: transform 0.3s;
+    }
+
+    /* Sub-menu Content (Accordion) */
+    .dropdown-content {
+        position: static;      /* Taki content baki menu ko niche push kare */
+        display: none;
+        width: 100%;
+        background-color: #f8fafc; /* Subtle contrast background */
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        animation: none;
+    }
+
+    .dropdown.active .dropdown-content {
+        display: block;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    /* Sub-links Spacing (Indented) */
+    .dropdown-content a {
+        padding: 14px 24px 14px 50px; /* 50px left padding for nested look */
+        font-size: 0.95rem;
+        color: #64748b;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+    }
+
+    .dropdown-content a:last-child {
+        border-bottom: none;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #eef2ff;
+        color: var(--primary);
+    }
+
+    /* Hide the Desktop Triangle */
+    .dropdown-content::before {
+        display: none;
+    }
+
+    /* Active Highlight */
+    .nav-item.active {
+        color: var(--primary) !important;
+        font-weight: 700;
+    }
+}
