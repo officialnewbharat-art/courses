@@ -227,108 +227,7 @@ header {
 .card-body { padding: 24px; }
 
 
-        /* =========================================
-           7. FOOTER STYLES
-           ========================================= */
-        footer {
-            background-color: #0f172a;
-            color: #cbd5e0;
-            padding: 80px 0 20px;
-            font-size: 0.95rem;
-        }
-
-        .footer-grid {
-            display: grid;
-            /* Brand ko space di aur baaki columns ko tight rakha */
-            grid-template-columns: 1.8fr repeat(5, 1fr); 
-            gap: 25px;
-            margin-bottom: 60px;
-            max-width: 1320px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        @media (max-width: 1200px) {
-            .footer-grid {
-                grid-template-columns: 1.5fr repeat(3, 1fr);
-            }
-        }
-        
-        .footer-brand { padding-right: 20px; }
-
-        .footer-logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 15px;
-            letter-spacing: -0.5px;
-        }
-
-        .footer-description {
-            color: #94a3b8;
-            line-height: 1.6;
-            margin-bottom: 25px;
-            max-width: 300px;
-        }
-
-
-        /* Keeps the footer content grouped better on large monitors */
-        footer .footer-grid {
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .social-links { display: flex; gap: 15px; }
-
-        .social-link {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            transition: all 0.3s ease;
-            font-size: 1.1rem;
-        }
-
-        .social-link:hover {
-            background: var(--primary);
-            transform: translateY(-3px);
-        }
-
-        .footer-links-column { display: flex; flex-direction: column; }
-
-        .footer-links-title {
-            color: white;
-            font-weight: 700;
-            margin-bottom: 20px;
-            font-size: 1rem;
-            letter-spacing: 0.5px;
-        }
-
-        .footer-links li { margin-bottom: 12px; }
-
-        .footer-links a {
-            color: #94a3b8;
-            transition: color 0.2s, padding-left 0.2s;
-        }
-
-        .footer-links a:hover {
-            color: var(--secondary);
-            padding-left: 5px;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #1e293b;
-            padding-top: 30px;
-            text-align: center;
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-
+    
 /* =========================================
    6. RESPONSIVE MOBILE MENU & FOOTER
    ========================================= */
@@ -423,4 +322,94 @@ header {
 
 @media (max-width: 480px) {
     .footer-grid { grid-template-columns: 1fr; }
+}
+
+/* =========================================
+   7. FOOTER STYLES (Updated)
+   ========================================= */
+footer {
+    background-color: #0f172a;
+    color: #cbd5e0;
+    padding: 80px 0 20px;
+    font-size: 0.95rem;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.8fr repeat(5, 1fr); 
+    gap: 25px;
+    margin-bottom: 60px;
+    max-width: 1320px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.social-links { 
+    display: flex; 
+    gap: 15px; 
+    transition: all 0.3s ease;
+}
+
+.social-link {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+}
+
+/* =========================================
+   8. RESPONSIVE MOBILE ADJUSTMENTS
+   ========================================= */
+@media (max-width: 768px) {
+    /* Main Footer Grid for Mobile */
+    .footer-grid {
+        grid-template-columns: 1fr 1fr; 
+        gap: 40px 20px;
+        text-align: left;
+    }
+
+    /* Brand Section: Centering everything here */
+    .footer-brand {
+        grid-column: span 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centers Logo, Text, and Socials */
+        text-align: center;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 10px;
+    }
+
+    .footer-description {
+        margin: 0 auto 25px; /* Centers the description block */
+        max-width: 100%;
+    }
+
+    /* Social Links Centering */
+    .social-links {
+        justify-content: center; /* This pulls the icons to the center */
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    /* Links Columns remain side-by-side (2 columns) */
+    .footer-links-column {
+        text-align: left;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Optional: Stack everything into 1 column on very small phones */
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+    .footer-brand {
+        grid-column: span 1;
+    }
 }
