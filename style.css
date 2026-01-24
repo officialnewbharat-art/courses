@@ -17,7 +17,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    text-decoration: none !important; /* Removes all underlines */
+    text-decoration: none !important;
 }
 
 body {
@@ -28,16 +28,22 @@ body {
     overflow-x: hidden;
 }
 
+a { transition: color 0.2s; color: inherit; }
 ul { list-style: none; }
 img { max-width: 100%; display: block; }
 
-/* FIXED CONTAINER: Perfect for 14-inch and Large Desktops */
+/* Container Utility */
 .container {
     width: 100%;
-    max-width: 1320px;     /* Professional standard width */
+    max-width: 1320px;
     margin: 0 auto;
-    padding: 0 40px;       /* Fixed padding, percentage nahi */
-    position: relative;
+    padding: 0 40px;
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        padding: 0 20px;
+    }
 }
 
 /* =========================================
@@ -74,7 +80,7 @@ header {
 
 .nav-links {
     display: flex;
-    gap: 25px;             /* Professional tight spacing */
+    gap: 25px;
     align-items: center;
 }
 
@@ -92,27 +98,27 @@ header {
 .nav-item i { display: none; }
 .nav-item:hover { color: var(--primary); }
 
-/* --- ACTIVE COURSES GLOW EFFECT --- */
-.active-glow {
+/* Active glow */
+.nav-links a.nav-item.active-glow {
     color: #4338ca !important;
     font-weight: 700 !important;
-    text-shadow: 0 0 8px rgba(67, 56, 202, 0.4), 0 0 15px rgba(67, 56, 202, 0.2);
+    text-shadow: 0 0 8px rgba(67, 56, 202, 0.4), 0 0 15px rgba(67, 56, 202, 0.2) !important;
     position: relative;
 }
 
-.active-glow::after {
-    content: '';
+.nav-links a.nav-item.active-glow::after {
+    content: '' !important;
     position: absolute;
     bottom: -5px;
     left: 0;
     width: 100%;
     height: 2px;
-    background: #4338ca;
-    box-shadow: 0 0 10px rgba(67, 56, 202, 0.6);
+    background: #4338ca !important;
+    box-shadow: 0 0 10px rgba(67, 56, 202, 0.6) !important;
     border-radius: 2px;
 }
 
-/* --- DROPDOWN MENU --- */
+/* DROPDOWN MENU */
 .dropdown { position: relative; display: inline-block; }
 .dropdown > span { display: flex; align-items: center; cursor: pointer; user-select: none; padding: 5px 0; }
 
@@ -132,6 +138,19 @@ header {
 
 .dropdown.active .dropdown-content { display: block; }
 
+.dropdown-content::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    right: 20px;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border-left: 1px solid #e2e8f0;
+    border-top: 1px solid #e2e8f0;
+    transform: rotate(45deg);
+}
+
 .dropdown-content a {
     color: #4a5568;
     padding: 12px 20px;
@@ -141,7 +160,10 @@ header {
     font-size: 0.95rem;
 }
 
-.dropdown-content a:hover { background-color: #f8fafc; color: var(--primary); }
+.dropdown-content a:hover {
+    background-color: #f8fafc;
+    color: var(--primary);
+}
 
 .mobile-menu-btn {
     display: none;
@@ -153,7 +175,7 @@ header {
 }
 
 /* =========================================
-   3. HERO SECTION (BALANCED)
+   3. HERO SECTION
    ========================================= */
 .courses-hero {
     padding: 60px 0 40px; 
@@ -167,16 +189,6 @@ header {
     color: #1e293b;
     margin-bottom: 15px;
     letter-spacing: -1px;
-    max-width: 800px;      /* Prevents stretching */
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.courses-hero p {
-    font-size: 1.1rem;
-    color: #64748b;
-    max-width: 550px;      /* Professional readable width */
-    margin: 0 auto;
 }
 
 /* =========================================
@@ -184,8 +196,8 @@ header {
    ========================================= */
 .course-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
-    gap: 30px;             /* Balanced gap */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
     padding-bottom: 80px;
     margin-top: 20px;
 }
@@ -195,31 +207,10 @@ header {
     border: 1px solid #e2e8f0;
     border-radius: 20px;
     overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s ease;
 }
 
-.course-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
-
-.card-image-wrapper {
-    position: relative;
-    height: 200px;
-    overflow: hidden;
-}
-
-.card-image-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-.course-card:hover .card-image-wrapper img {
-    transform: scale(1.1);
-}
+.course-card:hover { transform: translateY(-10px); }
 
 .badge-premium {
     position: absolute;
@@ -231,222 +222,12 @@ header {
     border-radius: 50px;
     font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 0.5px;
-    box-shadow: 0 4px 10px rgba(67, 56, 202, 0.3);
 }
 
-.card-body {
-    padding: 24px;
-}
-
-.category-tag {
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 4px 12px;
-    border-radius: 6px;
-    text-transform: uppercase;
-}
-
-.tag-dev { background: #eef2ff; color: #4338ca; }
-.tag-data { background: #ecfdf5; color: #059669; }
-
-.course-title {
-    font-size: 1.3rem;
-    color: #1e293b;
-    margin: 12px 0 4px;
-    font-weight: 800;
-}
-
-.instructor {
-    font-size: 0.85rem;
-    color: #64748b;
-    margin-bottom: 15px;
-}
-
-.course-stats {
-    display: flex;
-    gap: 15px;
-    padding: 12px 0;
-    border-top: 1px solid #f1f5f9;
-    border-bottom: 1px solid #f1f5f9;
-    margin-bottom: 15px;
-}
-
-.course-stats span {
-    font-size: 0.85rem;
-    color: #475569;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.course-stats i { color: #4338ca; }
-
-.price-container {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-}
-
-.original-price {
-    text-decoration: line-through !important;
-    color: #94a3b8;
-    font-size: 1.1rem;
-}
-
-.current-price {
-    color: #059669;
-    font-weight: 800;
-    font-size: 1.4rem;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-}
-
-.view-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background: #1e293b;
-    color: white !important;
-    padding: 12px;
-    border-radius: 10px;
-    font-weight: 600;
-    transition: background 0.3s;
-}
-
-.view-btn:hover {
-    background: #4338ca;
-}
+.card-body { padding: 24px; }
 
 /* =========================================
-   5. PROFESSIONAL MOBILE MENU (Accordion Style)
-   ========================================= */
-@media (max-width: 768px) {
-    .container { padding: 0 20px; }
-    .courses-hero { padding: 40px 0 30px; }
-    .courses-hero h1 { font-size: 1.8rem; }
-    .courses-hero p { font-size: 1rem; }
-    
-    .mobile-menu-btn { 
-        display: block; 
-        z-index: 1002; 
-        font-size: 1.4rem;
-        color: var(--text-main);
-        padding: 5px;
-    }
-
-    .nav-links {
-        position: absolute; 
-        top: 80px; 
-        left: 0; 
-        width: 100%;
-        background: #ffffff; 
-        flex-direction: column; 
-        align-items: flex-start;
-        padding: 0; 
-        gap: 0;               /* REMOVED GAP FOR 100% MATCH */
-        max-height: 0; 
-        overflow: hidden; 
-        opacity: 0;
-        transform: translateY(-10px);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-        border-top: 1px solid #f1f5f9;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-    }
-
-    .nav-links.active { 
-        max-height: 85vh; 
-        opacity: 1; 
-        transform: translateY(0);
-        overflow-y: auto;
-    }
-
-    .nav-item {
-        width: 100%; 
-        padding: 14px 24px;   /* Your saved spacing */
-        font-size: 1.05rem;
-        font-weight: 600;
-        color: #334155;
-        border-bottom: 1px solid #f1f5f9;
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-    }
-
-    .nav-item i { 
-        display: inline-block; 
-        width: 24px; 
-        color: var(--primary); 
-        margin-right: 12px; 
-        text-align: center;
-    }
-
-    .dropdown { width: 100%; }
-    
-    .dropdown > span { 
-        width: 100%; 
-        padding: 14px 24px;   /* Match nav-item padding */
-        justify-content: space-between; 
-        border-bottom: 1px solid #f1f5f9; 
-    }
-    
-    .dropdown.active > span i.fa-chevron-down {
-        transform: rotate(180deg);
-        transition: transform 0.3s;
-    }
-
-    .dropdown-content { 
-        position: static; 
-        display: none; 
-        box-shadow: none; 
-        border: none;
-        background-color: #f8fafc; 
-        padding: 0;
-        animation: none;
-    }
-    
-    .dropdown.active .dropdown-content { 
-        display: block; 
-        border-bottom: 1px solid #f1f5f9;
-    }
-
-    .dropdown-content a {
-        padding: 12px 24px 12px 50px; /* Indented Sub-links */
-        font-size: 0.95rem;
-        color: #64748b;
-        border-bottom: 1px solid #e2e8f0;
-    }
-
-    .dropdown-content a:last-child {
-        border-bottom: none;
-    }
-
-    .nav-item.active {
-        color: #4338ca !important;
-        font-weight: 700;
-    }
-}
-
-@media (max-width: 1024px) {
-    .course-grid { 
-        grid-template-columns: repeat(2, 1fr); 
-        gap: 30px;
-    }
-    .courses-hero h1 { font-size: 2.2rem; }
-}
-
-@media (max-width: 650px) {
-    .course-grid { 
-        grid-template-columns: 1fr; 
-        gap: 25px;
-    }
-}
-
-/* =========================================
-   6. FOOTER STYLES
+   5. FOOTER STYLES (Fixed Column Requirement)
    ========================================= */
 footer {
     background-color: #0f172a;
@@ -457,29 +238,17 @@ footer {
 
 .footer-grid {
     display: grid;
-    grid-template-columns: 2fr repeat(4, 1fr); 
+    /* DESKTOP: 5 Columns exactly as requested */
+    grid-template-columns: 1.5fr repeat(4, 1fr); 
     gap: 30px;
     margin-bottom: 60px;
-    max-width: 1320px;
-    margin-left: auto;
-    margin-right: auto;
 }
-
-.footer-brand { padding-right: 20px; }
 
 .footer-logo {
     font-size: 1.8rem;
     font-weight: 800;
     color: white;
     margin-bottom: 15px;
-    letter-spacing: -0.5px;
-}
-
-.footer-description {
-    color: #94a3b8;
-    line-height: 1.6;
-    margin-bottom: 25px;
-    max-width: 320px;
 }
 
 .social-links { display: flex; gap: 15px; }
@@ -496,10 +265,7 @@ footer {
     transition: all 0.3s ease;
 }
 
-.social-link:hover {
-    background: var(--primary);
-    transform: translateY(-3px);
-}
+.social-link:hover { background: var(--primary); }
 
 .footer-links-title {
     color: white;
@@ -510,53 +276,107 @@ footer {
 
 .footer-links li { margin-bottom: 12px; }
 
-.footer-links a {
-    color: #94a3b8;
-    transition: all 0.2s ease;
-}
-
-.footer-links a:hover {
-    color: var(--secondary);
-    padding-left: 5px;
-}
+.footer-links a { color: #94a3b8; transition: all 0.2s ease; }
 
 .footer-bottom {
     border-top: 1px solid #1e293b;
     padding-top: 30px;
     text-align: center;
     color: #64748b;
-    font-size: 0.9rem;
 }
 
-@media (max-width: 1200px) {
-    .footer-grid {
-        grid-template-columns: 1.5fr repeat(3, 1fr);
-    }
-}
-
+/* =========================================
+   6. RESPONSIVE MOBILE MENU & FOOTER
+   ========================================= */
 @media (max-width: 768px) {
+    /* FOOTER MOBILE: 2 Columns, Left Aligned as requested */
     .footer-grid {
-        grid-template-columns: 1fr 1fr; /* 2 Column grid on mobile */
+        grid-template-columns: repeat(2, 1fr); 
         gap: 40px 20px;
+        text-align: left;
     }
 
     .footer-brand {
         grid-column: span 2;
-        text-align: center;
-        border-bottom: 1px solid rgba(255,255,255,0.05);
-        padding-bottom: 30px;
+        text-align: left; /* Changed from center to left as requested */
     }
 
-    .footer-brand .footer-description {
-        margin: 0 auto 20px;
+    /* MOBILE NAVIGATION */
+    .mobile-menu-btn { display: block; z-index: 1002; }
+
+    .nav-links {
+        position: absolute;
+        top: 80px; 
+        left: 0;
+        width: 100%;
+        background: #ffffff;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0;
+        gap: 0; /* Gap 0 for seamless rows */
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-top: 1px solid #f1f5f9;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
     }
 
-    .social-links { justify-content: center; }
+    .nav-links.active { max-height: 90vh; overflow-y: auto; opacity: 1; transform: translateY(0); }
+
+    .nav-item {
+        width: 100%;
+        padding: 14px 24px;
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: #334155;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .nav-item i { display: inline-block; width: 24px; margin-right: 12px; color: var(--primary); }
+
+    /* "More" Accordion Logic */
+    .dropdown { display: block; width: 100%; padding: 0; }
+
+    .dropdown > span {
+        width: 100%;
+        padding: 14px 24px; 
+        display: flex;
+        align-items: center;
+        justify-content: space-between; 
+        border-bottom: 1px solid #f1f5f9;
+        font-weight: 600;
+        color: #334155;
+    }
+    
+    .dropdown.active > span i.fa-chevron-down { transform: rotate(180deg); }
+
+    .dropdown-content {
+        position: static;
+        display: none;
+        width: 100%;
+        background-color: #f8fafc; 
+        padding: 0;
+        box-shadow: none;
+        border: none;
+    }
+
+    .dropdown.active .dropdown-content { display: block; border-bottom: 1px solid #f1f5f9; }
+
+    .dropdown-content a {
+        padding: 12px 24px 12px 50px; /* Indented padding */
+        font-size: 0.95rem;
+        color: #64748b;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .course-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
-    .footer-grid {
-        grid-template-columns: 1fr; /* Single column on very small screens */
-        text-align: center;
-    }
+    .footer-grid { grid-template-columns: 1fr; }
 }
