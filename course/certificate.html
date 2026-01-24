@@ -2,12 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Internadda Elite Certificate</title>
+<title>Internadda Certificate</title>
 <link rel="icon" type="image/x-icon" href="../favicon.ico">
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
 body {
@@ -17,9 +15,8 @@ body {
     font-family: 'Inter', sans-serif;
 }
 
-/* CERTIFICATE WRAPPER */
 .certificate-wrapper {
-    width: 1123px; /* A4 landscape */
+    width: 1123px;
     height: 794px;
     margin: 40px auto;
     background: #ffffff;
@@ -29,7 +26,6 @@ body {
     box-sizing: border-box;
 }
 
-/* BORDER */
 .certificate-wrapper::after {
     content: "";
     position: absolute;
@@ -45,22 +41,16 @@ body {
 }
 
 .logo {
-    height: 65px;
+    height: 60px;
 }
 
-.badge {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    padding: 10px 18px;
-    border-radius: 30px;
-    background: #4338ca;
-    color: white;
+.msme-logo {
+    height: 55px;
 }
 
 /* TITLE */
 .title {
-    margin-top: 40px;
+    margin-top: 35px;
     text-align: center;
     font-family: 'Playfair Display', serif;
     font-size: 46px;
@@ -80,21 +70,21 @@ body {
 /* CONTENT */
 .presented {
     text-align: center;
-    margin-top: 45px;
+    margin-top: 40px;
     font-size: 16px;
     color: #475569;
 }
 
 #recipient-name {
     text-align: center;
-    margin: 30px 0;
+    margin: 28px 0;
     font-size: 40px;
     font-weight: 700;
     color: #4338ca;
 }
 
 .description {
-    max-width: 800px;
+    max-width: 820px;
     margin: auto;
     text-align: center;
     font-size: 18px;
@@ -105,7 +95,7 @@ body {
 /* FOOTER */
 .footer {
     position: absolute;
-    bottom: 80px;
+    bottom: 70px;
     left: 90px;
     right: 90px;
     display: flex;
@@ -124,12 +114,27 @@ body {
     margin-bottom: 6px;
 }
 
-/* SIGNATURE */
 .signature {
     font-family: 'Playfair Display', serif;
     font-size: 18px;
     font-weight: 700;
     margin-bottom: 6px;
+}
+
+/* QR */
+.qr-wrap {
+    text-align: center;
+}
+
+.qr {
+    height: 95px;
+}
+
+.verify-text {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #475569;
+    letter-spacing: 0.5px;
 }
 </style>
 </head>
@@ -140,7 +145,8 @@ body {
 
     <div class="header">
         <img src="https://internadda.com/images/logo.jpg" class="logo" alt="Internadda Logo">
-        <div class="badge">OFFICIAL CREDENTIAL</div>
+        <!-- MSME Style Badge -->
+        <img src="msme.png" class="msme-logo" alt="MSME Badge">
     </div>
 
     <div class="title">Certificate of Completion</div>
@@ -150,9 +156,8 @@ body {
     <div id="recipient-name">Recipient Name</div>
 
     <div class="description">
-        for successfully completing the <b id="course-title">Data Science Specialization</b> under the
-        <b>Internadda Elite Program</b>. This certification confirms professional
-        competency in the specialized domain and industry standard practices.
+        for successfully completing the <b id="course-title">Professional Skill Program</b> with Internadda.
+        This certificate reflects dedication, consistency, and learning excellence.
     </div>
 
     <div class="footer">
@@ -161,9 +166,9 @@ body {
             <span id="cert-date"></span>
         </div>
 
-        <div class="footer-box">
-            <div class="signature">Internadda Authority</div>
-            Program Director
+        <div class="footer-box qr-wrap">
+            <img src="/qr.jpg" class="qr" alt="QR Code">
+            <div class="verify-text">Verify</div>
         </div>
 
         <div class="footer-box">
@@ -175,37 +180,22 @@ body {
 </div>
 
 <script>
-/* 1. Load Name and Course from LocalStorage */
 const name = localStorage.getItem("internadda_cert_name");
 const courseName = localStorage.getItem("internadda_course_name");
 
-// Set the recipient name if it exists in storage
-if (name) {
-    document.getElementById("recipient-name").innerText = name;
-}
+if (name) document.getElementById("recipient-name").innerText = name;
+if (courseName) document.getElementById("course-title").innerText = courseName;
 
-// Set the course title if it exists in storage to fix the "Data Science" hardcoding
-if (courseName) {
-    document.getElementById("course-title").innerText = courseName;
-}
-
-/* 2. Set Current Date */
 document.getElementById("cert-date").innerText =
-    new Date().toLocaleDateString("en-IN", {
-        day: "numeric",
-        month: "long",
-        year: "numeric"
-    });
+    new Date().toLocaleDateString("en-IN", { day:"numeric", month:"long", year:"numeric" });
 
-/* 3. Generate Unique Certificate ID */
 function generateCertID() {
-    // Adds course initials to the ID to ensure uniqueness per program
     const prefix = courseName ? courseName.substring(0,2).toUpperCase() : "IA";
     return "IA-" + prefix + "-" +
-        Math.random().toString(36).substring(2, 6).toUpperCase() +
-        "-" +
-        Date.now().toString().slice(-5);
+        Math.random().toString(36).substring(2,6).toUpperCase() +
+        "-" + Date.now().toString().slice(-5);
 }
+
 document.getElementById("cert-id").innerText = generateCertID();
 </script>
 
