@@ -17,7 +17,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    text-decoration: none !important;
 }
 
 body {
@@ -28,7 +27,7 @@ body {
     overflow-x: hidden;
 }
 
-a { transition: color 0.2s; color: inherit; }
+a { text-decoration: none !important; color: inherit; transition: color 0.2s; }
 ul { list-style: none; }
 img { max-width: 100%; display: block; }
 
@@ -38,6 +37,12 @@ img { max-width: 100%; display: block; }
     margin: 0 auto;
     padding: 0 40px;
     position: relative;
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        padding: 0 20px;
+    }
 }
 
 /* =========================================
@@ -92,15 +97,15 @@ header {
 .nav-item i { display: none; }
 .nav-item:hover { color: var(--primary); }
 
-/* Active Glow Effect */
-.active-glow {
+/* --- ACTIVE GLOW EFFECT --- */
+.nav-item.active-glow {
     color: #4338ca !important;
     font-weight: 700 !important;
     text-shadow: 0 0 8px rgba(67, 56, 202, 0.4), 0 0 15px rgba(67, 56, 202, 0.2);
     position: relative;
 }
 
-.active-glow::after {
+.nav-item.active-glow::after {
     content: '';
     position: absolute;
     bottom: -5px;
@@ -112,7 +117,7 @@ header {
     border-radius: 2px;
 }
 
-/* Dropdown Menu (Desktop) */
+/* --- DROPDOWN MENU (DESKTOP) --- */
 .dropdown { position: relative; display: inline-block; }
 .dropdown > span { display: flex; align-items: center; cursor: pointer; user-select: none; padding: 5px 0; }
 
@@ -167,11 +172,12 @@ header {
 }
 
 /* =========================================
-   3. HERO SECTION & TRUST BAR
+   3. HERO SECTION
    ========================================= */
 .hero {
     padding: 100px 0 80px;
     background: linear-gradient(to bottom, #f8faff 0%, #ffffff 100%);
+    overflow: visible;
 }
 
 .hero-container {
@@ -181,7 +187,10 @@ header {
     gap: 40px;
 }
 
-.hero-content { flex: 1; max-width: 580px; }
+.hero-content {
+    flex: 1;
+    max-width: 580px;
+}
 
 .hero-badge {
     display: inline-flex;
@@ -194,6 +203,7 @@ header {
     font-size: 0.9rem;
     font-weight: 700;
     margin-bottom: 24px;
+    letter-spacing: 0.5px;
 }
 
 .hero-heading {
@@ -209,6 +219,7 @@ header {
     background: linear-gradient(135deg, #4c51bf 0%, #9f7aea 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    display: inline-block;
 }
 
 .hero-description {
@@ -218,7 +229,7 @@ header {
     line-height: 1.7;
 }
 
-.hero-cta { display: flex; gap: 15px; }
+.hero-cta { display: flex; gap: 15px; margin-bottom: 40px; }
 
 .btn {
     padding: 14px 32px;
@@ -233,11 +244,29 @@ header {
 .btn-primary {
     background: var(--primary);
     color: white;
-    box-shadow: 0 10px 20px rgba(67, 56, 202, 0.2);
     border: none;
+    box-shadow: 0 10px 20px rgba(67, 56, 202, 0.2);
 }
 
 .btn-primary:hover { transform: translateY(-2px); background: var(--primary-hover); }
+
+.btn-transparent {
+    background: white;
+    color: var(--text-main);
+    border: 1px solid #e2e8f0;
+}
+
+.hero-stats {
+    display: flex;
+    gap: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.stat-value { font-size: 1.5rem; font-weight: 800; color: var(--text-main); display: block; }
+.stat-label { font-size: 0.85rem; color: #718096; }
+
+.hero-image { flex: 1; display: flex; justify-content: center; }
 
 .hero-image-wrapper {
     position: relative;
@@ -251,7 +280,9 @@ header {
 
 .hero-image-wrapper:hover { transform: perspective(1000px) rotateY(0deg) rotateX(0deg); }
 
-/* Trust Bar */
+/* =========================================
+   4. TRUST BAR & MARQUEE
+   ========================================= */
 .trust-bar-section {
     background: #f8fafc;
     padding: 50px 0;
@@ -269,17 +300,9 @@ header {
     margin: 0 auto;
 }
 
-.msme-logo { width: 120px; height: auto; }
+.msme-logo { width: 120px; height: auto; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1)); }
 
-/* =========================================
-   4. INFINITE MARQUEE
-   ========================================= */
-.marquee-section {
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-    padding: 40px 0;
-}
+.marquee-section { width: 100%; overflow: hidden; position: relative; padding: 40px 0; }
 
 .marquee-track {
     display: flex;
@@ -293,11 +316,8 @@ header {
     100% { transform: translateX(-50%); }
 }
 
-.logo-item img { height: 45px; transition: transform 0.3s; }
-.logo-item:hover img { transform: scale(1.1); }
-
 /* =========================================
-   5. COURSE GRID & CARDS
+   5. COURSE GRID & TESTIMONIALS
    ========================================= */
 .course-grid {
     display: grid;
@@ -316,33 +336,17 @@ header {
 
 .course-card:hover { transform: translateY(-10px); box-shadow: 0 20px 25px rgba(0,0,0,0.1); }
 
-.card-image-wrapper { height: 200px; overflow: hidden; position: relative; }
-.card-image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-.course-card:hover .card-image-wrapper img { transform: scale(1.1); }
-
-.badge-premium, .badge-free {
+.badge-free {
     position: absolute;
     top: 15px;
     right: 15px;
-    padding: 6px 14px;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 700;
+    background: #22c55e;
     color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 700;
 }
 
-.badge-premium { background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%); }
-.badge-free { background: #22c55e; }
-
-.card-body { padding: 24px; }
-.course-title { font-size: 1.3rem; font-weight: 800; margin: 12px 0 4px; color: #1e293b; }
-.price-container { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-.current-price { color: #059669; font-weight: 800; font-size: 1.4rem; }
-.original-price { text-decoration: line-through !important; color: #94a3b8; }
-
-/* =========================================
-   6. TESTIMONIALS
-   ========================================= */
 .testimonials-dark {
     background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
     padding: 100px 0;
@@ -356,10 +360,11 @@ header {
     border-radius: 16px;
     padding: 30px;
     max-width: 380px;
+    transition: all 0.3s ease;
 }
 
 /* =========================================
-   7. FOOTER
+   6. FOOTER STYLES
    ========================================= */
 footer {
     background-color: #0f172a;
@@ -379,22 +384,9 @@ footer {
 .footer-links a:hover { color: var(--secondary); padding-left: 5px; }
 
 /* =========================================
-   8. MOBILE RESPONSIVE & MENU (100% MATCH)
+   7. PROFESSIONAL MOBILE MENU (ACCORDION)
    ========================================= */
-@media (max-width: 1024px) {
-    .course-grid { grid-template-columns: repeat(2, 1fr); }
-    .footer-grid { grid-template-columns: 1.5fr repeat(3, 1fr); }
-}
-
 @media (max-width: 768px) {
-    .container { padding: 0 20px; }
-    .hero-container { flex-direction: column; text-align: center; }
-    .hero-heading { font-size: 2.5rem; }
-    .hero-cta { flex-direction: column; }
-    .btn { width: 100%; }
-    .hero-image-wrapper { transform: none; width: 100%; }
-
-    /* Mobile Hamburger & Menu */
     .mobile-menu-btn { display: block; z-index: 1002; color: var(--text-main); }
 
     .nav-links {
@@ -404,9 +396,8 @@ footer {
         width: 100%;
         background: #ffffff;
         flex-direction: column;
-        align-items: flex-start;
         padding: 0;
-        gap: 0; /* REMOVED GAP FOR TIGHT ACCORDION */
+        gap: 0;
         max-height: 0;
         overflow: hidden;
         opacity: 0;
@@ -425,25 +416,20 @@ footer {
         color: #334155;
         border-bottom: 1px solid #f1f5f9;
         display: flex;
-        justify-content: flex-start;
     }
 
     .nav-item i { display: inline-block; width: 24px; color: var(--primary); margin-right: 12px; }
 
-    /* Mobile Accordion Dropdown */
     .dropdown { width: 100%; }
     .dropdown > span { width: 100%; padding: 14px 24px; justify-content: space-between; border-bottom: 1px solid #f1f5f9; }
     
     .dropdown-content { position: static; display: none; box-shadow: none; border: none; background-color: #f8fafc; padding: 0; }
     .dropdown.active .dropdown-content { display: block; border-bottom: 1px solid #f1f5f9; }
-    .dropdown-content a { padding: 12px 24px 12px 50px; font-size: 0.95rem; color: #64748b; border-bottom: 1px solid #e2e8f0; }
+    .dropdown-content a { padding: 12px 24px 12px 50px; color: #64748b; border-bottom: 1px solid #e2e8f0; }
 
-    .footer-grid { grid-template-columns: 1fr 1fr; }
-    .footer-brand { grid-column: span 2; text-align: center; padding-bottom: 30px; }
-}
-
-@media (max-width: 650px) {
-    .course-grid { grid-template-columns: 1fr; }
+    /* Footer Mobile */
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 30px 20px; }
+    .footer-brand { grid-column: span 2; text-align: center; }
 }
 
 @keyframes slideUp {
