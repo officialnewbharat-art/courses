@@ -40,12 +40,6 @@ img { max-width: 100%; display: block; }
     padding: 0 40px;
 }
 
-@media screen and (max-width: 768px) {
-    .container {
-        padding: 0 20px;
-    }
-}
-
 /* =========================================
    2. HEADER & NAVIGATION
    ========================================= */
@@ -95,75 +89,7 @@ header {
     transition: all 0.3s ease;
 }
 
-.nav-item i { display: none; }
 .nav-item:hover { color: var(--primary); }
-
-/* Active glow */
-.nav-links a.nav-item.active-glow {
-    color: #4338ca !important;
-    font-weight: 700 !important;
-    text-shadow: 0 0 8px rgba(67, 56, 202, 0.4), 0 0 15px rgba(67, 56, 202, 0.2) !important;
-    position: relative;
-}
-
-.nav-links a.nav-item.active-glow::after {
-    content: '' !important;
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: #4338ca !important;
-    box-shadow: 0 0 10px rgba(67, 56, 202, 0.6) !important;
-    border-radius: 2px;
-}
-
-/* DROPDOWN MENU */
-.dropdown { position: relative; display: inline-block; }
-.dropdown > span { display: flex; align-items: center; cursor: pointer; user-select: none; padding: 5px 0; }
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #ffffff;
-    min-width: 260px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    border-radius: 12px;
-    border: 1px solid #e2e8f0;
-    z-index: 1001;
-    top: 140%;
-    right: 0;
-    padding: 8px 0;
-}
-
-.dropdown.active .dropdown-content { display: block; }
-
-.dropdown-content::before {
-    content: "";
-    position: absolute;
-    top: -6px;
-    right: 20px;
-    width: 12px;
-    height: 12px;
-    background: #fff;
-    border-left: 1px solid #e2e8f0;
-    border-top: 1px solid #e2e8f0;
-    transform: rotate(45deg);
-}
-
-.dropdown-content a {
-    color: #4a5568;
-    padding: 12px 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.95rem;
-}
-
-.dropdown-content a:hover {
-    background-color: #f8fafc;
-    color: var(--primary);
-}
 
 .mobile-menu-btn {
     display: none;
@@ -175,7 +101,7 @@ header {
 }
 
 /* =========================================
-   3. HERO SECTION
+   3. HERO & COURSE GRID
    ========================================= */
 .courses-hero {
     padding: 60px 0 40px; 
@@ -188,18 +114,13 @@ header {
     font-weight: 800;
     color: #1e293b;
     margin-bottom: 15px;
-    letter-spacing: -1px;
 }
 
-/* =========================================
-   4. COURSE GRID & CARDS
-   ========================================= */
 .course-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
     padding-bottom: 80px;
-    margin-top: 20px;
 }
 
 .course-card {
@@ -212,120 +133,8 @@ header {
 
 .course-card:hover { transform: translateY(-10px); }
 
-.badge-premium {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
-    color: white;
-    padding: 6px 14px;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 700;
-}
-
-.card-body { padding: 24px; }
-
-
-    
 /* =========================================
-   6. RESPONSIVE MOBILE MENU & FOOTER
-   ========================================= */
-@media (max-width: 768px) {
-    /* FOOTER MOBILE: 2 Columns, Left Aligned as requested */
-    .footer-grid {
-        grid-template-columns: repeat(2, 1fr); 
-        gap: 40px 20px;
-        text-align: left;
-    }
-
-    .footer-brand {
-        grid-column: span 2;
-        text-align: left; /* Changed from center to left as requested */
-    }
-
-    /* MOBILE NAVIGATION */
-    .mobile-menu-btn { display: block; z-index: 1002; }
-
-    .nav-links {
-        position: absolute;
-        top: 80px; 
-        left: 0;
-        width: 100%;
-        background: #ffffff;
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 0;
-        gap: 0; /* Gap 0 for seamless rows */
-        max-height: 0;
-        overflow: hidden;
-        opacity: 0;
-        transform: translateY(-10px);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        border-top: 1px solid #f1f5f9;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-    }
-
-    .nav-links.active { max-height: 90vh; overflow-y: auto; opacity: 1; transform: translateY(0); }
-
-    .nav-item {
-        width: 100%;
-        padding: 14px 24px;
-        font-size: 1.05rem;
-        font-weight: 600;
-        color: #334155;
-        border-bottom: 1px solid #f1f5f9;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-    }
-
-    .nav-item i { display: inline-block; width: 24px; margin-right: 12px; color: var(--primary); }
-
-    /* "More" Accordion Logic */
-    .dropdown { display: block; width: 100%; padding: 0; }
-
-    .dropdown > span {
-        width: 100%;
-        padding: 14px 24px; 
-        display: flex;
-        align-items: center;
-        justify-content: space-between; 
-        border-bottom: 1px solid #f1f5f9;
-        font-weight: 600;
-        color: #334155;
-    }
-    
-    .dropdown.active > span i.fa-chevron-down { transform: rotate(180deg); }
-
-    .dropdown-content {
-        position: static;
-        display: none;
-        width: 100%;
-        background-color: #f8fafc; 
-        padding: 0;
-        box-shadow: none;
-        border: none;
-    }
-
-    .dropdown.active .dropdown-content { display: block; border-bottom: 1px solid #f1f5f9; }
-
-    .dropdown-content a {
-        padding: 12px 24px 12px 50px; /* Indented padding */
-        font-size: 0.95rem;
-        color: #64748b;
-        border-bottom: 1px solid #e2e8f0;
-    }
-
-    .course-grid { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 480px) {
-    .footer-grid { grid-template-columns: 1fr; }
-}
-
-/* =========================================
-   7. FOOTER STYLES (Updated)
+   4. FOOTER STYLES (MATCHING IMAGE)
    ========================================= */
 footer {
     background-color: #0f172a;
@@ -339,15 +148,28 @@ footer {
     grid-template-columns: 1.8fr repeat(5, 1fr); 
     gap: 25px;
     margin-bottom: 60px;
-    max-width: 1320px;
+    max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.footer-logo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 15px;
+}
+
+.footer-description {
+    color: #94a3b8;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    max-width: 300px;
 }
 
 .social-links { 
     display: flex; 
     gap: 15px; 
-    transition: all 0.3s ease;
 }
 
 .social-link {
@@ -360,56 +182,96 @@ footer {
     justify-content: center;
     color: white;
     transition: all 0.3s ease;
-    font-size: 1.1rem;
+}
+
+.social-link:hover {
+    background: var(--primary);
+    transform: translateY(-3px);
+}
+
+.footer-links-title {
+    color: white;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.footer-links a:hover {
+    color: var(--secondary);
+    padding-left: 5px;
+}
+
+.footer-bottom {
+    border-top: 1px solid #1e293b;
+    padding-top: 30px;
+    text-align: center;
+    color: #64748b;
 }
 
 /* =========================================
-   8. RESPONSIVE MOBILE ADJUSTMENTS
+   5. RESPONSIVE MOBILE ADJUSTMENTS
    ========================================= */
 @media (max-width: 768px) {
-    /* Main Footer Grid for Mobile */
+    .container { padding: 0 20px; }
+
+    /* MOBILE NAVIGATION */
+    .mobile-menu-btn { display: block; z-index: 1002; }
+
+    .nav-links {
+        position: absolute;
+        top: 80px; left: 0; width: 100%;
+        background: #ffffff;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-top: 1px solid #f1f5f9;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    }
+
+    .nav-links.active { max-height: 90vh; opacity: 1; transform: translateY(0); }
+
+    .nav-item {
+        width: 100%;
+        padding: 14px 24px;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    /* FOOTER MOBILE FIXES */
     .footer-grid {
         grid-template-columns: 1fr 1fr; 
         gap: 40px 20px;
         text-align: left;
     }
 
-    /* Brand Section: Centering everything here */
     .footer-brand {
         grid-column: span 2;
         display: flex;
         flex-direction: column;
-        align-items: center; /* Centers Logo, Text, and Socials */
+        align-items: center; /* Centered Image/Text/Socials */
         text-align: center;
-        padding-bottom: 20px;
+        padding-bottom: 25px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        margin-bottom: 10px;
+        margin-bottom: 15px;
     }
 
     .footer-description {
-        margin: 0 auto 25px; /* Centers the description block */
+        margin: 0 auto 25px;
         max-width: 100%;
     }
 
-    /* Social Links Centering */
     .social-links {
-        justify-content: center; /* This pulls the icons to the center */
+        justify-content: center; /* Icons in Center */
         width: 100%;
-        margin-top: 10px;
     }
 
-    /* Links Columns remain side-by-side (2 columns) */
-    .footer-links-column {
-        text-align: left;
-    }
+    .course-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
-    /* Optional: Stack everything into 1 column on very small phones */
-    .footer-grid {
-        grid-template-columns: 1fr;
-    }
-    .footer-brand {
-        grid-column: span 1;
-    }
+    .footer-grid { grid-template-columns: 1fr; }
+    .footer-brand { grid-column: span 1; }
 }
