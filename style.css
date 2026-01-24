@@ -17,7 +17,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    text-decoration: none !important; /* Removes all underlines */
+    text-decoration: none !important;
 }
 
 body {
@@ -31,13 +31,17 @@ body {
 ul { list-style: none; }
 img { max-width: 100%; display: block; }
 
-/* FIXED CONTAINER: Perfect for 14-inch and Large Desktops */
+/* FIXED CONTAINER: Perfect balance for all screens */
 .container {
     width: 100%;
-    max-width: 1320px;     /* Professional standard width */
+    max-width: 1320px;     /* Content limit to prevent stretching */
     margin: 0 auto;
-    padding: 0 40px;       /* Balanced side padding */
+    padding: 0 40px;       /* Professional side padding */
     position: relative;
+}
+
+@media screen and (max-width: 768px) {
+    .container { padding: 0 20px; }
 }
 
 /* =========================================
@@ -74,7 +78,7 @@ header {
 
 .nav-links {
     display: flex;
-    gap: 25px;             /* Professional tight spacing */
+    gap: 25px;             /* Tight professional spacing */
     align-items: center;
 }
 
@@ -96,7 +100,7 @@ header {
 .active-glow {
     color: #4338ca !important;
     font-weight: 700 !important;
-    text-shadow: 0 0 8px rgba(67, 56, 202, 0.4), 0 0 15px rgba(67, 56, 202, 0.2);
+    text-shadow: 0 0 8px rgba(67, 56, 202, 0.4);
     position: relative;
 }
 
@@ -112,7 +116,7 @@ header {
     border-radius: 2px;
 }
 
-/* --- DROPDOWN MENU --- */
+/* --- DROPDOWN MENU (Desktop) --- */
 .dropdown { position: relative; display: inline-block; }
 .dropdown > span { display: flex; align-items: center; cursor: pointer; user-select: none; padding: 5px 0; }
 
@@ -153,7 +157,7 @@ header {
 }
 
 /* =========================================
-   3. HERO SECTION (BALANCED)
+   3. HERO SECTION (ADJUSTED TO PREVENT STRETCH)
    ========================================= */
 .courses-hero {
     padding: 60px 0 40px; 
@@ -167,7 +171,7 @@ header {
     color: #1e293b;
     margin-bottom: 15px;
     letter-spacing: -1px;
-    max-width: 800px;      /* Prevents stretching */
+    max-width: 800px;      /* Lock width */
     margin-left: auto;
     margin-right: auto;
 }
@@ -175,293 +179,32 @@ header {
 .courses-hero p {
     font-size: 1.1rem;
     color: #64748b;
-    max-width: 550px;      /* Professional readable width */
+    max-width: 550px;      /* Lock width */
     margin: 0 auto;
 }
 
 /* =========================================
-   4. COURSE GRID & CARDS
+   4. COURSE GRID
    ========================================= */
 .course-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
-    gap: 30px;             /* Balanced gap */
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 30px;
     padding-bottom: 80px;
     margin-top: 20px;
 }
 
-.course-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 20px;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-}
-
-.course-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
-
-.card-image-wrapper {
-    position: relative;
-    height: 200px;
-    overflow: hidden;
-}
-
-.card-image-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-.course-card:hover .card-image-wrapper img {
-    transform: scale(1.1);
-}
-
-.badge-premium {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
-    color: white;
-    padding: 6px 14px;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    box-shadow: 0 4px 10px rgba(67, 56, 202, 0.3);
-}
-
-.card-body {
-    padding: 24px;
-}
-
-.category-tag {
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 4px 12px;
-    border-radius: 6px;
-    text-transform: uppercase;
-}
-
-.tag-dev { background: #eef2ff; color: #4338ca; }
-.tag-data { background: #ecfdf5; color: #059669; }
-
-.course-title {
-    font-size: 1.3rem;
-    color: #1e293b;
-    margin: 12px 0 4px;
-    font-weight: 800;
-}
-
-.instructor {
-    font-size: 0.85rem;
-    color: #64748b;
-    margin-bottom: 15px;
-}
-
-.course-stats {
-    display: flex;
-    gap: 15px;
-    padding: 12px 0;
-    border-top: 1px solid #f1f5f9;
-    border-bottom: 1px solid #f1f5f9;
-    margin-bottom: 15px;
-}
-
-.course-stats span {
-    font-size: 0.85rem;
-    color: #475569;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.course-stats i { color: #4338ca; }
-
-.price-container {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-}
-
-.original-price {
-    text-decoration: line-through !important;
-    color: #94a3b8;
-    font-size: 1.1rem;
-}
-
-.current-price {
-    color: #059669;
-    font-weight: 800;
-    font-size: 1.4rem;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-}
-
-.view-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background: #1e293b;
-    color: white !important;
-    padding: 12px;
-    border-radius: 10px;
-    font-weight: 600;
-    transition: background 0.3s;
-}
-
-.view-btn:hover {
-    background: #4338ca;
-}
-
 /* =========================================
-   5. RESPONSIVE ADJUSTMENTS (100% Mobile Match)
-   ========================================= */
-@media (max-width: 1024px) {
-    .course-grid { 
-        grid-template-columns: repeat(2, 1fr); 
-        gap: 30px;
-    }
-    .courses-hero h1 { font-size: 2.2rem; }
-}
-
-@media (max-width: 768px) {
-    .container { padding: 0 20px; }
-    .courses-hero { padding: 40px 0 30px; }
-    .courses-hero h1 { font-size: 1.8rem; }
-    .courses-hero p { font-size: 1rem; }
-    
-    /* 1. Hamburger Icon Alignment */
-    .mobile-menu-btn { 
-        display: block; 
-        z-index: 1002; 
-        font-size: 1.4rem;
-        color: var(--text-main);
-        padding: 5px;
-    }
-
-    /* 2. Menu Container - FIXED SPACING (Gap 0) */
-    .nav-links {
-        position: absolute; 
-        top: 80px; 
-        left: 0; 
-        width: 100%;
-        background: #ffffff; 
-        flex-direction: column; 
-        align-items: flex-start;
-        padding: 0; 
-        gap: 0;               /* REMOVED GAP FOR 100% MATCH */
-        max-height: 0; 
-        overflow: hidden; 
-        opacity: 0;
-        transform: translateY(-10px);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-        border-top: 1px solid #f1f5f9;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-    }
-
-    .nav-links.active { 
-        max-height: 85vh; 
-        opacity: 1; 
-        transform: translateY(0);
-        overflow-y: auto;
-    }
-
-    /* 3. Menu Items - Tight Spacing & Borders */
-    .nav-item {
-        width: 100%; 
-        padding: 14px 24px;   /* Your saved spacing */
-        font-size: 1.05rem;
-        font-weight: 600;
-        color: #334155;
-        border-bottom: 1px solid #f1f5f9;
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-    }
-
-    .nav-item i { 
-        display: inline-block; 
-        width: 24px; 
-        color: var(--primary); 
-        margin-right: 12px; 
-        text-align: center;
-    }
-
-    /* 4. Dropdown Spacing */
-    .dropdown { width: 100%; }
-    
-    .dropdown > span { 
-        width: 100%; 
-        padding: 14px 24px;   /* Match nav-item padding */
-        justify-content: space-between; 
-        border-bottom: 1px solid #f1f5f9; 
-    }
-    
-    .dropdown.active > span i.fa-chevron-down {
-        transform: rotate(180deg);
-        transition: transform 0.3s;
-    }
-
-    .dropdown-content { 
-        position: static; 
-        display: none; 
-        box-shadow: none; 
-        border: none;
-        background-color: #f8fafc; 
-        padding: 0;
-        animation: none;
-    }
-    
-    .dropdown.active .dropdown-content { 
-        display: block; 
-        border-bottom: 1px solid #f1f5f9;
-    }
-
-    .dropdown-content a {
-        padding: 12px 24px 12px 50px; /* Indented Sub-links */
-        font-size: 0.95rem;
-        color: #64748b;
-        border-bottom: 1px solid #e2e8f0;
-    }
-
-    .dropdown-content a:last-child {
-        border-bottom: none;
-    }
-
-    .nav-item.active {
-        color: #4338ca !important;
-        font-weight: 700;
-    }
-}
-
-@media (max-width: 650px) {
-    .course-grid { 
-        grid-template-columns: 1fr; 
-        gap: 25px;
-    }
-}
-
-/* =========================================
-   6. FOOTER STYLES (BALANCED & TIGHT)
+   5. FOOTER STYLES (BALANCED & TIGHT)
    ========================================= */
 footer {
     background-color: #0f172a;
     color: #cbd5e0;
     padding: 80px 0 20px;
-    font-size: 0.95rem;
 }
 
 .footer-grid {
     display: grid;
-    /* Brand ko space di aur links tight columns mein */
     grid-template-columns: 1.8fr repeat(5, 1fr); 
     gap: 25px;
     margin-bottom: 60px;
@@ -470,112 +213,17 @@ footer {
     margin-right: auto;
 }
 
-.footer-brand { padding-right: 20px; }
-
-.footer-logo {
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: #ffffff;
-    margin-bottom: 15px;
-    letter-spacing: -0.5px;
-}
-
-.footer-description {
-    color: #94a3b8;
-    line-height: 1.6;
-    margin-bottom: 25px;
-    max-width: 280px;
-}
-
-.social-links { display: flex; gap: 12px; }
-
-.social-link {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    transition: all 0.3s ease;
-}
-
-.social-link:hover {
-    background: #4338ca;
-    transform: translateY(-3px);
-}
-
-.footer-links-title {
-    color: #ffffff;
-    font-weight: 700;
-    margin-bottom: 20px;
-    font-size: 0.95rem;
-    letter-spacing: 1px;
-}
-
-.footer-links li { margin-bottom: 12px; }
-
-.footer-links a {
-    color: #94a3b8;
-    transition: all 0.2s;
-}
-
-.footer-links a:hover {
-    color: #4c51bf;
-    padding-left: 4px;
-}
-
-.footer-bottom {
-    border-top: 1px solid #1e293b;
-    padding-top: 30px;
-    text-align: center;
-    color: #64748b;
-    font-size: 0.85rem;
-}
-
 @media (max-width: 1200px) {
-    .footer-grid {
-        grid-template-columns: 1.5fr repeat(3, 1fr);
-        gap: 40px;
-    }
-    .footer-brand {
-        grid-column: span 4;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-    .footer-brand .footer-description { margin: 0 auto 20px; }
-    .footer-brand .social-links { justify-content: center; }
-}
-
-@media (max-width: 600px) {
-    .footer-grid { grid-template-columns: 1fr 1fr; }
-    .footer-brand { grid-column: span 2; }
+    .footer-grid { grid-template-columns: 1.5fr repeat(3, 1fr); gap: 40px; }
 }
 
 /* =========================================
-   7. PROFESSIONAL MOBILE MENU (Accordion Style)
+   6. PROFESSIONAL MOBILE MENU (Accordion Style)
    ========================================= */
 @media (max-width: 768px) {
     
-    /* General Mobile Layout Adjustments */
-    .hero-container { flex-direction: column; text-align: center; gap: 40px; }
-    .hero-heading { font-size: 2.5rem; }
-    .hero-cta { justify-content: center; flex-direction: column; }
-    .btn { width: 100%; }
-    .hero-stats { justify-content: center; flex-wrap: wrap; }
-    .hero-image-wrapper { transform: none; width: 100%; }
+    .mobile-menu-btn { display: block; z-index: 1002; color: var(--text-main); padding: 5px; }
 
-    /* Hamburger Icon */
-    .mobile-menu-btn { 
-        display: block; 
-        z-index: 1002; 
-        font-size: 1.4rem;
-        color: var(--text-main);
-        padding: 5px;
-    }
-
-    /* Main Navigation Box */
     .nav-links {
         position: absolute;
         top: 80px; 
@@ -585,7 +233,7 @@ footer {
         flex-direction: column;
         align-items: flex-start;
         padding: 0;
-        gap: 0;               /* Gap zero for seamless rows */
+        gap: 0;               /* Gap 0 for seamless rows */
         max-height: 0;
         overflow: hidden;
         opacity: 0;
@@ -595,17 +243,11 @@ footer {
         box-shadow: 0 15px 40px rgba(0,0,0,0.1);
     }
 
-    .nav-links.active {
-        max-height: 90vh;
-        overflow-y: auto;
-        opacity: 1;
-        transform: translateY(0);
-    }
+    .nav-links.active { max-height: 90vh; overflow-y: auto; opacity: 1; transform: translateY(0); }
 
-    /* Normal Menu Row Spacing */
     .nav-item {
         width: 100%;
-        padding: 16px 24px;   /* Clean professional padding */
+        padding: 14px 24px;   /* SAVED SPACING: Compact & professional */
         font-size: 1.05rem;
         font-weight: 600;
         color: #334155;
@@ -617,74 +259,46 @@ footer {
 
     .nav-item i { display: inline-block; width: 24px; margin-right: 12px; color: var(--primary); }
 
-    /* "More" Dropdown Row (Accordion Style) */
-    .dropdown {
-        display: block;
-        width: 100%;
-    }
+    /* "More" Accordion Logic */
+    .dropdown { display: block; width: 100%; padding: 0; }
 
     .dropdown > span {
         width: 100%;
-        padding: 16px 24px;
+        padding: 14px 24px; 
         display: flex;
         align-items: center;
-        justify-content: space-between; /* Text left, Arrow right */
+        justify-content: space-between; 
+        border-bottom: 1px solid #f1f5f9;
         font-weight: 600;
         color: #334155;
-        border-bottom: 1px solid #f1f5f9;
-        cursor: pointer;
     }
-
-    /* Rotate Arrow on Active */
+    
     .dropdown.active > span i.fa-chevron-down {
         transform: rotate(180deg);
         transition: transform 0.3s;
     }
 
-    /* Sub-menu Content (Accordion) */
     .dropdown-content {
-        position: static;      /* Taki content baki menu ko niche push kare */
+        position: static;      /* Pushes menu down */
         display: none;
         width: 100%;
-        background-color: #f8fafc; /* Subtle contrast background */
+        background-color: #f8fafc; 
+        padding: 0;
         box-shadow: none;
         border: none;
-        padding: 0;
-        animation: none;
     }
 
-    .dropdown.active .dropdown-content {
-        display: block;
-        border-bottom: 1px solid #f1f5f9;
-    }
+    .dropdown.active .dropdown-content { display: block; border-bottom: 1px solid #f1f5f9; }
 
-    /* Sub-links Spacing (Indented) */
     .dropdown-content a {
-        padding: 14px 24px 14px 50px; /* 50px left padding for nested look */
+        padding: 12px 24px 12px 50px; /* INDENTED SAVED SPACING */
         font-size: 0.95rem;
         color: #64748b;
         border-bottom: 1px solid #e2e8f0;
-        display: flex;
-        align-items: center;
     }
+    
+    .dropdown-content a:last-child { border-bottom: none; }
+    .dropdown-content::before { display: none; } /* Hide desktop triangle */
 
-    .dropdown-content a:last-child {
-        border-bottom: none;
-    }
-
-    .dropdown-content a:hover {
-        background-color: #eef2ff;
-        color: var(--primary);
-    }
-
-    /* Hide the Desktop Triangle */
-    .dropdown-content::before {
-        display: none;
-    }
-
-    /* Active Highlight */
-    .nav-item.active {
-        color: var(--primary) !important;
-        font-weight: 700;
-    }
+    .nav-item.active { color: #4338ca !important; font-weight: 700; }
 }
