@@ -2,33 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Elite Python Mastery | Internadda</title>
     
-    <title>Python Essentials | Internadda Elite - Master Software Engineering</title>
-    <meta name="title" content="Python Essentials | Internadda Elite - Master Software Engineering">
-    <meta name="description" content="Advance from coder to system-level Python engineer. Master CPython, memory management, and industrial design patterns with Internadda Elite.">
-    <meta name="keywords" content="Python Essentials, Internadda Elite, Python Engineering, CPython, Software Design Patterns, Backend Development, Internadda Courses">
-    <meta name="author" content="Internadda">
-    <meta name="robots" content="index, follow">
-
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://internadda.com/courses/python-essentials">
-    <meta property="og:title" content="Python Essentials | Internadda Elite">
-    <meta property="og:description" content="Master high-performance Python and industry-scale software architecture. Enroll in the Internadda Elite proctored curriculum.">
-    <meta property="og:image" content="https://internadda.com/images/Python-Essentials-for-All.png">
-
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://internadda.com/courses/python-essentials">
-    <meta property="twitter:title" content="Python Essentials | Internadda Elite">
-    <meta property="twitter:description" content="Advance your career with Elite Python Engineering. Master memory management and scaling.">
-    <meta property="twitter:image" content="https://internadda.com/images/Python-Essentials-for-All.png">
-
-    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="../images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon-16x16.png">
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -36,195 +13,392 @@
         :root {
             --primary: #4338ca; 
             --primary-hover: #3730a3;
+            --secondary: #10b981;
+            --accent: #8b5cf6;
             --dark-bg: #0f172a;
-            --text-main: #1a202c;
+            --dark-card: #1e293b;
+            --text-main: #1e293b;
             --text-light: #64748b;
             --white: #ffffff;
+            --off-white: #f8fafc;
             --border: #e2e8f0;
+            --border-dark: #334155;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --header-height: 75px;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
+            --gradient-primary: linear-gradient(135deg, #4338ca 0%, #7c3aed 100%);
+            --gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background-color: #f8faff; color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--off-white); color: var(--text-main); line-height: 1.8; overflow-x: hidden; }
 
-        /* --- UI COMPONENTS --- */
+        /* --- HEADER & PROGRESS --- */
         header { 
-            background: var(--white); border-bottom: 1px solid var(--border); 
-            position: sticky; top: 0; z-index: 1000; padding: 15px 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            background: var(--white); 
+            border-bottom: 1px solid var(--border); 
+            box-shadow: var(--shadow-sm);
+            position: fixed; top: 0; width: 100%; z-index: 1000; height: var(--header-height);
+            display: flex; align-items: center; padding: 0 25px;
         }
-        .nav-container { display: flex; align-items: center; justify-content: space-between; max-width: 1400px; margin: 0 auto; }
-        .logo-box { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-        .logo-box img { height: 35px; border-radius: 6px; }
-        .logo-text { font-weight: 800; font-size: 1.3rem; color: #1a202c; letter-spacing: -0.5px; }
-        .logo-text span { color: var(--primary); }
+        .nav-container { 
+            display: flex; align-items: center; justify-content: space-between; 
+            width: 100%; max-width: 1400px; margin: 0 auto; 
+        }
+        .logo-container { display: flex; align-items: center; gap: 10px; }
+        .logo-icon { color: var(--primary); font-size: 1.8rem; }
+        .logo-text { font-weight: 800; font-size: 1.5rem; color: #0f172a; text-decoration: none; letter-spacing: -0.5px; }
+        .logo-text span { background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .progress-stats { display: flex; align-items: center; gap: 15px; }
+        .progress-percent { font-weight: 800; font-size: 1rem; color: var(--primary); background: #eef2ff; padding: 6px 12px; border-radius: 20px; }
 
-        /* 3D Circular Badge Animation */
-        .trust-badge-container {
-            position: relative; width: 120px; height: 120px;
-            margin: 0 auto 30px; perspective: 1000px;
-        }
-        .circular-text {
-            width: 100%; height: 100%;
-            animation: rotateText 10s linear infinite; position: absolute;
-        }
-        @keyframes rotateText {
-            from { transform: rotateY(0deg); }
-            to { transform: rotateY(360deg); }
-        }
-        .inner-check {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: var(--primary); color: white; width: 50px; height: 50px;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; box-shadow: 0 10px 20px rgba(67, 56, 202, 0.3); border: 3px solid white;
+        @media (max-width: 768px) {
+            .nav-container { justify-content: center; position: relative; }
+            .sidebar-toggle { position: absolute; left: 20px; display: block !important; z-index: 1001; }
+            .logo-text { font-size: 1.3rem; }
+            .progress-percent { font-size: 0.85rem; padding: 4px 10px; }
         }
 
-        .hero-title { font-size: 3rem; font-weight: 800; letter-spacing: -1.5px; line-height: 1.2; margin-bottom: 20px; }
-
-        /* Course Stats Bar */
-        .course-meta-bar {
-            display: flex; justify-content: center; gap: 30px; margin-bottom: 40px;
-            background: white; padding: 15px; border-radius: 50px;
-            border: 1px solid var(--border); max-width: 800px; margin-inline: auto;
+        .mobile-progress-container { 
+            position: fixed; top: var(--header-height); left: 0; width: 100%; height: 4px; 
+            background: #e2e8f0; z-index: 999; 
         }
-        .meta-item { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--text-light); font-size: 0.9rem; }
-        .meta-item i { color: var(--primary); }
-
-        /* Instructor Card */
-        .instructor-card {
-            display: flex; align-items: center; gap: 20px; max-width: 550px;
-            margin: 50px auto; padding: 20px; background: #fff; border-radius: 15px;
-            text-align: left; border: 1px solid var(--border);
+        #progress-fill { 
+            height: 100%; width: 0%; background: var(--gradient-primary); 
+            transition: width 0.6s ease; border-radius: 0 2px 2px 0; 
         }
-        .instructor-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
-        .blue-tick { color: #0095f6; margin-left: 5px; }
 
-        /* Sidebar & Layout */
+        /* --- SIDEBAR & OVERLAY --- */
         .sidebar {
-            position: fixed; top: 0; left: -320px; width: 300px; height: 100vh;
-            background: var(--dark-bg); z-index: 1100; padding: 30px 20px;
-            transition: 0.4s ease; color: white; overflow-y: auto;
+            position: fixed; top: 0; left: -350px; width: 320px; height: 100vh;
+            background: var(--dark-bg); z-index: 1100; padding: 30px 0;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); color: white; overflow-y: auto;
+            box-shadow: 5px 0 30px rgba(0,0,0,0.2);
         }
         .sidebar.active { left: 0; }
-        .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1050; display: none; }
+        .sidebar-overlay { 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1050; display: none; 
+            backdrop-filter: blur(3px); 
+        }
         .sidebar-overlay.active { display: block; }
-        .module-item { padding: 14px; border-radius: 10px; margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; gap: 12px; font-size: 0.9rem; transition: 0.2s; }
-        .module-item.active { background: var(--primary); color: white; }
-        .module-item.locked { opacity: 0.4; cursor: not-allowed; }
+        .sidebar-header { padding: 0 25px 25px; border-bottom: 1px solid var(--border-dark); margin-bottom: 20px; }
+        .sidebar-title { font-size: 1.1rem; font-weight: 700; color: #cbd5e1; letter-spacing: 0.5px; }
+        .module-item { 
+            padding: 16px 25px; margin: 0 15px 8px; border-radius: 12px; cursor: pointer; 
+            display: flex; align-items: center; gap: 15px; transition: all 0.3s; 
+            background: rgba(255,255,255,0.03); border: 1px solid transparent; 
+        }
+        .module-item:hover { background: rgba(255,255,255,0.07); }
+        .module-item.active { 
+            background: rgba(67, 56, 202, 0.15); border-color: var(--primary); 
+            box-shadow: 0 4px 12px rgba(67, 56, 202, 0.15); 
+        }
+        .module-number { 
+            width: 28px; height: 28px; background: rgba(255,255,255,0.1); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            font-size: 0.85rem; font-weight: 700; 
+        }
+        .module-item.active .module-number { background: var(--primary); }
+        .module-text { flex: 1; }
+        .module-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 3px; }
+        .module-desc { font-size: 0.8rem; color: #94a3b8; }
+        .module-status { font-size: 0.9rem; }
+        .module-item.locked { opacity: 0.6; cursor: not-allowed; }
 
-        .main-layout { padding: 40px 20px; display: flex; justify-content: center; }
-        .content-card { background: white; border-radius: 20px; padding: 60px; max-width: 900px; width: 100%; border: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+        /* --- CONTENT UI --- */
+        .main-layout { 
+            margin-top: calc(var(--header-height) + 30px); padding: 0 20px 80px; 
+            display: flex; justify-content: center; 
+        }
+        .content-card { 
+            background: white; border-radius: 28px; padding: 50px; max-width: 920px; width: 100%; 
+            border: 1px solid var(--border); box-shadow: var(--shadow-md); 
+            position: relative; overflow: hidden; 
+        }
+        .content-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+            background: var(--gradient-primary);
+        }
+        
+        @keyframes reveal { 
+            from { opacity: 0; transform: translateY(30px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        .animate-content { animation: reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
 
-        .btn-primary, .btn-premium { background: var(--primary); color: white; padding: 16px 35px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; }
-        .btn-primary:hover, .btn-premium:hover { background: var(--primary-hover); transform: translateY(-2px); }
+        .module-tag { 
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #eef2ff; color: var(--primary); padding: 6px 14px; 
+            border-radius: 20px; font-size: 0.75rem; font-weight: 800; 
+            text-transform: uppercase; margin-bottom: 20px; letter-spacing: 0.5px; 
+        }
+        .mod-title { 
+            font-size: 2.4rem; font-weight: 800; color: var(--dark-bg); 
+            margin-bottom: 25px; letter-spacing: -1px; line-height: 1.2; 
+        }
+        .body-text { 
+            margin-bottom: 25px; font-size: 1.1rem; color: #334155; 
+            line-height: 1.7; 
+        }
+        
+        pre { 
+            background: #0f172a; color: #e2e8f0; padding: 25px; border-radius: 16px; 
+            margin: 25px 0; overflow-x: auto; font-family: 'Fira Code', monospace; 
+            font-size: 0.9rem; border: 1px solid #1e293b; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2); 
+            position: relative; 
+        }
+        pre::before {
+            content: 'Code'; position: absolute; top: 0; right: 20px;
+            background: var(--primary); color: white; padding: 4px 12px;
+            font-size: 0.7rem; border-radius: 0 0 6px 6px; font-weight: 700;
+        }
 
-        pre { background: #1e293b; color: #e2e8f0; padding: 20px; border-radius: 10px; margin: 20px 0; overflow-x: auto; }
+        .section-head { 
+            font-size: 1.6rem; font-weight: 700; color: var(--dark-bg); 
+            margin: 35px 0 15px; padding-bottom: 10px; border-bottom: 2px solid #eef2ff; 
+        }
+        .subsection-head { 
+            font-size: 1.2rem; font-weight: 600; color: var(--dark-bg); 
+            margin: 25px 0 12px; 
+        }
+        .pro-note {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid #0ea5e9; padding: 20px; border-radius: 12px;
+            margin: 25px 0; font-size: 0.95rem;
+        }
+        .pro-note b { color: #0369a1; }
+
+        /* --- BUTTONS --- */
+        .btn-primary, .btn-premium { 
+            background: var(--gradient-primary); color: white; padding: 18px 35px; 
+            border-radius: 14px; border: none; font-weight: 700; cursor: pointer; 
+            transition: all 0.3s ease; width: 100%; display: flex; align-items: center; 
+            justify-content: center; gap: 12px; font-size: 1rem; letter-spacing: 0.3px;
+            box-shadow: 0 6px 20px rgba(67, 56, 202, 0.25); margin-top: 30px;
+        }
+        .btn-primary:hover, .btn-premium:hover { 
+            transform: translateY(-3px); box-shadow: 0 12px 25px rgba(67, 56, 202, 0.35); 
+        }
+
+        /* Landing Page Enhancements */
+        .hero-section { 
+            text-align: center; padding: 140px 20px 80px; max-width: 1000px; margin: 0 auto; 
+        }
+        .hero-title { 
+            font-size: 3.8rem; font-weight: 800; margin-bottom: 25px; letter-spacing: -2px; 
+            line-height: 1.1; opacity: 0; animation: reveal 0.8s 0.2s forwards; 
+        }
+        
+        .instructor-card { 
+            background: #fff; border: 1px solid var(--border); border-radius: 24px; 
+            padding: 30px; display: flex; align-items: center; gap: 25px; 
+            max-width: 550px; margin: 40px auto; text-align: left;
+            box-shadow: var(--shadow-md); opacity: 0; animation: reveal 0.8s 0.6s forwards;
+        }
+        .instructor-img { 
+            width: 80px; height: 80px; border-radius: 50%; background: #ddd; 
+            object-fit: cover; border: 4px solid #eef2ff; box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+        }
+        .badge-verified { 
+            color: var(--success); font-size: 0.8rem; font-weight: 700; 
+            background: #f0f9ff; padding: 4px 12px; border-radius: 20px; 
+            display: inline-flex; align-items: center; gap: 5px; margin-bottom: 8px; 
+        }
+
+        .perks-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+            gap: 20px; max-width: 900px; margin: 50px auto; 
+            opacity: 0; animation: reveal 0.8s 0.4s forwards;
+        }
+        .perk-item { 
+            background: white; padding: 25px 20px; border-radius: 18px; 
+            border: 1px solid var(--border); font-size: 0.9rem; font-weight: 700; 
+            text-align: center; box-shadow: var(--shadow-sm); transition: transform 0.3s;
+        }
+        .perk-item:hover { transform: translateY(-5px); }
+        .perk-item i { 
+            color: var(--primary); margin-bottom: 12px; display: block; 
+            font-size: 1.8rem; 
+        }
+
+        /* Quiz Styles */
+        .quiz-box, .cert-input-box { 
+            margin-top: 40px; animation: reveal 0.5s ease; 
+        }
+        .q-block { margin-bottom: 30px; }
+        .option-label { 
+            display: flex; align-items: center; background: white; padding: 20px; 
+            margin-bottom: 15px; border: 2px solid var(--border); border-radius: 16px; 
+            cursor: pointer; transition: all 0.2s; position: relative; 
+        }
+        .option-label:hover { border-color: #c7d2fe; background: #f8fafc; }
+        .option-input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; left:0; top:0; }
+        .option-label:has(.option-input:checked) { 
+            border-color: var(--primary); background: #f5f7ff; 
+            box-shadow: 0 4px 12px rgba(67, 56, 202, 0.1); 
+        }
+        
+        .score-display {
+            background: var(--gradient-dark); color: white; padding: 25px;
+            border-radius: 20px; text-align: center; margin: 30px 0;
+            box-shadow: var(--shadow-lg);
+        }
+        .score-value {
+            font-size: 3.5rem; font-weight: 800; margin: 10px 0;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        
+        .cert-input-box input {
+            width: 100%; padding: 20px; border-radius: 14px; 
+            border: 2px solid var(--border); font-size: 1rem; 
+            margin-bottom: 25px; transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        .cert-input-box input:focus {
+            outline: none; border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.1);
+        }
+
         .hidden { display: none !important; }
         
-        .module-tag { color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1.5px; margin-bottom: 10px; display: block; }
-        .mod-title { font-size: 2.2rem; font-weight: 800; color: var(--dark-bg); margin-bottom: 25px; }
-        .pro-note { background: #f0f4ff; border-left: 4px solid var(--primary); padding: 20px; border-radius: 8px; margin: 20px 0; font-style: italic; }
-
-        @keyframes moduleReveal {
-            0% { opacity: 0; transform: translateY(20px); filter: blur(5px); }
-            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+        /* Trust Badges */
+        .trust-badges {
+            display: flex; justify-content: center; gap: 30px;
+            margin-top: 60px; flex-wrap: wrap;
         }
-        .module-reveal-active { animation: moduleReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-
-
-        .module-item {
-    /* ... existing styles ... */
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-    }
-
-    .module-item.active::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        width: 4px;
-        height: 100%;
-        background: #60a5fa; /* A lighter blue accent */
-        border-radius: 0 4px 4px 0;
-    }
-        </style>
+        .trust-badge {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 0.9rem; color: var(--text-light);
+        }
+        .trust-badge i { color: var(--success); font-size: 1.2rem; }
+        
+        /* Loading Animation */
+        .loader { display: none; }
+        .loader.active {
+            display: block; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(255,255,255,0.9);
+            z-index: 2000; display: flex; align-items: center;
+            justify-content: center; flex-direction: column; gap: 20px;
+        }
+        .spinner {
+            width: 60px; height: 60px; border: 5px solid #e2e8f0;
+            border-top-color: var(--primary); border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        /* Achievement Badge */
+        .achievement-badge {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white; padding: 8px 16px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 700; display: inline-flex;
+            align-items: center; gap: 5px; margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
 
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+        <p style="color: var(--text-main); font-weight: 600;">Loading Module...</p>
+    </div>
+
     <header>
         <div class="nav-container">
-            <button style="background:none; border:none; cursor:pointer; font-size:1.4rem;" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
-            <a href="#" class="logo-box">
-                <img src="https://internadda.com/images/logo.jpg" alt="Logo">
-                <span class="logo-text">Intern<span>adda</span></span>
-            </a>
-            <div id="prog-stat" style="color:var(--primary); font-weight:700;">0% COMPLETE</div>
+            <button class="sidebar-toggle" onclick="toggleSidebar()" style="background:none; border:none; cursor:pointer; font-size:1.4rem; display:none; color: var(--text-main);">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo-container">
+                <i class="fas fa-graduation-cap logo-icon"></i>
+                <a href="#" class="logo-text">Intern<span>adda</span></a>
+            </div>
+            <div class="progress-stats">
+                <div class="progress-percent" id="prog-stat-text">0% COMPLETE</div>
+            </div>
         </div>
     </header>
 
-    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <div class="mobile-progress-container"><div id="progress-fill"></div></div>
+    <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
     <aside class="sidebar" id="toc"></aside>
 
-    <div id="welcome-screen" style="text-align: center; padding: 80px 20px;">
-        <div class="trust-badge-container">
-            <div class="circular-text">
-                <svg viewBox="0 0 100 100" width="120" height="120">
-                    <path id="circlePath" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="none"/>
-                    <text font-size="9" font-weight="bold" fill="#4338ca">
-                        <textPath xlink:href="#circlePath">VERIFIED ELITE CURRICULUM • INTERNADDA PROFESSIONAL •</textPath>
-                    </text>
-                </svg>
+    <div id="welcome-screen">
+        <section class="hero-section">
+            <div style="opacity: 0; animation: reveal 0.8s 0.1s forwards;">
+                <div class="module-tag"><i class="fas fa-crown"></i> ELITE MASTERY PROGRAM</div>
             </div>
-            <div class="inner-check"><i class="fas fa-check"></i></div>
-        </div>
-
-        <h1 class="hero-title">Master Software Engineering with <br><span style="color:var(--primary)">Elite Python Essentials</span></h1>
-
-        <div class="course-meta-bar">
-            <div class="meta-item"><i class="fas fa-layer-group"></i> 10 Elite Modules</div>
-            <div class="meta-item"><i class="fas fa-clock"></i> 45+ Hours Est.</div>
-            <div class="meta-item"><i class="fas fa-certificate"></i> Global Credential</div>
-        </div>
-
-        <p class="body-text" style="max-width:700px; margin: 0 auto 40px; color: var(--text-light); font-size: 1.1rem;">
-            Move beyond basic scripts. Master CPython architecture, advanced concurrency, and production-grade software patterns designed for senior developers.
-        </p>
-
-        <button class="btn-primary" onclick="enrollUser()">Start Learning Now <i class="fas fa-arrow-right"></i></button>
-
-        <div class="instructor-card">
-            <img src="../Vikash.jpg" alt="Vikash" class="instructor-img">
-            <div class="instructor-info">
-                <p style="font-size: 0.75rem; color: var(--primary); font-weight: 700; text-transform: uppercase; margin-bottom: 5px;">Lead Instructor</p>
-                <h4 style="margin:0;">Vikash Yadav <i class="fas fa-check-circle blue-tick"></i></h4>
-                <p style="font-size: 0.85rem; color: var(--text-light); margin-top: 5px;">Co-Founder of Internadda & Professional Python Developer. Dedicated to training the next generation of engineers.</p>
+            
+            <h1 class="hero-title">Master Python at an <span style="background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Expert Level</span></h1>
+            <p style="color:var(--text-light); font-size: 1.25rem; margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto; opacity: 0; animation: reveal 0.8s 0.3s forwards;">
+                Engineered for software engineers who want to build production-grade systems, optimize performance, and master advanced Python concepts.
+            </p>
+            
+            <div class="perks-grid">
+                <div class="perk-item"><i class="fas fa-award"></i> ISO 9001 Certified</div>
+                <div class="perk-item"><i class="fas fa-code"></i> 50+ Hands-on Exercises</div>
+                <div class="perk-item"><i class="fas fa-chart-line"></i> Real-world Projects</div>
+                <div class="perk-item"><i class="fas fa-certificate"></i> Verified Certificate</div>
             </div>
-        </div>
+
+            <div class="instructor-card">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lucky&backgroundColor=4f46e5" alt="Lucky Tiwari" class="instructor-img">
+                <div>
+                    <span class="badge-verified"><i class="fas fa-shield-alt"></i> VERIFIED INSTRUCTOR</span>
+                    <h4 style="font-weight: 800; font-size: 1.2rem; margin-bottom: 5px;">Lucky Tiwari</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-light);">Founder of InternAdda & Senior Software Architect</p>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin-top: 8px;">10+ years in production Python systems</p>
+                </div>
+            </div>
+
+            <div class="trust-badges">
+                <div class="trust-badge"><i class="fas fa-check-circle"></i> Industry-recognized</div>
+                <div class="trust-badge"><i class="fas fa-clock"></i> Self-paced learning</div>
+                <div class="trust-badge"><i class="fas fa-users"></i> 5,000+ students</div>
+            </div>
+
+            <button class="btn-primary" style="max-width:320px; margin:50px auto 0; opacity: 0; animation: reveal 0.8s 0.8s forwards;" onclick="startCourse()">
+                <i class="fas fa-rocket"></i> Start Learning Now
+            </button>
+        </section>
     </div>
 
-    <div id="course-ui" class="hidden">
+    <div id="course-player" class="hidden">
         <main class="main-layout">
-            <div id="main-content" class="content-card"></div>
+            <div class="content-card">
+                <div id="module-content"></div>
+                <div id="exam-section" class="hidden quiz-box"></div>
+                <div id="final-step-section" class="hidden cert-input-box">
+                    <span class="module-tag"><i class="fas fa-trophy"></i> ACHIEVEMENT UNLOCKED</span>
+                    <h2 class="mod-title">Claim Your Certificate</h2>
+                    <p class="body-text">Congratulations! You've successfully completed all modules and passed the final exam. Your certificate is ready for generation.</p>
+                    
+                    <div style="background: #f0f9ff; padding: 25px; border-radius: 16px; margin: 30px 0; border-left: 4px solid var(--success);">
+                        <h4 style="font-weight: 700; margin-bottom: 10px; color: var(--dark-bg);"><i class="fas fa-certificate"></i> Certificate Details</h4>
+                        <p style="color: #475569; margin-bottom: 5px;"><b>Issued by:</b> InternAdda Academy</p>
+                        <p style="color: #475569; margin-bottom: 5px;"><b>Course:</b> Elite Python Mastery</p>
+                        <p style="color: #475569;"><b>Verification ID:</b> PY-ELITE-${Math.random().toString(36).substr(2, 9).toUpperCase()}</p>
+                    </div>
+                    
+                    <input type="text" id="student-name" placeholder="Enter your full name as it should appear on certificate">
+                    <button class="btn-primary" onclick="claimCertificate()">
+                        <i class="fas fa-file-certificate"></i> Generate & Download Certificate
+                    </button>
+                </div>
+            </div>
         </main>
     </div>
 
-    <div id="final-screen" class="hidden" style="text-align: center; padding: 100px 20px;">
-        <h2 class="hero-title">Mastery Achieved.</h2>
-        <p class="body-text">You have completed the Internadda Elite Python Specialization.</p>
-        <div style="margin: 30px auto; max-width: 400px;">
-            <input type="text" id="cert-name" style="width:100%; padding:15px; border-radius:10px; border:2px solid var(--border);" placeholder="Enter Full Name for Certificate">
-        </div>
-        <button class="btn-primary" onclick="generateCredential()">Generate Certificate <i class="fas fa-award"></i></button>
-    </div>
-
     <script>
-        let maxUnlocked = 0;
-        let currentModule = 0;
-
- const syllabus = [
+const syllabus = [
 {
     title: "Module 01: The Python Virtual Machine",
+    desc: "CPython Internals & Memory Management",
     content: `
-        <span class="module-tag">System Architecture</span>
+        <span class="module-tag"><i class="fas fa-microchip"></i> System Architecture</span>
         <h2 class="mod-title">CPython Internals & Memory Management</h2>
 
         <p class="body-text">
@@ -235,8 +409,8 @@
         </p>
 
         <div class="pro-note">
-            <b>Execution Flow Overview:</b>
-            <ul>
+            <b><i class="fas fa-lightbulb"></i> Execution Flow Overview:</b>
+            <ul style="margin-top: 10px; padding-left: 20px;">
                 <li><b>Source Code (.py)</b> → Python Compiler → <b>Bytecode (.pyc)</b></li>
                 <li><b>Python Virtual Machine (PVM)</b> executes bytecode on a stack-based interpreter</li>
                 <li>Runtime memory management with objects stored on the private heap</li>
@@ -251,7 +425,7 @@
             This design simplifies memory management and prevents race conditions in CPython, 
             but it has implications:
         </p>
-        <ul>
+        <ul style="margin-left: 25px; margin-bottom: 20px;">
             <li><b>Pros:</b> Thread-safe memory access without complex locking mechanisms.</li>
             <li><b>Cons:</b> CPU-bound multithreading cannot utilize multiple cores effectively.</li>
         </ul>
@@ -291,7 +465,7 @@ for t in threads:
         <p class="body-text">
             Python primarily uses <b>reference counting</b>. Each object has a counter of references pointing to it:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>When a new reference is created → counter += 1</li>
             <li>When a reference goes out of scope → counter -= 1</li>
             <li>When counter reaches 0 → object is deallocated</li>
@@ -311,7 +485,7 @@ del b          # reference count = 0 → object deleted
             Circular references (objects referencing each other) cannot be freed by reference counting alone. 
             Python uses a <b>generational garbage collector</b>:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li><b>Generation 0:</b> Newly created objects, collected frequently</li>
             <li><b>Generation 1:</b> Objects surviving one collection cycle</li>
             <li><b>Generation 2:</b> Long-lived objects, collected rarely</li>
@@ -321,7 +495,7 @@ del b          # reference count = 0 → object deleted
         </p>
 
         <div class="pro-note">
-            <b>Pro Tip:</b> Use the <code>gc</code> module to inspect garbage collection and detect circular references in production.
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> Use the <code>gc</code> module to inspect garbage collection and detect circular references in production.
         </div>
 
         <h3 class="section-head">3. Python Bytecode & Execution</h3>
@@ -351,7 +525,7 @@ dis.dis(add)
         <p class="body-text">
             Python is flexible but not always memory-efficient. Senior engineers use advanced techniques:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li><b>__slots__:</b> Fix the set of attributes in classes to reduce memory by avoiding dictionaries per instance.</li>
             <li><b>Generator Expressions:</b> Process data lazily instead of creating large lists in memory.</li>
             <li><b>Interning Strings:</b> Use <code>sys.intern()</code> for repeated strings to save memory.</li>
@@ -373,7 +547,7 @@ p = Point(1, 2)
         <p class="body-text">
             Learn to detect leaks and optimize:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li><b>sys.getsizeof():</b> Check memory usage of objects</li>
             <li><b>tracemalloc:</b> Track memory allocation over time</li>
             <li><b>objgraph:</b> Visualize object references and detect leaks</li>
@@ -383,7 +557,7 @@ p = Point(1, 2)
         <p class="body-text">
             By understanding:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>The GIL and its impact on multithreading</li>
             <li>Reference counting & garbage collection</li>
             <li>Bytecode execution & memory management</li>
@@ -393,18 +567,20 @@ p = Point(1, 2)
         </p>
 
         <div class="pro-note">
-            <b>Next Steps:</b> In Module 02, we explore Python Data Structures in depth, including lists, dictionaries, sets, tuples, and performance implications in large-scale software systems.
+            <b><i class="fas fa-arrow-right"></i> Next Steps:</b> In Module 02, we explore Python Data Structures in depth, including lists, dictionaries, sets, tuples, and performance implications in large-scale software systems.
         </div>
 
-        <button class="btn-premium" onclick="completeModule()">Unlock Module 02 <i class="fas fa-lock-open"></i></button>
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 02: Advanced Data Structures
+        </button>
     `
 },
 
-
 {
     title: "Module 02: Advanced Python Data Structures",
+    desc: "Lists, Tuples, Sets, Dictionaries & Performance",
     content: `
-        <span class="module-tag">Core Foundations</span>
+        <span class="module-tag"><i class="fas fa-layer-group"></i> Core Foundations</span>
         <h2 class="mod-title">Lists, Tuples, Sets, Dictionaries & Performance Optimization</h2>
 
         <p class="body-text">
@@ -414,7 +590,7 @@ p = Point(1, 2)
         </p>
 
         <div class="pro-note">
-            <b>Pro Tip:</b> Knowing how Python structures data internally will help you write code that scales to millions of records in production.
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Knowing how Python structures data internally will help you write code that scales to millions of records in production.
         </div>
 
         <h3 class="section-head">1. Lists: Dynamic Arrays</h3>
@@ -424,13 +600,29 @@ p = Point(1, 2)
         </p>
 
         <h4 class="subsection-head">1.1 List Operations & Time Complexity</h4>
-        <table>
-            <tr><th>Operation</th><th>Average Case</th><th>Worst Case</th></tr>
-            <tr><td>Indexing</td><td>O(1)</td><td>O(1)</td></tr>
-            <tr><td>Append</td><td>O(1) amortized</td><td>O(n) on resize</td></tr>
-            <tr><td>Insert/Delete</td><td>O(n)</td><td>O(n)</td></tr>
-            <tr><td>Search (in)</td><td>O(n)</td><td>O(n)</td></tr>
-        </table>
+        <div style="overflow-x: auto; margin: 20px 0;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="background: #f1f5f9;">
+                    <tr><th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Operation</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Average Case</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Worst Case</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">Indexing</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">O(1)</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">O(1)</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">Append</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">O(1) amortized</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">O(n) on resize</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">Insert/Delete</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">O(n)</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">O(n)</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">Search (in)</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">O(n)</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">O(n)</td></tr>
+                </tbody>
+            </table>
+        </div>
 
         <h4 class="subsection-head">1.2 Examples</h4>
         <pre>
@@ -461,7 +653,7 @@ print(fruits[2])
         </p>
 
         <h4 class="subsection-head">2.1 When to Use Tuples</h4>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Function return multiple values</li>
             <li>As keys in dictionaries</li>
             <li>Fixed-size datasets</li>
@@ -486,7 +678,7 @@ locations = { (0,0): 'origin', (1,2): 'point A' }
         </p>
 
         <h4 class="subsection-head">3.1 Common Set Operations</h4>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Union: <code>a | b</code></li>
             <li>Intersection: <code>a & b</code></li>
             <li>Difference: <code>a - b</code></li>
@@ -511,12 +703,26 @@ print(a ^ b)  # {1,2,4,5}
         </p>
 
         <h4 class="subsection-head">4.1 Dictionary Operations & Complexity</h4>
-        <table>
-            <tr><th>Operation</th><th>Average Case</th><th>Worst Case</th></tr>
-            <tr><td>Get/Set Item</td><td>O(1)</td><td>O(n)</td></tr>
-            <tr><td>Delete Item</td><td>O(1)</td><td>O(n)</td></tr>
-            <tr><td>Iteration</td><td>O(n)</td><td>O(n)</td></tr>
-        </table>
+        <div style="overflow-x: auto; margin: 20px 0;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="background: #f1f5f9;">
+                    <tr><th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Operation</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Average Case</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Worst Case</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">Get/Set Item</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">O(1)</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">O(n)</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">Delete Item</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">O(1)</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">O(n)</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">Iteration</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">O(n)</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">O(n)</td></tr>
+                </tbody>
+            </table>
+        </div>
 
         <h4 class="subsection-head">4.2 Examples</h4>
         <pre>
@@ -555,7 +761,7 @@ print(students[0]['courses']['Math'])
         <p class="body-text">
             Understanding complexity helps choose the right data structure:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Use lists for ordered sequences</li>
             <li>Use sets for membership checks</li>
             <li>Use dictionaries for key-based access</li>
@@ -564,7 +770,7 @@ print(students[0]['courses']['Math'])
 
         <h3 class="section-head">7. Memory Optimization Techniques</h3>
         <p class="body-text">
-            <ul>
+            <ul style="margin-left: 25px;">
                 <li>Use <b>__slots__</b> in classes to save memory</li>
                 <li>Use generators instead of large lists for iteration</li>
                 <li>Use <b>array.array</b> for homogeneous numeric data</li>
@@ -607,17 +813,19 @@ print(config['database']['host'])
         </pre>
 
         <div class="pro-note">
-            <b>Pro Tip:</b> For enterprise applications, understanding these structures allows you to model data efficiently, reducing memory usage and improving runtime performance.
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> For enterprise applications, understanding these structures allows you to model data efficiently, reducing memory usage and improving runtime performance.
         </div>
 
-        <button class="btn-premium" onclick="completeModule()">Unlock Module 03 <i class="fas fa-lock-open"></i></button>
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 03: Object-Oriented Python
+        </button>
     `
 },
-
 {
     title: "Module 03: Object-Oriented Python Engineering",
+    desc: "Advanced Classes, Inheritance & Metaprogramming",
     content: `
-        <span class="module-tag">Software Architecture</span>
+        <span class="module-tag"><i class="fas fa-cube"></i> Software Architecture</span>
         <h2 class="mod-title">Advanced Classes, Inheritance & Metaprogramming</h2>
 
         <p class="body-text">
@@ -627,7 +835,7 @@ print(config['database']['host'])
         </p>
 
         <div class="pro-note">
-            <b>Pro Tip:</b> Mastering OOP in Python is essential for writing large-scale software systems and libraries that are used across teams or in production environments.
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Mastering OOP in Python is essential for writing large-scale software systems and libraries that are used across teams or in production environments.
         </div>
 
         <h3 class="section-head">1. Python Classes & Object Internals</h3>
@@ -654,7 +862,7 @@ emp1.work()
         <p class="body-text">
             Every object has:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li><b>__dict__:</b> stores instance attributes</li>
             <li><b>__class__:</b> reference to its class</li>
             <li><b>__slots__ (optional):</b> reduces memory by fixing attribute names</li>
@@ -719,7 +927,7 @@ e.salary = 80000
         </p>
 
         <h4 class="subsection-head">4.1 Common Dunder Methods</h4>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li><code>__str__</code> - string representation</li>
             <li><code>__repr__</code> - developer-friendly representation</li>
             <li><code>__add__</code> - operator overloading</li>
@@ -811,7 +1019,7 @@ print(D.__mro__)
         </pre>
 
         <h3 class="section-head">8. Memory Optimization for OOP</h3>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Use <b>__slots__</b> to fix attributes and reduce per-object overhead</li>
             <li>Use <b>weakref</b> for large graphs to avoid reference cycles</li>
             <li>Avoid storing duplicate immutable objects; consider interning</li>
@@ -843,7 +1051,7 @@ class Manager(Employee):
         </pre>
 
         <h3 class="section-head">10. Key Takeaways</h3>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Understand class internals and memory</li>
             <li>Use inheritance and polymorphism for reusable code</li>
             <li>Master encapsulation and property decorators</li>
@@ -853,17 +1061,19 @@ class Manager(Employee):
         </ul>
 
         <div class="pro-note">
-            <b>Next Steps:</b> In Module 04, we will dive into <b>Functional Programming, Iterators, and Generators</b> to write high-performance, memory-efficient Python pipelines.
+            <b><i class="fas fa-arrow-right"></i> Next Steps:</b> In Module 04, we will dive into <b>Functional Programming, Iterators, and Generators</b> to write high-performance, memory-efficient Python pipelines.
         </div>
 
-        <button class="btn-premium" onclick="completeModule()">Unlock Module 04 <i class="fas fa-lock-open"></i></button>
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 04: Functional Programming
+        </button>
     `
 },
-
 {
     title: "Module 04: Functional & High-Performance Python",
+    desc: "Iterators, Generators & Decorators",
     content: `
-        <span class="module-tag">Software Patterns</span>
+        <span class="module-tag"><i class="fas fa-bolt"></i> Software Patterns</span>
         <h2 class="mod-title">Functional Programming, Iterators, Generators & Decorators</h2>
 
         <p class="body-text">
@@ -873,7 +1083,7 @@ class Manager(Employee):
         </p>
 
         <div class="pro-note">
-            <b>Pro Tip:</b> Functional programming in Python reduces side-effects, improves concurrency potential, and makes testing easier.
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Functional programming in Python reduces side-effects, improves concurrency potential, and makes testing easier.
         </div>
 
         <h3 class="section-head">1. Functional Programming in Python</h3>
@@ -960,7 +1170,7 @@ for val in squared_gen:
         </pre>
 
         <div class="pro-note">
-            <b>Pro Tip:</b> Use generators for processing huge datasets or streaming data to save memory and improve performance.
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> Use generators for processing huge datasets or streaming data to save memory and improve performance.
         </div>
 
         <h3 class="section-head">4. Decorators: Extending Functionality</h3>
@@ -1005,7 +1215,7 @@ greet()
         </pre>
 
         <h3 class="section-head">5. Functional Patterns & Best Practices</h3>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Prefer <b>pure functions</b> with no side effects</li>
             <li>Use <b>higher-order functions</b> to abstract repeated logic</li>
             <li>Favor <b>generators</b> for large datasets</li>
@@ -1043,7 +1253,7 @@ print(results)  # [5.0, None, 2.0]
         </pre>
 
         <h3 class="section-head">8. Practical Use Cases</h3>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Data pipelines: generators for streaming logs</li>
             <li>Functional transformations in ETL processes</li>
             <li>Decorators for caching and memoization</li>
@@ -1051,7 +1261,7 @@ print(results)  # [5.0, None, 2.0]
         </ul>
 
         <h3 class="section-head">9. Performance Optimization Techniques</h3>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Use generator expressions instead of lists</li>
             <li>Use built-in functions over manual loops</li>
             <li>Minimize side-effects for easier concurrency</li>
@@ -1059,17 +1269,19 @@ print(results)  # [5.0, None, 2.0]
         </ul>
 
         <div class="pro-note">
-            <b>Pro Tip:</b> Functional programming combined with iterators and generators enables scalable and maintainable Python pipelines for data-intensive applications.
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> Functional programming combined with iterators and generators enables scalable and maintainable Python pipelines for data-intensive applications.
         </div>
 
-        <button class="btn-premium" onclick="completeModule()">Unlock Module 05 <i class="fas fa-lock-open"></i></button>
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 05: Data Processing & Optimization
+        </button>
     `
 },
-
 {
     title: "Module 05: Advanced Data Processing & Performance Optimization",
+    desc: "Multiprocessing, Async IO & Memory Efficiency",
     content: `
-        <span class="module-tag">High-Performance Python</span>
+        <span class="module-tag"><i class="fas fa-tachometer-alt"></i> High-Performance Python</span>
         <h2 class="mod-title">Multiprocessing, Async IO, and Memory-Efficient Data Handling</h2>
 
         <p class="body-text">
@@ -1078,14 +1290,14 @@ print(results)  # [5.0, None, 2.0]
         </p>
 
         <div class="pro-note">
-            <b>Pro Tip:</b> Optimizing Python pipelines is not just about writing faster code; it’s about understanding how Python executes, how memory is used, and how I/O operations can be parallelized efficiently.
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Optimizing Python pipelines is not just about writing faster code; it's about understanding how Python executes, how memory is used, and how I/O operations can be parallelized efficiently.
         </div>
 
         <h3 class="section-head">1. Understanding Python Concurrency</h3>
         <p class="body-text">
             Python provides multiple ways to achieve concurrency:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li><b>Threading:</b> For I/O-bound tasks; limited by the Global Interpreter Lock (GIL).</li>
             <li><b>Multiprocessing:</b> For CPU-bound tasks; bypasses the GIL by using separate memory spaces.</li>
             <li><b>Async IO:</b> Event-driven concurrency; ideal for thousands of simultaneous I/O operations.</li>
@@ -1180,7 +1392,7 @@ print(a)  # [0 1 99 3 4 5 6 7 8 9]
         <p class="body-text">
             Pandas is powerful but can consume a lot of memory. Key optimizations include:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Use <b>categorical types</b> for string columns with limited unique values.</li>
             <li>Use <b>vectorized operations</b> instead of row-wise loops.</li>
             <li>Chunk large CSVs with <code>chunksize</code> to reduce memory usage.</li>
@@ -1250,7 +1462,7 @@ result = ddf.groupby("category_col").sum().compute()
         </pre>
 
         <h3 class="section-head">8. Best Practices for High-Performance Python</h3>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Vectorize operations with NumPy/Pandas instead of Python loops</li>
             <li>Use generators for streaming large datasets</li>
             <li>Use async IO for thousands of I/O-bound tasks</li>
@@ -1277,17 +1489,19 @@ asyncio.run(main())
         </pre>
 
         <div class="pro-note">
-            <b>Pro Tip:</b> Combining async IO, chunked processing, and vectorized operations can process millions of rows efficiently without blowing up memory usage.
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> Combining async IO, chunked processing, and vectorized operations can process millions of rows efficiently without blowing up memory usage.
         </div>
 
-        <button class="btn-premium" onclick="completeModule()">Unlock Module 06 <i class="fas fa-lock-open"></i></button>
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 06: Data Modeling & Dimensionality Reduction
+        </button>
     `
 },
-
 {
     title: "Module 06: Data Modeling & Dimensionality Reduction",
+    desc: "PCA, t-SNE, UMAP & Feature Engineering",
     content: `
-        <span class="module-tag">Machine Learning Foundations</span>
+        <span class="module-tag"><i class="fas fa-project-diagram"></i> Machine Learning Foundations</span>
         <h2 class="mod-title">Principal Component Analysis (PCA), t-SNE, UMAP & Feature Engineering</h2>
 
         <p class="body-text">
@@ -1297,7 +1511,7 @@ asyncio.run(main())
         </p>
 
         <div class="pro-note">
-            <b>Pro Tip:</b> Reducing dimensionality helps in visualization, denoising, improving model generalization, and speeding up training.
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Reducing dimensionality helps in visualization, denoising, improving model generalization, and speeding up training.
         </div>
 
         <h3 class="section-head">1. Principal Component Analysis (PCA)</h3>
@@ -1307,7 +1521,7 @@ asyncio.run(main())
         </p>
 
         <h4 class="subsection-head">1.1 Mathematical Intuition</h4>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Compute the covariance matrix of standardized data.</li>
             <li>Calculate eigenvalues and eigenvectors.</li>
             <li>Sort eigenvectors by descending eigenvalues.</li>
@@ -1374,7 +1588,7 @@ plt.show()
         </pre>
 
         <div class="pro-note">
-            <b>Pro Tip:</b> t-SNE is computationally expensive for very large datasets, whereas UMAP scales better and often preserves global structure.
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> t-SNE is computationally expensive for very large datasets, whereas UMAP scales better and often preserves global structure.
         </div>
 
         <h3 class="section-head">3. Feature Engineering for High-Dimensional Data</h3>
@@ -1404,7 +1618,7 @@ print(encoded)
         <p class="body-text">
             Remove redundant or irrelevant features using:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Variance thresholding</li>
             <li>Correlation analysis</li>
             <li>Model-based importance (e.g., tree-based feature importance)</li>
@@ -1420,7 +1634,7 @@ print(X_poly.shape)
         </pre>
 
         <h3 class="section-head">4. Practical Applications</h3>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Visualizing high-dimensional datasets for clustering analysis.</li>
             <li>Reducing dimensionality to prevent overfitting in regression or classification models.</li>
             <li>Improving computational efficiency by reducing feature space.</li>
@@ -1428,7 +1642,7 @@ print(X_poly.shape)
         </ul>
 
         <h3 class="section-head">5. Best Practices</h3>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Always scale or normalize features before PCA or distance-based embeddings.</li>
             <li>Check cumulative explained variance to choose optimal number of components.</li>
             <li>Use t-SNE/UMAP mainly for visualization, not for feeding into predictive models.</li>
@@ -1465,11 +1679,11 @@ plt.show()
         </pre>
 
         <div class="pro-note">
-            <b>Pro Tip:</b> Combining PCA for initial linear reduction and UMAP/t-SNE for visualization is standard in industry pipelines for exploratory data analysis and preprocessing.
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> Combining PCA for initial linear reduction and UMAP/t-SNE for visualization is standard in industry pipelines for exploratory data analysis and preprocessing.
         </div>
 
         <h3 class="section-head">7. Performance Optimization</h3>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Use incremental PCA for extremely large datasets that don't fit in memory.</li>
             <li>Use sparse matrices if the data contains many zeros to save memory.</li>
             <li>Reduce feature precision (float32 instead of float64) to cut memory usage by 50%.</li>
@@ -1477,7 +1691,7 @@ plt.show()
         </ul>
 
         <h3 class="section-head">8. Summary</h3>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>PCA: Linear, fast, retains most variance, reduces dimensionality.</li>
             <li>t-SNE: Nonlinear, preserves local structure, excellent for cluster visualization.</li>
             <li>UMAP: Nonlinear, scalable, preserves local & global structures.</li>
@@ -1485,14 +1699,16 @@ plt.show()
             <li>Best Practices: Standardization, combination of methods, memory-efficient handling.</li>
         </ul>
 
-        <button class="btn-premium" onclick="completeModule()">Unlock Module 07 <i class="fas fa-lock-open"></i></button>
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 07: Deep Learning & Neural Networks
+        </button>
     `
 },
-
 {
     title: "Module 07: Deep Learning & Neural Networks",
+    desc: "Backpropagation, Activation Functions & Optimizers",
     content: `
-        <span class="module-tag">Artificial Intelligence</span>
+        <span class="module-tag"><i class="fas fa-brain"></i> Artificial Intelligence</span>
         <h2 class="mod-title">Backpropagation, Activation Functions & Optimizers</h2>
 
         <p class="body-text">
@@ -1501,14 +1717,14 @@ plt.show()
         </p>
 
         <div class="pro-note">
-            <b>Pro Tip:</b> Understanding the math behind backpropagation and activation functions is critical to debug, optimize, and design robust networks.
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Understanding the math behind backpropagation and activation functions is critical to debug, optimize, and design robust networks.
         </div>
 
         <h3 class="section-head">1. Neural Network Architecture</h3>
         <p class="body-text">
             A neural network is composed of layers of interconnected neurons. The key components are:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li><b>Input Layer:</b> Receives raw features.</li>
             <li><b>Hidden Layers:</b> Perform nonlinear transformations to capture patterns.</li>
             <li><b>Output Layer:</b> Produces predictions (regression, classification, or embeddings).</li>
@@ -1539,7 +1755,7 @@ print(A)
         <p class="body-text">
             Activation functions introduce nonlinearity. Choosing the right activation is critical for gradient flow and convergence.
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li><b>Sigmoid:</b> Smooth, output between 0-1. Can cause vanishing gradients in deep networks.</li>
             <li><b>Tanh:</b> Output between -1 and 1. Slightly better gradient behavior than sigmoid.</li>
             <li><b>ReLU (Rectified Linear Unit):</b> Output = max(0, x). Prevents vanishing gradient, standard for hidden layers.</li>
@@ -1559,7 +1775,7 @@ print(relu(X))
         <p class="body-text">
             The loss function quantifies the difference between predictions and true labels. Common losses include:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li><b>Mean Squared Error (MSE):</b> Regression tasks.</li>
             <li><b>Binary Cross-Entropy:</b> Binary classification.</li>
             <li><b>Categorical Cross-Entropy:</b> Multi-class classification.</li>
@@ -1595,7 +1811,7 @@ print(dLoss_dW)
         <p class="body-text">
             Stochastic Gradient Descent (SGD) is the base optimizer, but adaptive optimizers improve convergence:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li><b>SGD with Momentum:</b> Adds inertia to smooth updates.</li>
             <li><b>RMSprop:</b> Scales learning rates by a moving average of squared gradients.</li>
             <li><b>Adam:</b> Combines momentum and RMSprop for robust convergence.</li>
@@ -1628,7 +1844,7 @@ W = W - learning_rate * m_hat / (np.sqrt(v_hat) + epsilon)
         <p class="body-text">
             Proper initialization prevents slow convergence or exploding/vanishing gradients.
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li><b>Xavier/Glorot Initialization:</b> For sigmoid/tanh activations.</li>
             <li><b>He Initialization:</b> For ReLU activations.</li>
             <li><b>Regularization:</b> L2 (weight decay) or L1 to prevent overfitting.</li>
@@ -1664,7 +1880,7 @@ print("Loss:", loss)
         </pre>
 
         <h3 class="section-head">8. Training Tricks for Deep Networks</h3>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Batch normalization to stabilize learning.</li>
             <li>Learning rate scheduling to avoid overshooting minima.</li>
             <li>Gradient clipping to prevent exploding gradients.</li>
@@ -1695,11 +1911,11 @@ model.fit(X_train, y_train, validation_split=0.1, epochs=10, batch_size=32)
         </pre>
 
         <div class="pro-note">
-            <b>Pro Tip:</b> Understanding low-level NumPy implementation of backpropagation helps debug neural networks and optimize architectures in real-world projects.
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> Understanding low-level NumPy implementation of backpropagation helps debug neural networks and optimize architectures in real-world projects.
         </div>
 
         <h3 class="section-head">10. Summary</h3>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Neural networks consist of input, hidden, and output layers.</li>
             <li>Forward propagation calculates predictions; backpropagation updates weights.</li>
             <li>Activation functions introduce nonlinearity and prevent vanishing gradients.</li>
@@ -1708,14 +1924,16 @@ model.fit(X_train, y_train, validation_split=0.1, epochs=10, batch_size=32)
             <li>Deep learning pipelines require careful preprocessing, monitoring, and validation.</li>
         </ul>
 
-        <button class="btn-premium" onclick="completeModule()">Unlock Module 08 <i class="fas fa-lock-open"></i></button>
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 08: Natural Language Processing
+        </button>
     `
 },
-
 {
     title: "Module 08: Natural Language Processing (NLP)",
+    desc: "Transformers, Attention & Large Language Models",
     content: `
-        <span class="module-tag">Language Modeling</span>
+        <span class="module-tag"><i class="fas fa-language"></i> Language Modeling</span>
         <h2 class="mod-title">Transformers, Attention Mechanism & Large Language Models</h2>
 
         <p class="body-text">
@@ -1725,14 +1943,14 @@ model.fit(X_train, y_train, validation_split=0.1, epochs=10, batch_size=32)
         </p>
 
         <div class="pro-note">
-            <b>Pro Tip:</b> Transformers replaced RNNs and LSTMs for almost all modern NLP tasks because they handle long-range dependencies efficiently and scale better on GPUs.
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Transformers replaced RNNs and LSTMs for almost all modern NLP tasks because they handle long-range dependencies efficiently and scale better on GPUs.
         </div>
 
         <h3 class="section-head">1. Traditional NLP Approaches</h3>
         <p class="body-text">
             Before transformers, NLP relied on:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li><b>Bag-of-Words (BoW):</b> Count vectors, ignores word order.</li>
             <li><b>TF-IDF:</b> Weighted frequency of words, still ignores context.</li>
             <li><b>Word Embeddings:</b> Dense vectors like Word2Vec or GloVe, capture semantic similarity.</li>
@@ -1745,7 +1963,7 @@ model.fit(X_train, y_train, validation_split=0.1, epochs=10, batch_size=32)
         </p>
 
         <h4 class="subsection-head">2.1 Transformer Architecture</h4>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li><b>Input Embedding:</b> Converts tokens into dense vectors.</li>
             <li><b>Positional Encoding:</b> Adds sequence order information.</li>
             <li><b>Multi-Head Self-Attention:</b> Allows each word to attend to all others, capturing dependencies.</li>
@@ -1806,7 +2024,7 @@ print(PE.shape)
         <p class="body-text">
             Modern NLP leverages transfer learning. Popular models include:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li><b>BERT:</b> Bidirectional Encoder Representations, excellent for classification & NER.</li>
             <li><b>RoBERTa:</b> Optimized BERT with more training and dynamic masking.</li>
             <li><b>GPT-series:</b> Decoder-only transformer for text generation.</li>
@@ -1832,7 +2050,7 @@ print(outputs.logits)
         <p class="body-text">
             Prompt engineering is the process of designing effective instructions for pre-trained models to perform tasks without full fine-tuning:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Use clear, specific instructions.</li>
             <li>Provide examples in the prompt (few-shot learning).</li>
             <li>Break tasks into subtasks to improve output accuracy.</li>
@@ -1857,14 +2075,14 @@ print(tokenizer.decode(outputs[0]))
         <p class="body-text">
             Tokenization splits text into subword units. Embeddings map tokens into dense vectors capturing semantic relationships:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>WordPiece (BERT) and Byte-Pair Encoding (GPT) for subword tokenization.</li>
             <li>Embedding layers transform token IDs into trainable vectors.</li>
             <li>Contextual embeddings depend on surrounding words, unlike static embeddings like Word2Vec.</li>
         </ul>
 
         <h3 class="section-head">8. Real-World Applications</h3>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Text classification: spam detection, sentiment analysis.</li>
             <li>Named Entity Recognition (NER): extracting names, dates, locations.</li>
             <li>Text summarization and translation.</li>
@@ -1873,7 +2091,7 @@ print(tokenizer.decode(outputs[0]))
         </ul>
 
         <h3 class="section-head">9. Best Practices in NLP</h3>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Always preprocess text: lowercasing, removing punctuation, handling stopwords.</li>
             <li>Use pretrained embeddings for small datasets to improve performance.</li>
             <li>Monitor overfitting: large LLMs can memorize training data.</li>
@@ -1882,7 +2100,7 @@ print(tokenizer.decode(outputs[0]))
         </ul>
 
         <h3 class="section-head">10. Summary</h3>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Traditional NLP relied on BoW, TF-IDF, embeddings, and RNNs.</li>
             <li>Transformers use self-attention to model long-range dependencies efficiently.</li>
             <li>Multi-head attention and positional encoding allow parallelization and context understanding.</li>
@@ -1891,14 +2109,16 @@ print(tokenizer.decode(outputs[0]))
             <li>Tokenization, embeddings, and preprocessing are critical for model accuracy.</li>
         </ul>
 
-        <button class="btn-premium" onclick="completeModule()">Unlock Module 09 <i class="fas fa-lock-open"></i></button>
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 09: Computer Vision
+        </button>
     `
 },
-
 {
     title: "Module 09: Computer Vision",
+    desc: "Convolutional Neural Networks & Modern CV Architectures",
     content: `
-        <span class="module-tag">Visual Perception</span>
+        <span class="module-tag"><i class="fas fa-eye"></i> Visual Perception</span>
         <h2 class="mod-title">Convolutional Neural Networks (CNNs) & Modern CV Architectures</h2>
 
         <p class="body-text">
@@ -1908,7 +2128,7 @@ print(tokenizer.decode(outputs[0]))
         </p>
 
         <div class="pro-note">
-            <b>Pro Tip:</b> CNNs automatically extract hierarchical features from images: from edges to textures to complex objects, enabling end-to-end learning without manual feature engineering.
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> CNNs automatically extract hierarchical features from images: from edges to textures to complex objects, enabling end-to-end learning without manual feature engineering.
         </div>
 
         <h3 class="section-head">1. Image Representation & Preprocessing</h3>
@@ -1916,7 +2136,7 @@ print(tokenizer.decode(outputs[0]))
             Images are represented as tensors of shape <b>(height, width, channels)</b>. For RGB images, channels = 3. 
             Preprocessing steps include:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Normalization (0–1 or -1 to 1 scaling)</li>
             <li>Resizing to a fixed dimension</li>
             <li>Data augmentation: rotation, flipping, brightness adjustments</li>
@@ -1941,7 +2161,7 @@ transform = transforms.Compose([
             The convolution operation slides a filter (kernel) over the input image to extract features such as edges and textures. 
             Key concepts:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li><b>Kernels/Filters:</b> Small matrices (e.g., 3x3) applied over input</li>
             <li><b>Stride:</b> Step size of the kernel</li>
             <li><b>Padding:</b> Adding pixels around the input to control output size</li>
@@ -1963,7 +2183,7 @@ print(output.shape)  # (1, 16, 224, 224)
         <p class="body-text">
             Pooling reduces spatial dimensions while retaining important features. Common types:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li><b>Max Pooling:</b> Takes the maximum value in a window</li>
             <li><b>Average Pooling:</b> Computes the mean</li>
         </ul>
@@ -1977,7 +2197,7 @@ print(pooled_output.shape)  # Downsampled by factor of 2
         <p class="body-text">
             Nonlinear activations allow CNNs to model complex patterns. Common choices:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li><b>ReLU:</b> max(0, x), prevents vanishing gradients</li>
             <li><b>LeakyReLU:</b> Allows small negative slope</li>
             <li><b>Softmax:</b> Converts logits to probability distribution for classification</li>
@@ -2008,7 +2228,7 @@ output = F(x) + x  # Residual connection
         <p class="body-text">
             Beyond classification, CV tasks include detecting objects and segmenting regions:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>YOLO, SSD: Single-shot detectors for real-time object detection</li>
             <li>Faster R-CNN: Region proposal networks for high-accuracy detection</li>
             <li>Mask R-CNN: Adds segmentation masks per object</li>
@@ -2041,7 +2261,7 @@ model.fc = nn.Linear(model.fc.in_features, num_classes)
         </pre>
 
         <h3 class="section-head">8. Training & Optimization</h3>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Use SGD or Adam optimizers</li>
             <li>Apply learning rate schedulers for stable convergence</li>
             <li>Augmentation improves generalization</li>
@@ -2049,7 +2269,7 @@ model.fc = nn.Linear(model.fc.in_features, num_classes)
         </ul>
 
         <h3 class="section-head">9. Real-World Applications</h3>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Autonomous vehicles: detecting pedestrians, cars, traffic signs</li>
             <li>Medical imaging: detecting tumors, segmenting organs</li>
             <li>Retail: product recognition and shelf monitoring</li>
@@ -2058,7 +2278,7 @@ model.fc = nn.Linear(model.fc.in_features, num_classes)
         </ul>
 
         <h3 class="section-head">10. Summary</h3>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Images are tensors; preprocessing ensures consistency and efficiency.</li>
             <li>CNNs automatically extract hierarchical features through convolution and pooling.</li>
             <li>Activation functions introduce non-linearity, enabling complex pattern learning.</li>
@@ -2067,14 +2287,16 @@ model.fc = nn.Linear(model.fc.in_features, num_classes)
             <li>Transfer learning reduces data requirements and accelerates deployment.</li>
         </ul>
 
-        <button class="btn-premium" onclick="completeModule()">Unlock Module 10 <i class="fas fa-lock-open"></i></button>
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 10: MLOps & Production Engineering
+        </button>
     `
 },
-
 {
     title: "Module 10: MLOps & Production Engineering",
+    desc: "Model Serving, CI/CD Pipelines & Monitoring",
     content: `
-        <span class="module-tag">Deployment & ROI</span>
+        <span class="module-tag"><i class="fas fa-server"></i> Deployment & ROI</span>
         <h2 class="mod-title">Model Serving, CI/CD Pipelines & Monitoring</h2>
 
         <p class="body-text">
@@ -2083,14 +2305,14 @@ model.fc = nn.Linear(model.fc.in_features, num_classes)
         </p>
 
         <div class="pro-note">
-            <b>Pro Tip:</b> In production, 70–80% of ML engineer time is spent on deployment, monitoring, scaling, and retraining pipelines, not on model creation.
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> In production, 70–80% of ML engineer time is spent on deployment, monitoring, scaling, and retraining pipelines, not on model creation.
         </div>
 
         <h3 class="section-head">1. Model Serving with FastAPI</h3>
         <p class="body-text">
             FastAPI is a high-performance web framework ideal for serving ML models asynchronously. Key concepts:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Define RESTful endpoints for predictions</li>
             <li>Validate incoming requests using Pydantic</li>
             <li>Support batch and single-instance inference</li>
@@ -2123,7 +2345,7 @@ def predict(data: InputData):
         <p class="body-text">
             Docker ensures that the entire ML environment — OS, dependencies, and model artifacts — runs consistently anywhere.
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Write a Dockerfile specifying Python version, dependencies, and startup commands</li>
             <li>Build Docker image and run containers for isolated environments</li>
             <li>Use Docker Compose for multi-service applications</li>
@@ -2157,7 +2379,7 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
         <p class="body-text">
             Continuous Integration / Continuous Deployment (CI/CD) pipelines automate testing, building, and deploying ML models. Key components:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Version control: Git for code and ML artifacts</li>
             <li>Unit tests for preprocessing, feature engineering, and model outputs</li>
             <li>Automated Docker builds on code changes</li>
@@ -2195,7 +2417,7 @@ jobs:
         <p class="body-text">
             ML models degrade over time due to <b>concept drift</b> and <b>data drift</b>. Monitoring ensures models maintain performance:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Log predictions, input features, and request metadata</li>
             <li>Track key metrics (accuracy, F1, precision, recall)</li>
             <li>Detect drift using statistical tests or embedding distance</li>
@@ -2215,7 +2437,7 @@ def log_request(input_data, prediction):
         <p class="body-text">
             For high-volume inference, scale your deployment:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Horizontal scaling: multiple containers behind a load balancer</li>
             <li>GPU acceleration for deep learning models</li>
             <li>Serverless deployments with AWS Lambda or Google Cloud Functions for event-driven inference</li>
@@ -2226,7 +2448,7 @@ def log_request(input_data, prediction):
         <p class="body-text">
             Track model versions to ensure reproducibility:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Store artifacts with model metadata, training data snapshot, and hyperparameters</li>
             <li>Use tools like MLflow, DVC, or Weights & Biases for version control</li>
             <li>Implement rollback in CI/CD pipelines in case of model failure</li>
@@ -2236,7 +2458,7 @@ def log_request(input_data, prediction):
         <p class="body-text">
             Protect ML systems from data leaks, adversarial attacks, and unauthorized access:
         </p>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Validate all inputs and sanitize text/images</li>
             <li>Implement authentication and API rate-limiting</li>
             <li>Monitor for anomalous predictions that could indicate attacks</li>
@@ -2244,7 +2466,7 @@ def log_request(input_data, prediction):
         </ul>
 
         <h3 class="section-head">8. Real-World MLOps Workflow</h3>
-        <ol>
+        <ol style="margin-left: 25px;">
             <li>Data ingestion → preprocessing → feature engineering</li>
             <li>Model training → evaluation → artifact storage</li>
             <li>API serving using FastAPI → containerization with Docker</li>
@@ -2253,7 +2475,7 @@ def log_request(input_data, prediction):
         </ol>
 
         <h3 class="section-head">9. Summary</h3>
-        <ul>
+        <ul style="margin-left: 25px;">
             <li>Production ML is about reliability, scalability, and maintainability.</li>
             <li>FastAPI provides asynchronous, validated endpoints for serving models.</li>
             <li>Docker ensures environment consistency and easy deployment.</li>
@@ -2262,93 +2484,301 @@ def log_request(input_data, prediction):
             <li>Security, governance, and model versioning ensure trust and compliance.</li>
         </ul>
 
-        <button class="btn-premium" onclick="completeModule()">Generate Final Credential <i class="fas fa-certificate"></i></button>
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-trophy"></i> Take Final Exam & Claim Certificate
+        </button>
     `
-},
-
-
-
+}
 ];
 
-        function toggleSidebar() {
-            document.getElementById('toc').classList.toggle('active');
-            document.querySelector('.sidebar-overlay').classList.toggle('active');
-        }
+const quizData = [
+    { 
+        q:"CPython mein Global Interpreter Lock (GIL) ka primary function kya hai?", 
+        options:["Multi-core utilization badhana","Python objects ko thread-safe rakhna","Bytecode ko machine code mein badalna","Memory leak rokna"], 
+        correct:1 
+    },
+    { 
+        q:"Python ka 'Generational Garbage Collector' main roop se kis problem ko solve karta hai?", 
+        options:["Slow execution","Syntax errors","Circular references","Stack overflow"], 
+        correct:2 
+    },
+    { 
+        q:"Agar aapko memory usage optimize karni hai aur attributes ko fix rakhna hai, toh aap kya use karenge?", 
+        options:["__init__","__dict__","__slots__","__cache__"], 
+        correct:2 
+    },
+    { 
+        q:"Ek list mein element search karne ki 'Average Case' time complexity kya hoti hai?", 
+        options:["O(1)","O(log n)","O(n)","O(n^2)"], 
+        correct:2 
+    },
+    { 
+        q:"Method Resolution Order (MRO) ko check karne ke liye kis attribute ka use kiya jata hai?", 
+        options:["__order__","__mro__","__resolve__","__hierarchy__"], 
+        correct:1 
+    },
+    { 
+        q:"Bina memory mein pura data load kiye sequence produce karne ke liye kya best hai?", 
+        options:["List Comprehension","Dictionaries","Generators","Tuples"], 
+        correct:2 
+    },
+    { 
+        q:"CPU-bound tasks ke liye Python mein GIL ko bypass karne ka sahi tarika kya hai?", 
+        options:["Multithreading","Asyncio","Multiprocessing","Recursion"], 
+        correct:2 
+    },
+    { 
+        q:"PCA (Principal Component Analysis) ka main uddeshya (objective) kya hota hai?", 
+        options:["Outliers hatana","Dimensionality reduction","Data labeling","Clustering"], 
+        correct:1 
+    },
+    { 
+        q:"Deep Learning mein 'Vanishing Gradient' ki problem ko solve karne ke liye kaunsa activation function behtar hai?", 
+        options:["Sigmoid","Tanh","ReLU","Step Function"], 
+        correct:2 
+    },
+    { 
+        q:"MLOps mein 'Concept Drift' ka kya matlab hai?", 
+        options:["Model ka code delete ho jana","Data distributions badalne se model ki accuracy girna","Server ka slow ho jana","Docker container ka crash hona"], 
+        correct:1 
+    }
+];
 
-        function enrollUser() {
+let maxUnlocked = 0;
+let currentModule = 0;
+let examScore = 0;
+let examTaken = false;
+
+function toggleSidebar(){
+    document.getElementById('toc').classList.toggle('active');
+    document.getElementById('overlay').classList.toggle('active');
+}
+
+function startCourse(){
+    document.getElementById('welcome-screen').classList.add('hidden');
+    document.getElementById('course-player').classList.remove('hidden');
+    document.querySelector('.sidebar-toggle').style.display='block';
+    loadModule(0); 
+    renderTOC();
+}
+
+function renderTOC(){
+    const toc = document.getElementById('toc');
+    let html = `
+        <div class="sidebar-header">
+            <h3 class="sidebar-title"><i class="fas fa-book-open"></i> COURSE MODULES</h3>
+            <div style="color: #94a3b8; font-size: 0.85rem; margin-top: 5px;">${syllabus.length} comprehensive modules</div>
+        </div>
+    `;
+    
+    syllabus.forEach((mod,i)=>{
+        const locked = i > maxUnlocked;
+        const completed = i < maxUnlocked;
+        const active = i === currentModule;
+        
+        html += `
+        <div class="module-item ${active?'active':''} ${locked?'locked':''}" onclick="${!locked?`loadModule(${i})`:''}">
+            <div class="module-number">${i+1}</div>
+            <div class="module-text">
+                <div class="module-title">${mod.title.replace("Module " + (i+1).toString().padStart(2, '0') + ": ", "")}</div>
+                <div class="module-desc">${mod.desc}</div>
+            </div>
+            <div class="module-status">
+                ${locked ? 
+                    '<i class="fas fa-lock" style="color: #94a3b8;"></i>' : 
+                    completed ? 
+                    '<i class="fas fa-check-circle" style="color: var(--success);"></i>' : 
+                    '<i class="fas fa-play-circle" style="color: var(--primary);"></i>'
+                }
+            </div>
+        </div>`;
+    });
+    
+    html += `
+        <div style="padding: 25px; text-align: center; margin-top: 20px; border-top: 1px solid var(--border-dark);">
+            <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 10px;">Progress</div>
+            <div style="background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                <div style="height: 100%; width: ${Math.round((maxUnlocked/(syllabus.length-1))*100)}%; background: var(--primary); border-radius: 3px;"></div>
+            </div>
+            <div style="color: white; font-size: 0.9rem; margin-top: 10px; font-weight: 600;">
+                ${maxUnlocked}/${syllabus.length-1} modules completed
+            </div>
+        </div>
+    `;
+    
+    toc.innerHTML = html;
+}
+
+function loadModule(idx){
+    currentModule = idx;
+    document.getElementById('loader').classList.add('active');
+    
+    setTimeout(() => {
+        document.getElementById('module-content').classList.remove('hidden');
+        document.getElementById('exam-section').classList.add('hidden');
+        document.getElementById('final-step-section').classList.add('hidden');
+        document.getElementById('module-content').innerHTML = syllabus[idx].content;
+        
+        const prog = Math.round((maxUnlocked/(syllabus.length-1))*100);
+        document.getElementById('progress-fill').style.width = prog + "%";
+        document.getElementById('prog-stat-text').innerText = prog + "% COMPLETE";
+        
+        renderTOC(); 
+        window.scrollTo(0,0);
+        document.getElementById('loader').classList.remove('active');
+    }, 300);
+}
+
+function completeModule(){
+    if(currentModule === syllabus.length-1){
+        showExam();
+    } else {
+        if(currentModule === maxUnlocked) {
+            maxUnlocked++;
             Swal.fire({
-                title: 'Welcome to Elite Track!',
-                text: 'Your proctored curriculum is now active.',
-                icon: 'success',
-                confirmButtonColor: '#4338ca'
-            }).then(() => {
-                document.getElementById('welcome-screen').classList.add('hidden');
-                document.getElementById('course-ui').classList.remove('hidden');
-                renderTOC();
-                loadModule(0);
+                title: "Module Completed!",
+                text: `You've unlocked Module ${currentModule+2}`,
+                icon: "success",
+                confirmButtonText: "Continue",
+                confirmButtonColor: "var(--primary)"
             });
         }
+        loadModule(currentModule+1);
+    }
+}
 
-        function renderTOC() {
-            const toc = document.getElementById('toc');
-            let html = `<div style="text-transform:uppercase; font-size:0.7rem; color:rgba(255,255,255,0.6); margin-bottom:20px; letter-spacing:1px;">Elite Curriculum</div>`;
-            syllabus.forEach((mod, i) => {
-                const isLocked = i > maxUnlocked;
-                html += `
-                    <div class="module-item ${i === currentModule ? 'active' : ''} ${isLocked ? 'locked' : ''}" onclick="${!isLocked ? `loadModule(${i})` : ''}">
-                        <i class="fas ${i < maxUnlocked ? 'fa-check-circle' : (isLocked ? 'fa-lock' : 'fa-play-circle')}"></i>
-                        ${mod.title}
-                    </div>`;
-            });
-            toc.innerHTML = html;
+function showExam(){
+    document.getElementById('module-content').classList.add('hidden');
+    const examBox = document.getElementById('exam-section');
+    examBox.classList.remove('hidden');
+
+    let html = `
+        <span class="module-tag"><i class="fas fa-graduation-cap"></i> FINAL ASSESSMENT</span>
+        <h2 class="mod-title">Proctored Final Exam</h2>
+        <p class="body-text">Complete this final assessment to earn your Elite Python Mastery certificate. Score 50% or above to pass.</p>
+        
+        <div style="background: #f0f9ff; padding: 20px; border-radius: 16px; margin-bottom: 30px; border-left: 4px solid var(--primary);">
+            <h4 style="font-weight: 700; margin-bottom: 10px; color: var(--dark-bg);"><i class="fas fa-info-circle"></i> Exam Details</h4>
+            <p style="color: #475569; margin-bottom: 5px;"><b>Questions:</b> ${quizData.length} multiple choice</p>
+            <p style="color: #475569; margin-bottom: 5px;"><b>Passing Score:</b> 50% or higher</p>
+            <p style="color: #475569;"><b>Time:</b> No time limit</p>
+        </div>
+    `;
+    
+    quizData.forEach((item,i)=>{
+        html += `<div class="q-block">
+            <p style="font-weight: 600; font-size: 1.1rem; margin-bottom: 15px; color: var(--dark-bg);">
+                <span style="background: var(--primary); color: white; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.9rem; margin-right: 10px;">${i+1}</span>
+                ${item.q}
+            </p>`;
+        item.options.forEach((opt,oi)=>{
+            html += `
+            <label class="option-label">
+                <input type="radio" name="q_${i}" value="${oi}">
+                ${opt}
+            </label>`;
+        });
+        html += `</div>`;
+    });
+    
+    html += `<button class="btn-primary" onclick="submitExam()">
+        <i class="fas fa-paper-plane"></i> Submit Exam
+    </button>`;
+    
+    examBox.innerHTML = html;
+    window.scrollTo(0,0);
+}
+
+function submitExam(){
+    let score = 0;
+    const results = [];
+    
+    quizData.forEach((item,i)=>{
+        const ans = document.querySelector(`input[name="q_${i}"]:checked`);
+        if(ans && parseInt(ans.value) === item.correct){
+            score++;
+            results.push({question: i, correct: true});
+        } else {
+            results.push({question: i, correct: false, selected: ans ? parseInt(ans.value) : null});
         }
+    });
 
-        function loadModule(idx) {
-            currentModule = idx;
-            const contentArea = document.getElementById('main-content');
-            const layout = document.querySelector('.main-layout');
+    examScore = score;
+    const percent = Math.round((score/quizData.length)*100);
+    const courseName = "Elite Python Mastery"; 
 
-            // 1. Instant Reset: Hide content so the change isn't messy
-            contentArea.style.opacity = '0';
-            contentArea.classList.remove('module-reveal-active');
+    // Detailed results HTML (Kept exactly as per your request)
+    let resultsHTML = `
+        <div class="score-display">
+            <h3 style="margin-bottom: 10px; font-weight: 700;">Exam Results</h3>
+            <div class="score-value">${percent}%</div>
+            <p style="font-size: 1.1rem; margin-bottom: 20px;">${score}/${quizData.length} Correct Answers</p>
+        </div>
+        <h3 style="margin: 30px 0 15px; color: var(--dark-bg);">Question Review</h3>
+    `;
+    
+    results.forEach((result, i) => {
+        resultsHTML += `
+        <div style="background: ${result.correct ? '#f0fdf4' : '#fef2f2'}; padding: 15px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid ${result.correct ? '#10b981' : '#ef4444'};">
+            <p style="font-weight: 600; margin-bottom: 8px; color: var(--dark-bg);">${i+1}. ${quizData[i].q}</p>
+            <p style="margin-bottom: 5px;"><b>Your answer:</b> ${result.selected !== null ? quizData[i].options[result.selected] : 'Not answered'}</p>
+            <p><b>Correct answer:</b> ${quizData[i].options[quizData[i].correct]}</p>
+        </div>`;
+    });
 
-            // 2. Teleport to top of the content area (not the whole page) 
-            // This mimics the Coursera behavior where the UI stays fixed
-            layout.scrollIntoView({ behavior: 'instant', block: 'start' });
+    if(percent >= 50){
+        Swal.fire({
+            title: "Congratulations!",
+            html: `<div style="text-align: left;">${resultsHTML}</div>`,
+            icon: "success",
+            confirmButtonText: "Claim Certificate",
+            confirmButtonColor: "var(--primary)",
+            width: 800
+        }).then(()=>{
+            // Instead of showing the final-step-section, we prompt for name and redirect
+            promptForCertificate(courseName);
+        });
+    } else {
+        Swal.fire({
+            title: "Try Again",
+            html: `<div style="text-align: left;">${resultsHTML}</div>`,
+            icon: "error",
+            confirmButtonText: "Retry Exam",
+            confirmButtonColor: "var(--primary)",
+            width: 800
+        }).then(() => {
+            showExam();
+        });
+    }
+}
 
-            // 3. Small timeout to allow the browser to process the 'top' position
-            setTimeout(() => {
-                contentArea.innerHTML = syllabus[idx].content;
-                
-                // 4. Trigger the professional reveal
-                contentArea.classList.add('module-reveal-active');
-                contentArea.style.opacity = '1';
-                
-                // Update Stats
-                document.getElementById('prog-stat').innerText = `${Math.round(((maxUnlocked) / syllabus.length) * 100)}% COMPLETE`;
-                renderTOC();
-            }, 50); 
-        }
-
-        function completeModule() {
-            if (currentModule < syllabus.length - 1) {
-                maxUnlocked++;
-                loadModule(currentModule + 1);
-            } else {
-                document.getElementById('course-ui').classList.add('hidden');
-                document.getElementById('final-screen').classList.remove('hidden');
-                document.getElementById('prog-stat').innerText = `100% COMPLETE`;
+// Helper function to handle the name input and redirection
+function promptForCertificate(course) {
+    Swal.fire({
+        title: "Enter Your Name",
+        text: "Please enter your name as you want it to appear on your certificate.",
+        input: 'text',
+        inputPlaceholder: 'Full Name',
+        confirmButtonText: 'Generate Redirect',
+        confirmButtonColor: "var(--primary)",
+        allowOutsideClick: false,
+        preConfirm: (name) => {
+            if (!name) {
+                Swal.showValidationMessage('Name is required to generate a certificate');
             }
+            return name;
         }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const studentName = encodeURIComponent(result.value);
+            const encodedCourse = encodeURIComponent(course);
+            // Redirecting with name and course in URL
+            window.location.href = `certificate.html?name=${studentName}&course=${encodedCourse}`;
+        }
+    });
+}
 
-        function generateCredential() {
-            const name = document.getElementById('cert-name').value.trim();
-            if (!name) { Swal.fire('Error', 'Please enter your full name.', 'error'); return; }
-            localStorage.setItem("internadda_cert_name", name);
-            localStorage.setItem("internadda_course_name", "Python Essentials Program");
-            Swal.fire('Issued!', 'Your professional credential has been generated.', 'success')
-            .then(() => { window.location.href = "certificate.html"; });
-        }
-    </script>
+
+</script>
 </body>
 </html>
