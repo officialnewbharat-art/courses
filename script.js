@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // ==============================================
     // 1. DROPDOWN LOGIC (Desktop & Mobile Accordion)
     // ==============================================
-    // Logic extracted from main site to handle "More" menu
     const dropdowns = document.querySelectorAll('.dropdown');
 
     dropdowns.forEach(dropdown => {
@@ -11,22 +10,19 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (trigger) {
             trigger.addEventListener('click', (e) => {
-                e.stopPropagation(); // Prevent closing immediately
+                e.stopPropagation();
                 
-                // Close other open dropdowns for a cleaner accordion feel
                 dropdowns.forEach(other => {
                     if (other !== dropdown) {
                         other.classList.remove('active');
                     }
                 });
 
-                // Toggle current dropdown
                 dropdown.classList.toggle('active');
             });
         }
     });
 
-    // Close all dropdowns when clicking anywhere else on the page
     document.addEventListener('click', (e) => {
         dropdowns.forEach(dropdown => {
             if (!dropdown.contains(e.target)) {
@@ -39,7 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // ==============================================
     // 2. MOBILE MENU TOGGLE (Hamburger)
     // ==============================================
-    // Logic extracted from main site for responsive navigation
     const menuBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
     
@@ -48,7 +43,6 @@ document.addEventListener('DOMContentLoaded', function() {
             e.stopPropagation();
             navLinks.classList.toggle('active');
             
-            // Toggle Icon between Hamburger (fa-bars) and Close (fa-times)
             const icon = menuBtn.querySelector('i');
             if (navLinks.classList.contains('active')) {
                 icon.classList.remove('fa-bars');
@@ -59,7 +53,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Close mobile menu when clicking outside of it
         document.addEventListener('click', (e) => {
             if (navLinks.classList.contains('active') && 
                 !navLinks.contains(e.target) && 
@@ -70,6 +63,69 @@ document.addEventListener('DOMContentLoaded', function() {
                 icon.classList.remove('fa-times');
                 icon.classList.add('fa-bars');
             }
+        });
+    }
+
+    // ==============================================
+    // 3. COURSE GRID REVEAL (View More Logic)
+    // ==============================================
+    const viewMoreBtn = document.getElementById('view-more-btn');
+    const courseCards = document.querySelectorAll('.course-card');
+    
+    if (viewMoreBtn && courseCards.length > 0) {
+        function updateCourseVisibility() {
+            const isMobile = window.innerWidth <= 768;
+            // Desktop: Show 3 (1 row), Mobile: Show 2 (2 rows because of 1-col layout)
+            const initialLimit = isMobile ? 2 : 3;
+
+            courseCards.forEach((card, index) => {
+                if (index < initialLimit) {
+                    card.classList.remove('hidden-card');
+                    card.style.display = 'block';
+                } else {
+                    card.classList.add('hidden-card');
+                    card.style.display = 'none';
+                }
+            });
+
+            // Agar total cards limit se kam hain toh button hide kardo
+            if (courseCards.length <= initialLimit) {
+                viewMoreBtn.style.display = 'none';
+            } else {
+                viewMoreBtn.style.display = 'inline-block';
+            }
+        }
+
+        // Initial set on load
+        updateCourseVisibility();
+
+        // View More Button Click
+        viewMoreBtn.addEventListener('click', function() {
+            const isMobile = window.innerWidth <= 768;
+            const revealCount = isMobile ? 2 : 3; // Har click pe mobile pe 2 cards aur desktop pe 3 cards reveal honge
+            
+            let hiddenCards = document.querySelectorAll('.course-card.hidden-card');
+            
+            for (let i = 0; i < revealCount; i++) {
+                if (hiddenCards[i]) {
+                    hiddenCards[i].style.display = 'block';
+                    hiddenCards[i].classList.remove('hidden-card');
+                    // Chota sa animation effect
+                    hiddenCards[i].style.animation = 'slideUp 0.4s ease forwards';
+                }
+            }
+
+            // Agar saare cards dikh gaye toh button hide kardo
+            if (document.querySelectorAll('.course-card.hidden-card').length === 0) {
+                viewMoreBtn.style.display = 'none';
+            }
+        });
+
+        // Window resize handle karein taki layout switch ho sake
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(updateCourseVisibility, 200);
         });
     }
 });
