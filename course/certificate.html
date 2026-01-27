@@ -180,23 +180,29 @@ body {
 </div>
 
 <script>
-const name = localStorage.getItem("internadda_cert_name");
-const courseName = localStorage.getItem("internadda_course_name");
+    // Function to get data from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const name = urlParams.get('name');
+    const courseName = urlParams.get('course');
 
-if (name) document.getElementById("recipient-name").innerText = name;
-if (courseName) document.getElementById("course-title").innerText = courseName;
+    // Fallback to LocalStorage if URL is empty, otherwise show default
+    const finalName = name || localStorage.getItem("internadda_cert_name") || "Recipient Name";
+    const finalCourse = courseName || localStorage.getItem("internadda_course_name") || "Professional Skill Program";
 
-document.getElementById("cert-date").innerText =
-    new Date().toLocaleDateString("en-IN", { day:"numeric", month:"long", year:"numeric" });
+    document.getElementById("recipient-name").innerText = finalName;
+    document.getElementById("course-title").innerText = finalCourse;
 
-function generateCertID() {
-    const prefix = courseName ? courseName.substring(0,2).toUpperCase() : "IA";
-    return "IA-" + prefix + "-" +
-        Math.random().toString(36).substring(2,6).toUpperCase() +
-        "-" + Date.now().toString().slice(-5);
-}
+    document.getElementById("cert-date").innerText =
+        new Date().toLocaleDateString("en-IN", { day:"numeric", month:"long", year:"numeric" });
 
-document.getElementById("cert-id").innerText = generateCertID();
+    function generateCertID() {
+        const prefix = finalCourse ? finalCourse.substring(0,2).toUpperCase() : "IA";
+        return "IA-" + prefix + "-" +
+            Math.random().toString(36).substring(2,6).toUpperCase() +
+            "-" + Date.now().toString().slice(-5);
+    }
+
+    document.getElementById("cert-id").innerText = generateCertID();
 </script>
 
 </body>
