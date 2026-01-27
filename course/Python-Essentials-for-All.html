@@ -54,34 +54,22 @@
         .logo-text span { background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .progress-stats { display: flex; align-items: center; gap: 15px; }
         .progress-percent { font-weight: 800; font-size: 1rem; color: var(--primary); background: #eef2ff; padding: 6px 12px; border-radius: 20px; }
-
         @media (max-width: 768px) {
-            header {
-                padding: 0 15px; /* Better side padding */
-            }
             .nav-container { 
-                justify-content: space-between; /* Keeps items spread out */
+                display: flex; 
+                justify-content: center; /* Centers the logo container */
+                align-items: center;
                 position: relative; 
             }
             .sidebar-toggle { 
                 display: block !important; 
-                padding: 10px; /* Bigger touch target */
-                margin-right: 10px;
+                position: absolute; /* Takes toggle out of flow so logo can center */
+                left: 0; 
+                z-index: 1001; 
             }
-            .logo-text { font-size: 1.2rem; }
-            
-            /* Hide the percentage text on mobile as requested */
-            .progress-percent { display: none; } 
-            
-            .logo-container {
-                position: absolute;
-                left: 50%;
-                transform: translateX(-50%); /* Perfectly centered logo */
-            }
+            .logo-text { font-size: 1.3rem; }
+            .progress-stats { display: none !important; } /* Hide % in header */
         }
-        
-        }
-
         /* --- SIDEBAR & OVERLAY --- */
         .sidebar {
             position: fixed; top: 0; left: -350px; width: 320px; height: 100vh;
@@ -318,21 +306,23 @@
         <p style="color: var(--text-main); font-weight: 600;">Loading Module...</p>
     </div>
 
-    <header>
+<header>
         <div class="nav-container">
             <button class="sidebar-toggle" onclick="toggleSidebar()" style="background:none; border:none; cursor:pointer; font-size:1.4rem; display:none; color: var(--text-main);">
                 <i class="fas fa-bars"></i>
             </button>
+            
             <div class="logo-container">
                 <i class="fas fa-graduation-cap logo-icon"></i>
                 <a href="#" class="logo-text">Intern<span>adda</span></a>
             </div>
+
             <div class="progress-stats">
                 <div class="progress-percent" id="prog-stat-text">0% COMPLETE</div>
             </div>
         </div>
     </header>
-    
+
     <div class="mobile-progress-container"><div id="progress-fill"></div></div>
     <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
     <aside class="sidebar" id="toc"></aside>
@@ -361,7 +351,7 @@
                     <span class="badge-verified"><i class="fas fa-shield-alt"></i> VERIFIED INSTRUCTOR</span>
                     <h4 style="font-weight: 800; font-size: 1.2rem; margin-bottom: 5px;">Lucky Tiwari</h4>
                     <p style="font-size: 0.9rem; color: var(--text-light);">Founder of InternAdda & Senior Software Architect</p>
-                    <p style="font-size: 0.85rem; color: var(--text-light); margin-top: 8px;">6+ years in production Python systems</p>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin-top: 8px;">10+ years in production Python systems</p>
                 </div>
             </div>
 
@@ -2612,7 +2602,7 @@ function renderTOC(){
                 <div style="height: 100%; width: ${Math.round((maxUnlocked/(syllabus.length-1))*100)}%; background: var(--primary); border-radius: 3px;"></div>
             </div>
             <div style="color: white; font-size: 0.9rem; margin-top: 10px; font-weight: 600;">
-                ${maxUnlocked}/${syllabus.length-1} modules completed
+                ${maxUnlocked}/${syllabus.length} modules completed
             </div>
         </div>
     `;
@@ -2716,15 +2706,20 @@ function submitExam(){
 
     examScore = score;
     const percent = Math.round((score/quizData.length)*100);
-    const courseName = "Elite Python Mastery"; 
+    examTaken = true;
 
-    // Detailed results HTML (Kept exactly as per your request)
+    // Create detailed results HTML
     let resultsHTML = `
         <div class="score-display">
             <h3 style="margin-bottom: 10px; font-weight: 700;">Exam Results</h3>
             <div class="score-value">${percent}%</div>
             <p style="font-size: 1.1rem; margin-bottom: 20px;">${score}/${quizData.length} Correct Answers</p>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; margin-top: 15px;">
+                <p style="margin-bottom: 8px;"><b>Status:</b> <span style="color: ${percent >= 50 ? '#4ade80' : '#f87171'}">${percent >= 50 ? 'PASSED' : 'FAILED'}</span></p>
+                <p><b>Required to pass:</b> 50%</p>
+            </div>
         </div>
+        
         <h3 style="margin: 30px 0 15px; color: var(--dark-bg);">Question Review</h3>
     `;
     
@@ -2746,8 +2741,8 @@ function submitExam(){
             confirmButtonColor: "var(--primary)",
             width: 800
         }).then(()=>{
-            // Instead of showing the final-step-section, we prompt for name and redirect
-            promptForCertificate(courseName);
+            document.getElementById('exam-section').classList.add('hidden');
+            document.getElementById('final-step-section').classList.remove('hidden');
         });
     } else {
         Swal.fire({
@@ -2758,37 +2753,39 @@ function submitExam(){
             confirmButtonColor: "var(--primary)",
             width: 800
         }).then(() => {
+            // Allow retaking the exam
             showExam();
         });
     }
 }
 
-// Helper function to handle the name input and redirection
-function promptForCertificate(course) {
+function claimCertificate(){
+    const name = document.getElementById('student-name').value.trim();
+    const course = "Elite Python Mastery"; // The proper course name
+
+    if(!name) {
+        return Swal.fire("Error","Please enter your full name.","error");
+    }
+    
+    // Save to localStorage as backup
+    localStorage.setItem("internadda_cert_name", name);
+    localStorage.setItem("internadda_course_name", course);
+    
     Swal.fire({
-        title: "Enter Your Name",
-        text: "Please enter your name as you want it to appear on your certificate.",
-        input: 'text',
-        inputPlaceholder: 'Full Name',
-        confirmButtonText: 'Generate Redirect',
-        confirmButtonColor: "var(--primary)",
-        allowOutsideClick: false,
-        preConfirm: (name) => {
-            if (!name) {
-                Swal.showValidationMessage('Name is required to generate a certificate');
-            }
-            return name;
-        }
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const studentName = encodeURIComponent(result.value);
-            const encodedCourse = encodeURIComponent(course);
-            // Redirecting with name and course in URL
-            window.location.href = `certificate.html?name=${studentName}&course=${encodedCourse}`;
-        }
+        title: "Generating Certificate...",
+        text: "Redirecting you to your official certificate.",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false
+    }).then(() => {
+        // Construct the URL with encoded parameters for safety
+        const urlName = encodeURIComponent(name);
+        const urlCourse = encodeURIComponent(course);
+        
+        // Redirect to certificate.html with parameters
+        window.location.href = `certificate.html?name=${urlName}&course=${urlCourse}`;
     });
 }
-
 
 </script>
 </body>
