@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Internadda Certificate</title>
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+    background: #eef2f7;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+.certificate-wrapper {
+    width: 1123px;
+    height: 794px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 70px 90px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.18);
+    position: relative;
+    box-sizing: border-box;
+}
+
+.certificate-wrapper::after {
+    content: "";
+    position: absolute;
+    inset: 25px;
+    border: 2px solid rgba(67,56,202,0.25);
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    height: 60px;
+}
+
+.msme-logo {
+    height: 55px;
+}
+
+/* TITLE */
+.title {
+    margin-top: 35px;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 46px;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.subtitle {
+    text-align: center;
+    margin-top: 8px;
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #64748b;
+}
+
+/* CONTENT */
+.presented {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 16px;
+    color: #475569;
+}
+
+#recipient-name {
+    text-align: center;
+    margin: 28px 0;
+    font-size: 40px;
+    font-weight: 700;
+    color: #4338ca;
+}
+
+.description {
+    max-width: 820px;
+    margin: auto;
+    text-align: center;
+    font-size: 18px;
+    line-height: 1.75;
+    color: #334155;
+}
+
+/* FOOTER */
+.footer {
+    position: absolute;
+    bottom: 70px;
+    left: 90px;
+    right: 90px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-box {
+    text-align: center;
+    font-size: 14px;
+    color: #334155;
+}
+
+.footer-box b {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.signature {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+/* QR */
+.qr-wrap {
+    text-align: center;
+}
+
+.qr {
+    height: 95px;
+}
+
+.verify-text {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #475569;
+    letter-spacing: 0.5px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="certificate" class="certificate-wrapper">
+
+    <div class="header">
+        <img src="https://internadda.com/images/logo.jpg" class="logo" alt="Internadda Logo">
+        <!-- MSME Style Badge -->
+        <img src="msme.png" class="msme-logo" alt="MSME Badge">
+    </div>
+
+    <div class="title">Certificate of Completion</div>
+    <div class="subtitle">Internadda Elite Program</div>
+
+    <div class="presented">This certificate is proudly presented to</div>
+    <div id="recipient-name">Recipient Name</div>
+
+    <div class="description">
+        for successfully completing the <b id="course-title">Professional Skill Program</b> with Internadda.
+        This certificate reflects dedication, consistency, and learning excellence.
+    </div>
+
+    <div class="footer">
+        <div class="footer-box">
+            <b>Date Issued</b>
+            <span id="cert-date"></span>
+        </div>
+
+        <div class="footer-box qr-wrap">
+            <img src="qr.jpg" class="qr" alt="QR Code">
+            <div class="verify-text">Verify</div>
+        </div>
+
+        <div class="footer-box">
+            <b>Certificate ID</b>
+            <span id="cert-id"></span>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Function to get data from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const name = urlParams.get('name');
+    const courseName = urlParams.get('course');
+
+    // Fallback to LocalStorage if URL is empty, otherwise show default
+    const finalName = name || localStorage.getItem("internadda_cert_name") || "Recipient Name";
+    const finalCourse = courseName || localStorage.getItem("internadda_course_name") || "Professional Skill Program";
+
+    document.getElementById("recipient-name").innerText = finalName;
+    document.getElementById("course-title").innerText = finalCourse;
+
+    document.getElementById("cert-date").innerText =
+        new Date().toLocaleDateString("en-IN", { day:"numeric", month:"long", year:"numeric" });
+
+    function generateCertID() {
+        const prefix = finalCourse ? finalCourse.substring(0,2).toUpperCase() : "IA";
+        return "IA-" + prefix + "-" +
+            Math.random().toString(36).substring(2,6).toUpperCase() +
+            "-" + Date.now().toString().slice(-5);
+    }
+
+    document.getElementById("cert-id").innerText = generateCertID();
+</script>
+
+</body>
+</html>
