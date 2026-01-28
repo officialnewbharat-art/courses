@@ -1,0 +1,5019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Elite Data Science Mastery | Internadda</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        :root {
+            --primary: #4338ca; 
+            --primary-hover: #3730a3;
+            --secondary: #10b981;
+            --accent: #8b5cf6;
+            --dark-bg: #0f172a;
+            --dark-card: #1e293b;
+            --text-main: #1e293b;
+            --text-light: #64748b;
+            --white: #ffffff;
+            --off-white: #f8fafc;
+            --border: #e2e8f0;
+            --border-dark: #334155;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --header-height: 75px;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
+            --gradient-primary: linear-gradient(135deg, #4338ca 0%, #7c3aed 100%);
+            --gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--off-white); color: var(--text-main); line-height: 1.8; overflow-x: hidden; }
+
+        /* --- HEADER & PROGRESS --- */
+        header { 
+            background: var(--white); 
+            border-bottom: 1px solid var(--border); 
+            box-shadow: var(--shadow-sm);
+            position: fixed; top: 0; width: 100%; z-index: 1000; height: var(--header-height);
+            display: flex; align-items: center; padding: 0 25px;
+        }
+        .nav-container { 
+            display: flex; align-items: center; justify-content: space-between; 
+            width: 100%; max-width: 1400px; margin: 0 auto; 
+        }
+        .logo-container { display: flex; align-items: center; gap: 10px; }
+        .logo-icon { color: var(--primary); font-size: 1.8rem; }
+        .logo-text { font-weight: 800; font-size: 1.5rem; color: #0f172a; text-decoration: none; letter-spacing: -0.5px; }
+        .logo-text span { background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .progress-stats { display: flex; align-items: center; gap: 15px; }
+        .progress-percent { font-weight: 800; font-size: 1rem; color: var(--primary); background: #eef2ff; padding: 6px 12px; border-radius: 20px; }
+        @media (max-width: 768px) {
+            .nav-container { 
+                display: flex; 
+                justify-content: center; /* Centers the logo container */
+                align-items: center;
+                position: relative; 
+            }
+            .sidebar-toggle { 
+                display: block !important; 
+                position: absolute; /* Takes toggle out of flow so logo can center */
+                left: 0; 
+                z-index: 1001; 
+            }
+            .logo-text { font-size: 1.3rem; }
+            .progress-stats { display: none !important; } /* Hide % in header */
+        }
+        /* --- SIDEBAR & OVERLAY --- */
+        .sidebar {
+            position: fixed; top: 0; left: -350px; width: 320px; height: 100vh;
+            background: var(--dark-bg); z-index: 1100; padding: 30px 0;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); color: white; overflow-y: auto;
+            box-shadow: 5px 0 30px rgba(0,0,0,0.2);
+        }
+        .sidebar.active { left: 0; }
+        .sidebar-overlay { 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1050; display: none; 
+            backdrop-filter: blur(3px); 
+        }
+        .sidebar-overlay.active { display: block; }
+        .sidebar-header { padding: 0 25px 25px; border-bottom: 1px solid var(--border-dark); margin-bottom: 20px; }
+        .sidebar-title { font-size: 1.1rem; font-weight: 700; color: #cbd5e1; letter-spacing: 0.5px; }
+        .module-item { 
+            padding: 16px 25px; margin: 0 15px 8px; border-radius: 12px; cursor: pointer; 
+            display: flex; align-items: center; gap: 15px; transition: all 0.3s; 
+            background: rgba(255,255,255,0.03); border: 1px solid transparent; 
+        }
+        .module-item:hover { background: rgba(255,255,255,0.07); }
+        .module-item.active { 
+            background: rgba(67, 56, 202, 0.15); border-color: var(--primary); 
+            box-shadow: 0 4px 12px rgba(67, 56, 202, 0.15); 
+        }
+        .module-number { 
+            width: 28px; height: 28px; background: rgba(255,255,255,0.1); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            font-size: 0.85rem; font-weight: 700; 
+        }
+        .module-item.active .module-number { background: var(--primary); }
+        .module-text { flex: 1; }
+        .module-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 3px; }
+        .module-desc { font-size: 0.8rem; color: #94a3b8; }
+        .module-status { font-size: 0.9rem; }
+        .module-item.locked { opacity: 0.6; cursor: not-allowed; }
+
+        /* --- CONTENT UI --- */
+        .main-layout { 
+            margin-top: calc(var(--header-height) + 30px); padding: 0 20px 80px; 
+            display: flex; justify-content: center; 
+        }
+        .content-card { 
+            background: white; border-radius: 28px; padding: 50px; max-width: 920px; width: 100%; 
+            border: 1px solid var(--border); box-shadow: var(--shadow-md); 
+            position: relative; overflow: hidden; 
+        }
+        .content-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+            background: var(--gradient-primary);
+        }
+        
+        @keyframes reveal { 
+            from { opacity: 0; transform: translateY(30px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        .animate-content { animation: reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+        .module-tag { 
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #eef2ff; color: var(--primary); padding: 6px 14px; 
+            border-radius: 20px; font-size: 0.75rem; font-weight: 800; 
+            text-transform: uppercase; margin-bottom: 20px; letter-spacing: 0.5px; 
+        }
+        .mod-title { 
+            font-size: 2.4rem; font-weight: 800; color: var(--dark-bg); 
+            margin-bottom: 25px; letter-spacing: -1px; line-height: 1.2; 
+        }
+        .body-text { 
+            margin-bottom: 25px; font-size: 1.1rem; color: #334155; 
+            line-height: 1.7; 
+        }
+        
+        pre { 
+            background: #0f172a; color: #e2e8f0; padding: 25px; border-radius: 16px; 
+            margin: 25px 0; overflow-x: auto; font-family: 'Fira Code', monospace; 
+            font-size: 0.9rem; border: 1px solid #1e293b; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2); 
+            position: relative; 
+        }
+        pre::before {
+            content: 'Code'; position: absolute; top: 0; right: 20px;
+            background: var(--primary); color: white; padding: 4px 12px;
+            font-size: 0.7rem; border-radius: 0 0 6px 6px; font-weight: 700;
+        }
+
+        .section-head { 
+            font-size: 1.6rem; font-weight: 700; color: var(--dark-bg); 
+            margin: 35px 0 15px; padding-bottom: 10px; border-bottom: 2px solid #eef2ff; 
+        }
+        .subsection-head { 
+            font-size: 1.2rem; font-weight: 600; color: var(--dark-bg); 
+            margin: 25px 0 12px; 
+        }
+        .pro-note {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid #0ea5e9; padding: 20px; border-radius: 12px;
+            margin: 25px 0; font-size: 0.95rem;
+        }
+        .pro-note b { color: #0369a1; }
+
+        /* --- BUTTONS --- */
+        .btn-primary, .btn-premium { 
+            background: var(--gradient-primary); color: white; padding: 18px 35px; 
+            border-radius: 14px; border: none; font-weight: 700; cursor: pointer; 
+            transition: all 0.3s ease; width: 100%; display: flex; align-items: center; 
+            justify-content: center; gap: 12px; font-size: 1rem; letter-spacing: 0.3px;
+            box-shadow: 0 6px 20px rgba(67, 56, 202, 0.25); margin-top: 30px;
+        }
+        .btn-primary:hover, .btn-premium:hover { 
+            transform: translateY(-3px); box-shadow: 0 12px 25px rgba(67, 56, 202, 0.35); 
+        }
+
+        /* Landing Page Enhancements */
+        .hero-section { 
+            text-align: center; padding: 140px 20px 80px; max-width: 1000px; margin: 0 auto; 
+        }
+        .hero-title { 
+            font-size: 3.8rem; font-weight: 800; margin-bottom: 25px; letter-spacing: -2px; 
+            line-height: 1.1; opacity: 0; animation: reveal 0.8s 0.2s forwards; 
+        }
+        
+        .instructor-card { 
+            background: #fff; border: 1px solid var(--border); border-radius: 24px; 
+            padding: 30px; display: flex; align-items: center; gap: 25px; 
+            max-width: 550px; margin: 40px auto; text-align: left;
+            box-shadow: var(--shadow-md); opacity: 0; animation: reveal 0.8s 0.6s forwards;
+        }
+        .instructor-img { 
+            width: 80px; height: 80px; border-radius: 50%; background: #ddd; 
+            object-fit: cover; border: 4px solid #eef2ff; box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+        }
+        .badge-verified { 
+            color: var(--success); font-size: 0.8rem; font-weight: 700; 
+            background: #f0f9ff; padding: 4px 12px; border-radius: 20px; 
+            display: inline-flex; align-items: center; gap: 5px; margin-bottom: 8px; 
+        }
+
+        .perks-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+            gap: 20px; max-width: 900px; margin: 50px auto; 
+            opacity: 0; animation: reveal 0.8s 0.4s forwards;
+        }
+        .perk-item { 
+            background: white; padding: 25px 20px; border-radius: 18px; 
+            border: 1px solid var(--border); font-size: 0.9rem; font-weight: 700; 
+            text-align: center; box-shadow: var(--shadow-sm); transition: transform 0.3s;
+        }
+        .perk-item:hover { transform: translateY(-5px); }
+        .perk-item i { 
+            color: var(--primary); margin-bottom: 12px; display: block; 
+            font-size: 1.8rem; 
+        }
+
+        /* Quiz Styles */
+        .quiz-box, .cert-input-box { 
+            margin-top: 40px; animation: reveal 0.5s ease; 
+        }
+        .q-block { margin-bottom: 30px; }
+        .option-label { 
+            display: flex; align-items: center; background: white; padding: 20px; 
+            margin-bottom: 15px; border: 2px solid var(--border); border-radius: 16px; 
+            cursor: pointer; transition: all 0.2s; position: relative; 
+        }
+        .option-label:hover { border-color: #c7d2fe; background: #f8fafc; }
+        .option-input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; left:0; top:0; }
+        .option-label:has(.option-input:checked) { 
+            border-color: var(--primary); background: #f5f7ff; 
+            box-shadow: 0 4px 12px rgba(67, 56, 202, 0.1); 
+        }
+        
+        .score-display {
+            background: var(--gradient-dark); color: white; padding: 25px;
+            border-radius: 20px; text-align: center; margin: 30px 0;
+            box-shadow: var(--shadow-lg);
+        }
+        .score-value {
+            font-size: 3.5rem; font-weight: 800; margin: 10px 0;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        
+        .cert-input-box input {
+            width: 100%; padding: 20px; border-radius: 14px; 
+            border: 2px solid var(--border); font-size: 1rem; 
+            margin-bottom: 25px; transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        .cert-input-box input:focus {
+            outline: none; border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.1);
+        }
+
+        .hidden { display: none !important; }
+        
+        /* Trust Badges */
+        .trust-badges {
+            display: flex; justify-content: center; gap: 30px;
+            margin-top: 60px; flex-wrap: wrap;
+        }
+        .trust-badge {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 0.9rem; color: var(--text-light);
+        }
+        .trust-badge i { color: var(--success); font-size: 1.2rem; }
+        
+        /* Loading Animation */
+        .loader { display: none; }
+        .loader.active {
+            display: block; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(255,255,255,0.9);
+            z-index: 2000; display: flex; align-items: center;
+            justify-content: center; flex-direction: column; gap: 20px;
+        }
+        .spinner {
+            width: 60px; height: 60px; border: 5px solid #e2e8f0;
+            border-top-color: var(--primary); border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        /* Achievement Badge */
+        .achievement-badge {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white; padding: 8px 16px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 700; display: inline-flex;
+            align-items: center; gap: 5px; margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+        <p style="color: var(--text-main); font-weight: 600;">Loading Module...</p>
+    </div>
+
+<header>
+        <div class="nav-container">
+            <button class="sidebar-toggle" onclick="toggleSidebar()" style="background:none; border:none; cursor:pointer; font-size:1.4rem; display:none; color: var(--text-main);">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="logo-container">
+                <i class="fas fa-graduation-cap logo-icon"></i>
+                <a href="#" class="logo-text">Intern<span>adda</span></a>
+            </div>
+
+            <div class="progress-stats">
+                <div class="progress-percent" id="prog-stat-text">0% COMPLETE</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="mobile-progress-container"><div id="progress-fill"></div></div>
+    <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
+    <aside class="sidebar" id="toc"></aside>
+
+    <div id="welcome-screen">
+        <section class="hero-section">
+            <div style="opacity: 0; animation: reveal 0.8s 0.1s forwards;">
+                <div class="module-tag"><i class="fas fa-crown"></i> ELITE MASTERY PROGRAM</div>
+            </div>
+            
+            <h1 class="hero-title">Master Data Science at an <span style="background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Expert Level</span></h1>
+            <p style="color:var(--text-light); font-size: 1.25rem; margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto; opacity: 0; animation: reveal 0.8s 0.3s forwards;">
+                Engineered for data professionals who want to build production-grade ML systems, optimize data pipelines, and master advanced statistical modeling.
+            </p>
+            
+            <div class="perks-grid">
+                <div class="perk-item"><i class="fas fa-award"></i>Professional Credentials</div>
+                <div class="perk-item"><i class="fas fa-code"></i> 50+ Hands-on Exercises</div>
+                <div class="perk-item"><i class="fas fa-chart-line"></i> Real-world Projects</div>
+                <div class="perk-item"><i class="fas fa-certificate"></i> Verified Certificate</div>
+            </div>
+
+            <div class="instructor-card">
+                <img src="lucky.jpg" alt="Lucky Tiwari" class="instructor-img">
+                <div>
+                    <span class="badge-verified"><i class="fas fa-shield-alt"></i> VERIFIED INSTRUCTOR</span>
+                    <h4 style="font-weight: 800; font-size: 1.2rem; margin-bottom: 5px;">Lucky Tiwari</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-light);">Founder of InternAdda & Senior Software Architect</p>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin-top: 8px;">7+ years in production Python systems</p>
+                </div>
+            </div>
+
+            <div class="trust-badges">
+                <div class="trust-badge"><i class="fas fa-check-circle"></i> Industry-recognized</div>
+                <div class="trust-badge"><i class="fas fa-clock"></i> Self-paced learning</div>
+                <div class="trust-badge"><i class="fas fa-users"></i> 5,000+ students</div>
+            </div>
+
+            <button class="btn-primary" style="max-width:320px; margin:50px auto 0; opacity: 0; animation: reveal 0.8s 0.8s forwards;" onclick="startCourse()">
+                <i class="fas fa-rocket"></i> Start Learning Now
+            </button>
+        </section>
+    </div>
+
+    <div id="course-player" class="hidden">
+        <main class="main-layout">
+            <div class="content-card">
+                <div id="module-content"></div>
+                <div id="exam-section" class="hidden quiz-box"></div>
+                <div id="final-step-section" class="hidden cert-input-box">
+                    <span class="module-tag"><i class="fas fa-trophy"></i> ACHIEVEMENT UNLOCKED</span>
+                    <h2 class="mod-title">Claim Your Certificate</h2>
+                    <p class="body-text">Congratulations! You've successfully completed all modules and passed the final exam. Your certificate is ready for generation.</p>
+                    
+                    <div style="background: #f0f9ff; padding: 25px; border-radius: 16px; margin: 30px 0; border-left: 4px solid var(--success);">
+                        <h4 style="font-weight: 700; margin-bottom: 10px; color: var(--dark-bg);"><i class="fas fa-certificate"></i> Certificate Details</h4>
+                        <p style="color: #475569; margin-bottom: 5px;"><b>Issued by:</b> Internadda Academy</p>
+                        <p style="color: #475569; margin-bottom: 5px;"><b>Course:</b> Elite Data Science Mastery</p>
+                        <p style="color: #475569;"><b>Verification ID:</b> DS-ELITE-${Math.random().toString(36).substr(2, 9).toUpperCase()}</p>
+                    </div>
+                    
+                    <input type="text" id="student-name" placeholder="Enter your full name as it should appear on certificate">
+                    <button class="btn-primary" onclick="claimCertificate()">
+                        <i class="fas fa-file-certificate"></i> Generate & Download Certificate
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+const syllabus = [
+{
+   title: "Module 01: Foundations of Data Science",
+    desc: "Statistics, Probability & Data Analysis",
+    content: `
+        <span class="module-tag"><i class="fas fa-chart-bar"></i> Core Foundations</span>
+        <h2 class="mod-title">Statistics, Probability & Data Analysis Fundamentals</h2>
+
+        <p class="body-text">
+            Welcome to the first module of <b>Elite Data Science Mastery</b>. Data Science begins with a solid foundation in statistics and probability. 
+            In this module, you'll master essential statistical concepts, probability distributions, hypothesis testing, and exploratory data analysis (EDA) techniques.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Data Science Workflow Overview:</b>
+            <ul style="margin-top: 10px; padding-left: 20px;">
+                <li><b>Problem Definition</b> → Data Collection → <b>Data Cleaning</b></li>
+                <li><b>Exploratory Data Analysis (EDA)</b> → Feature Engineering</li>
+                <li><b>Model Building</b> → Validation → <b>Deployment</b></li>
+                <li>Continuous monitoring and iteration</li>
+            </ul>
+        </div>
+
+        <h3 class="section-head">1. Descriptive Statistics</h3>
+        <p class="body-text">
+            Descriptive statistics summarize and describe the main features of a dataset:
+        </p>
+        <ul style="margin-left: 25px; margin-bottom: 20px;">
+            <li><b>Measures of Central Tendency:</b> Mean, Median, Mode</li>
+            <li><b>Measures of Dispersion:</b> Variance, Standard Deviation, Range, IQR</li>
+            <li><b>Shape of Distribution:</b> Skewness, Kurtosis</li>
+        </ul>
+
+        <p class="body-text">
+            <b>Example Python Code:</b>
+        </p>
+        <pre>
+import numpy as np
+import pandas as pd
+
+# Sample data
+data = np.array([23, 45, 67, 89, 34, 56, 78, 12, 45, 67])
+
+# Descriptive statistics
+print("Mean:", np.mean(data))
+print("Median:", np.median(data))
+print("Std Dev:", np.std(data))
+print("Variance:", np.var(data))
+        </pre>
+
+        <h3 class="section-head">2. Probability Distributions</h3>
+        <p class="body-text">
+            Understanding probability distributions is crucial for statistical modeling and inference:
+        </p>
+
+        <h4 class="subsection-head">2.1 Common Distributions</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>Normal Distribution:</b> Bell curve, symmetric, mean=median=mode</li>
+            <li><b>Binomial Distribution:</b> Discrete, two possible outcomes</li>
+            <li><b>Poisson Distribution:</b> Count of events in fixed interval</li>
+            <li><b>Exponential Distribution:</b> Time between events</li>
+        </ul>
+
+        <h4 class="subsection-head">2.2 Example: Normal Distribution</h4>
+        <pre>
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import norm
+
+# Generate normal distribution data
+mu, sigma = 0, 1
+data = np.random.normal(mu, sigma, 1000)
+
+# Plot histogram
+plt.hist(data, bins=30, density=True, alpha=0.6, color='g')
+
+# Plot PDF
+x = np.linspace(-4, 4, 100)
+plt.plot(x, norm.pdf(x, mu, sigma), 'r-', lw=2)
+plt.title('Normal Distribution')
+plt.show()
+        </pre>
+
+        <h3 class="section-head">3. Hypothesis Testing</h3>
+        <p class="body-text">
+            Hypothesis testing helps make data-driven decisions:
+        </p>
+        <ul style="margin-left: 25px;">
+            <li><b>Null Hypothesis (H₀):</b> Default assumption (no effect)</li>
+            <li><b>Alternative Hypothesis (H₁):</b> What we want to prove</li>
+            <li><b>p-value:</b> Probability of observing results if H₀ is true</li>
+            <li><b>Significance Level (α):</b> Threshold for rejecting H₀ (usually 0.05)</li>
+        </ul>
+
+        <h4 class="subsection-head">3.1 T-Test Example</h4>
+        <pre>
+from scipy.stats import ttest_ind
+
+# Sample data
+group_a = np.random.normal(50, 10, 100)
+group_b = np.random.normal(55, 10, 100)
+
+# Independent t-test
+t_stat, p_value = ttest_ind(group_a, group_b)
+print(f"T-statistic: {t_stat:.4f}")
+print(f"P-value: {p_value:.4f}")
+
+if p_value < 0.05:
+    print("Reject null hypothesis: Means are significantly different")
+else:
+    print("Fail to reject null hypothesis")
+        </pre>
+
+        <h3 class="section-head">4. Exploratory Data Analysis (EDA)</h3>
+        <p class="body-text">
+            EDA involves analyzing datasets to summarize their main characteristics:
+        </p>
+
+        <h4 class="subsection-head">4.1 EDA Techniques</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>Univariate Analysis:</b> Single variable analysis (histograms, box plots)</li>
+            <li><b>Bivariate Analysis:</b> Relationship between two variables (scatter plots, correlation)</li>
+            <li><b>Multivariate Analysis:</b> Multiple variables analysis (pair plots, heatmaps)</li>
+        </ul>
+
+        <h4 class="subsection-head">4.2 Example: Correlation Analysis</h4>
+        <pre>
+import seaborn as sns
+import pandas as pd
+
+# Create sample dataframe
+data = pd.DataFrame({
+    'Age': np.random.randint(20, 60, 100),
+    'Income': np.random.randint(30000, 100000, 100),
+    'Spending': np.random.randint(1000, 5000, 100)
+})
+
+# Correlation matrix
+corr_matrix = data.corr()
+print(corr_matrix)
+
+# Heatmap
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm')
+plt.title('Correlation Heatmap')
+plt.show()
+        </pre>
+
+        <h3 class="section-head">5. Data Visualization Techniques</h3>
+        <p class="body-text">
+            Effective visualization communicates insights clearly:
+        </p>
+        <ul style="margin-left: 25px;">
+            <li><b>Matplotlib:</b> Basic plotting library</li>
+            <li><b>Seaborn:</b> Statistical data visualization</li>
+            <li><b>Plotly:</b> Interactive visualizations</li>
+            <li><b>Tableau/Power BI:</b> Business intelligence tools</li>
+        </ul>
+
+        <h3 class="section-head">6. Statistical Inference</h3>
+        <p class="body-text">
+            Drawing conclusions about populations from samples:
+        </p>
+        <ul style="margin-left: 25px;">
+            <li><b>Confidence Intervals:</b> Range of plausible values for a parameter</li>
+            <li><b>Central Limit Theorem:</b> Sample means approximate normal distribution</li>
+            <li><b>Law of Large Numbers:</b> Sample average converges to expected value</li>
+        </ul>
+
+        <h4 class="subsection-head">6.1 Confidence Interval Example</h4>
+        <pre>
+from scipy import stats
+import numpy as np
+
+# Sample data
+sample = np.random.normal(100, 15, 1000)
+sample_mean = np.mean(sample)
+sample_std = np.std(sample, ddof=1)
+n = len(sample)
+
+# 95% Confidence Interval
+confidence = 0.95
+t_critical = stats.t.ppf((1 + confidence) / 2, n-1)
+margin_of_error = t_critical * (sample_std / np.sqrt(n))
+
+ci_lower = sample_mean - margin_of_error
+ci_upper = sample_mean + margin_of_error
+
+print(f"95% CI: [{ci_lower:.2f}, {ci_upper:.2f}]")
+        </pre>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> Always start any data science project with thorough EDA. Understanding your data's distribution, relationships, and anomalies will save you time and prevent modeling mistakes.
+        </div>
+
+        <h3 class="section-head">7. Key Takeaways</h3>
+        <ul style="margin-left: 25px;">
+            <li>Master descriptive statistics to summarize data effectively</li>
+            <li>Understand probability distributions for statistical modeling</li>
+            <li>Apply hypothesis testing for data-driven decision making</li>
+            <li>Perform comprehensive EDA before building models</li>
+            <li>Visualize data to communicate insights clearly</li>
+            <li>Use statistical inference to draw conclusions about populations</li>
+        </ul>
+
+        <div class="pro-note">
+            <b><i class="fas fa-arrow-right"></i> Next Steps:</b> In Module 02, we'll dive into Data Wrangling and Feature Engineering - essential skills for preparing data for machine learning models.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 02: Data Wrangling & Feature Engineering
+        </button>
+    `
+},
+
+{
+    title: "Module 02: Data Wrangling & Feature Engineering",
+    desc: "Data Cleaning, Transformation & Feature Creation",
+    content: `
+        <span class="module-tag"><i class="fas fa-database"></i> Data Processing</span>
+        <h2 class="mod-title">Data Cleaning, Transformation & Feature Engineering</h2>
+
+        <p class="body-text">
+            In real-world data science, 80% of the effort goes into data preparation. This module covers essential techniques for cleaning messy data, 
+            handling missing values, transforming variables, and creating powerful features that improve model performance.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Garbage in, garbage out! Clean, well-engineered features are more important than choosing the most advanced algorithm.
+        </div>
+
+        <h3 class="section-head">1. Data Quality Assessment</h3>
+        <p class="body-text">
+            Before cleaning, assess data quality:
+        </p>
+        <ul style="margin-left: 25px;">
+            <li><b>Missing Values:</b> Identify patterns in missing data</li>
+            <li><b>Outliers:</b> Detect anomalous values</li>
+            <li><b>Inconsistencies:</b> Check for data type mismatches</li>
+            <li><b>Duplicates:</b> Identify and remove duplicate records</li>
+        </ul>
+
+        <h4 class="subsection-head">1.1 Data Quality Check Example</h4>
+        <pre>
+import pandas as pd
+import numpy as np
+
+# Load data
+df = pd.read_csv('dataset.csv')
+
+# Data quality summary
+print("Data Shape:", df.shape)
+print("\nMissing Values:")
+print(df.isnull().sum())
+print("\nData Types:")
+print(df.dtypes)
+print("\nBasic Statistics:")
+print(df.describe())
+        </pre>
+
+        <h3 class="section-head">2. Handling Missing Data</h3>
+        <p class="body-text">
+            Different strategies for different types of missing data:
+        </p>
+
+        <h4 class="subsection-head">2.1 Missing Data Strategies</h4>
+        <div style="overflow-x: auto; margin: 20px 0;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="background: #f1f5f9;">
+                    <tr><th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Method</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">When to Use</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Pros/Cons</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">Deletion</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Small % missing, MCAR</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Simple but reduces sample size</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">Mean/Median Imputation</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Numerical data, MCAR</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Simple but reduces variance</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">Mode Imputation</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Categorical data</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Simple for categoricals</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">KNN Imputation</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Patterned missingness</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Accounts for relationships</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">Model-based</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Complex patterns</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Accurate but complex</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 class="subsection-head">2.2 Imputation Example</h4>
+        <pre>
+from sklearn.impute import SimpleImputer, KNNImputer
+
+# Simple imputation
+numeric_imputer = SimpleImputer(strategy='median')
+categorical_imputer = SimpleImputer(strategy='most_frequent')
+
+# KNN imputation
+knn_imputer = KNNImputer(n_neighbors=5)
+
+# Apply imputation
+df_numeric_imputed = pd.DataFrame(numeric_imputer.fit_transform(df.select_dtypes(include=[np.number])), 
+                                   columns=df.select_dtypes(include=[np.number]).columns)
+        </pre>
+
+        <h3 class="section-head">3. Outlier Detection & Treatment</h3>
+        <p class="body-text">
+            Outliers can skew analysis and model performance:
+        </p>
+
+        <h4 class="subsection-head">3.1 Detection Methods</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>IQR Method:</b> Values outside Q1 - 1.5×IQR or Q3 + 1.5×IQR</li>
+            <li><b>Z-score:</b> Values with |z| > 3</li>
+            <li><b>Visual Methods:</b> Box plots, scatter plots</li>
+            <li><b>Model-based:</b> Isolation Forest, DBSCAN</li>
+        </ul>
+
+        <h4 class="subsection-head">3.2 IQR Method Example</h4>
+        <pre>
+def detect_outliers_iqr(data, column):
+    Q1 = data[column].quantile(0.25)
+    Q3 = data[column].quantile(0.75)
+    IQR = Q3 - Q1
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+    
+    outliers = data[(data[column] < lower_bound) | (data[column] > upper_bound)]
+    return outliers
+
+# Detect outliers in 'price' column
+outliers = detect_outliers_iqr(df, 'price')
+print(f"Found {len(outliers)} outliers")
+        </pre>
+
+        <h3 class="section-head">4. Feature Transformation</h3>
+        <p class="body-text">
+            Transform features to meet model assumptions:
+        </p>
+
+        <h4 class="subsection-head">4.1 Common Transformations</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>Log Transformation:</b> Reduces right skew, stabilizes variance</li>
+            <li><b>Square Root:</b> For count data</li>
+            <li><b>Box-Cox:</b> Finds optimal transformation</li>
+            <li><b>Standardization:</b> Mean=0, Std=1 (for distance-based algorithms)</li>
+            <li><b>Normalization:</b> Scale to [0,1] range</li>
+        </ul>
+
+        <h4 class="subsection-head">4.2 Transformation Example</h4>
+        <pre>
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from scipy import stats
+
+# Standardization
+scaler = StandardScaler()
+df_standardized = scaler.fit_transform(df[['age', 'income']])
+
+# Log transformation
+df['log_income'] = np.log1p(df['income'])
+
+# Box-Cox transformation
+df['boxcox_transformed'], fitted_lambda = stats.boxcox(df['value'])
+        </pre>
+
+        <h3 class="section-head">5. Feature Engineering</h3>
+        <p class="body-text">
+            Create new features from existing data:
+        </p>
+
+        <h4 class="subsection-head">5.1 Feature Creation Techniques</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>Date Features:</b> Day, month, year, weekday, weekend flag</li>
+            <li><b>Interaction Terms:</b> Product or ratio of features</li>
+            <li><b>Polynomial Features:</b> Squares, cubes of numerical features</li>
+            <li><b>Binning:</b> Convert continuous to categorical</li>
+            <li><b>Aggregation:</b> Group statistics (mean, sum, count)</li>
+        </ul>
+
+        <h4 class="subsection-head">5.2 Feature Engineering Example</h4>
+        <pre>
+# Date features
+df['purchase_date'] = pd.to_datetime(df['purchase_date'])
+df['purchase_year'] = df['purchase_date'].dt.year
+df['purchase_month'] = df['purchase_date'].dt.month
+df['purchase_day'] = df['purchase_date'].dt.day
+df['is_weekend'] = df['purchase_date'].dt.weekday >= 5
+
+# Interaction features
+df['price_per_unit'] = df['total_price'] / df['quantity']
+df['age_income_interaction'] = df['age'] * df['income']
+
+# Binning
+df['age_group'] = pd.cut(df['age'], bins=[0, 18, 35, 50, 100], 
+                         labels=['Child', 'Young Adult', 'Middle Age', 'Senior'])
+        </pre>
+
+        <h3 class="section-head">6. Categorical Encoding</h3>
+        <p class="body-text">
+            Convert categorical variables to numerical format:
+        </p>
+
+        <h4 class="subsection-head">6.1 Encoding Methods</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>One-Hot Encoding:</b> Creates binary columns for each category</li>
+            <li><b>Label Encoding:</b> Assigns integer to each category (ordinal only)</li>
+            <li><b>Target Encoding:</b> Encode with target mean</li>
+            <li><b>Frequency Encoding:</b> Encode with category frequency</li>
+        </ul>
+
+        <h4 class="subsection-head">6.2 Encoding Example</h4>
+        <pre>
+from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+import category_encoders as ce
+
+# One-Hot Encoding
+encoder = OneHotEncoder(sparse=False, drop='first')
+encoded_features = encoder.fit_transform(df[['category']])
+
+# Target Encoding
+target_encoder = ce.TargetEncoder()
+df['category_encoded'] = target_encoder.fit_transform(df['category'], df['target'])
+        </pre>
+
+        <h3 class="section-head">7. Feature Selection</h3>
+        <p class="body-text">
+            Remove irrelevant or redundant features:
+        </p>
+
+        <h4 class="subsection-head">7.1 Selection Methods</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>Filter Methods:</b> Correlation, chi-square, mutual information</li>
+            <li><b>Wrapper Methods:</b> Forward/backward selection, RFE</li>
+            <li><b>Embedded Methods:</b> L1 regularization, tree importance</li>
+        </ul>
+
+        <h4 class="subsection-head">7.2 Feature Selection Example</h4>
+        <pre>
+from sklearn.feature_selection import SelectKBest, f_classif, RFE
+from sklearn.linear_model import LogisticRegression
+
+# Filter method: Select top 10 features
+selector = SelectKBest(score_func=f_classif, k=10)
+X_selected = selector.fit_transform(X, y)
+
+# Wrapper method: Recursive Feature Elimination
+model = LogisticRegression()
+rfe = RFE(model, n_features_to_select=10)
+X_rfe = rfe.fit_transform(X, y)
+        </pre>
+
+        <h3 class="section-head">8. Pipeline Creation</h3>
+        <p class="body-text">
+            Create reproducible data processing pipelines:
+        </p>
+
+        <h4 class="subsection-head">8.1 Pipeline Example</h4>
+        <pre>
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+
+# Define preprocessing for numerical and categorical features
+numeric_features = ['age', 'income', 'price']
+categorical_features = ['gender', 'category']
+
+numeric_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='median')),
+    ('scaler', StandardScaler())])
+
+categorical_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='most_frequent')),
+    ('onehot', OneHotEncoder(handle_unknown='ignore'))])
+
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', numeric_transformer, numeric_features),
+        ('cat', categorical_transformer, categorical_features)])
+        </pre>
+
+        <h3 class="section-head">9. Best Practices</h3>
+        <ul style="margin-left: 25px;">
+            <li>Always split data before any preprocessing to avoid data leakage</li>
+            <li>Document all transformations for reproducibility</li>
+            <li>Validate feature engineering with cross-validation</li>
+            <li>Monitor feature distributions over time for drift</li>
+            <li>Consider computational efficiency for production systems</li>
+        </ul>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> Feature engineering is both an art and science. Domain knowledge combined with systematic experimentation creates the most powerful features.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 03: Machine Learning Fundamentals
+        </button>
+    `
+},
+{
+    title: "Module 03: Machine Learning Fundamentals",
+    desc: "Supervised & Unsupervised Learning Algorithms",
+    content: `
+        <span class="module-tag"><i class="fas fa-brain"></i> ML Core</span>
+        <h2 class="mod-title">Supervised & Unsupervised Learning Algorithms</h2>
+
+        <p class="body-text">
+            This module covers the core machine learning algorithms that form the foundation of data science. 
+            You'll learn about regression, classification, clustering, and dimensionality reduction techniques, 
+            understanding when and how to apply each algorithm effectively.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> No single algorithm works best for every problem. The key is understanding each algorithm's strengths, weaknesses, and appropriate use cases.
+        </div>
+
+        <h3 class="section-head">1. Supervised Learning Overview</h3>
+        <p class="body-text">
+            Supervised learning uses labeled data to train models that can make predictions:
+        </p>
+        <ul style="margin-left: 25px;">
+            <li><b>Regression:</b> Predict continuous values (price, temperature)</li>
+            <li><b>Classification:</b> Predict categorical labels (spam/not spam, disease/no disease)</li>
+        </ul>
+
+        <h3 class="section-head">2. Regression Algorithms</h3>
+
+        <h4 class="subsection-head">2.1 Linear Regression</h4>
+        <p class="body-text">
+            Models the relationship between independent variables and a continuous dependent variable:
+        </p>
+        <pre>
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+
+# Generate sample data
+np.random.seed(42)
+X = 2 * np.random.rand(100, 1)
+y = 4 + 3 * X + np.random.randn(100, 1)
+
+# Train model
+model = LinearRegression()
+model.fit(X, y)
+
+# Predictions
+y_pred = model.predict(X)
+
+# Evaluation
+mse = mean_squared_error(y, y_pred)
+r2 = r2_score(y, y_pred)
+
+print(f"Intercept: {model.intercept_[0]:.2f}")
+print(f"Coefficient: {model.coef_[0][0]:.2f}")
+print(f"MSE: {mse:.2f}")
+print(f"R²: {r2:.2f}")
+        </pre>
+
+        <h4 class="subsection-head">2.2 Polynomial Regression</h4>
+        <p class="body-text">
+            Extends linear regression by adding polynomial terms to capture nonlinear relationships:
+        </p>
+        <pre>
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import Pipeline
+
+# Create polynomial features pipeline
+model = Pipeline([
+    ('poly', PolynomialFeatures(degree=3)),
+    ('linear', LinearRegression())
+])
+
+model.fit(X, y)
+y_pred = model.predict(X)
+        </pre>
+
+        <h4 class="subsection-head">2.3 Regularized Regression</h4>
+        <p class="body-text">
+            Prevents overfitting by adding penalty terms:
+        </p>
+        <ul style="margin-left: 25px;">
+            <li><b>Ridge Regression (L2):</b> Penalizes squared coefficients</li>
+            <li><b>Lasso Regression (L1):</b> Penalizes absolute coefficients (can zero out features)</li>
+            <li><b>Elastic Net:</b> Combines L1 and L2 penalties</li>
+        </ul>
+
+        <h3 class="section-head">3. Classification Algorithms</h3>
+
+        <h4 class="subsection-head">3.1 Logistic Regression</h4>
+        <p class="body-text">
+            Despite its name, logistic regression is used for binary classification:
+        </p>
+        <pre>
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+# Train model
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# Predictions
+y_pred = model.predict(X_test)
+y_pred_proba = model.predict_proba(X_test)[:, 1]
+
+# Evaluation
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy:.2f}")
+print(classification_report(y_test, y_pred))
+        </pre>
+
+        <h4 class="subsection-head">3.2 Decision Trees</h4>
+        <p class="body-text">
+            Non-parametric method that splits data based on feature values:
+        </p>
+        <pre>
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+import matplotlib.pyplot as plt
+
+# Train model
+model = DecisionTreeClassifier(max_depth=3, random_state=42)
+model.fit(X_train, y_train)
+
+# Visualize tree
+plt.figure(figsize=(12, 8))
+plot_tree(model, feature_names=X.columns, class_names=['No', 'Yes'], filled=True)
+plt.show()
+        </pre>
+
+        <h4 class="subsection-head">3.3 Random Forest</h4>
+        <p class="body-text">
+            Ensemble of decision trees that reduces overfitting:
+        </p>
+        <pre>
+from sklearn.ensemble import RandomForestClassifier
+
+# Train model
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+# Feature importance
+importances = model.feature_importances_
+feature_importance_df = pd.DataFrame({
+    'feature': X.columns,
+    'importance': importances
+}).sort_values('importance', ascending=False)
+
+print(feature_importance_df)
+        </pre>
+
+        <h4 class="subsection-head">3.4 Support Vector Machines (SVM)</h4>
+        <p class="body-text">
+            Finds the optimal hyperplane that separates classes with maximum margin:
+        </p>
+        <pre>
+from sklearn.svm import SVC
+from sklearn.preprocessing import StandardScaler
+
+# Scale features (important for SVM)
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Train SVM
+model = SVC(kernel='rbf', C=1.0, gamma='scale')
+model.fit(X_train_scaled, y_train)
+        </pre>
+
+        <h4 class="subsection-head">3.5 Gradient Boosting</h4>
+        <p class="body-text">
+            Sequentially builds models that correct previous models' errors:
+        </p>
+        <pre>
+from sklearn.ensemble import GradientBoostingClassifier
+
+# Train model
+model = GradientBoostingClassifier(
+    n_estimators=100,
+    learning_rate=0.1,
+    max_depth=3,
+    random_state=42
+)
+model.fit(X_train, y_train)
+        </pre>
+
+        <h3 class="section-head">4. Unsupervised Learning</h3>
+        <p class="body-text">
+            Unsupervised learning finds patterns in unlabeled data:
+        </p>
+
+        <h4 class="subsection-head">4.1 K-Means Clustering</h4>
+        <pre>
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+
+# Determine optimal k using elbow method
+inertia = []
+K = range(1, 11)
+for k in K:
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    kmeans.fit(X)
+    inertia.append(kmeans.inertia_)
+
+# Plot elbow curve
+plt.plot(K, inertia, 'bx-')
+plt.xlabel('k')
+plt.ylabel('Inertia')
+plt.title('Elbow Method')
+plt.show()
+
+# Apply K-means with optimal k
+kmeans = KMeans(n_clusters=3, random_state=42)
+clusters = kmeans.fit_predict(X)
+
+# Silhouette score
+score = silhouette_score(X, clusters)
+print(f"Silhouette Score: {score:.2f}")
+        </pre>
+
+        <h4 class="subsection-head">4.2 Hierarchical Clustering</h4>
+        <pre>
+from scipy.cluster.hierarchy import dendrogram, linkage
+from sklearn.cluster import AgglomerativeClustering
+
+# Create linkage matrix
+linked = linkage(X, 'ward')
+
+# Plot dendrogram
+plt.figure(figsize=(10, 7))
+dendrogram(linked)
+plt.title('Dendrogram')
+plt.xlabel('Samples')
+plt.ylabel('Distance')
+plt.show()
+
+# Apply clustering
+cluster = AgglomerativeClustering(n_clusters=3, affinity='euclidean', linkage='ward')
+labels = cluster.fit_predict(X)
+        </pre>
+
+        <h4 class="subsection-head">4.3 DBSCAN</h4>
+        <p class="body-text">
+            Density-based clustering that identifies clusters of varying shapes:
+        </p>
+        <pre>
+from sklearn.cluster import DBSCAN
+
+# Apply DBSCAN
+dbscan = DBSCAN(eps=0.5, min_samples=5)
+clusters = dbscan.fit_predict(X)
+
+# Identify noise points (labeled as -1)
+n_noise = list(clusters).count(-1)
+print(f"Number of noise points: {n_noise}")
+        </pre>
+
+        <h3 class="section-head">5. Model Evaluation</h3>
+
+        <h4 class="subsection-head">5.1 Regression Metrics</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>Mean Absolute Error (MAE):</b> Average absolute difference</li>
+            <li><b>Mean Squared Error (MSE):</b> Average squared difference</li>
+            <li><b>Root Mean Squared Error (RMSE):</b> Square root of MSE</li>
+            <li><b>R² Score:</b> Proportion of variance explained</li>
+        </ul>
+
+        <h4 class="subsection-head">5.2 Classification Metrics</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>Accuracy:</b> Proportion of correct predictions</li>
+            <li><b>Precision:</b> Proportion of positive predictions that are correct</li>
+            <li><b>Recall:</b> Proportion of actual positives correctly identified</li>
+            <li><b>F1-Score:</b> Harmonic mean of precision and recall</li>
+            <li><b>ROC-AUC:</b> Area under ROC curve</li>
+        </ul>
+
+        <h4 class="subsection-head">5.3 Cross-Validation</h4>
+        <pre>
+from sklearn.model_selection import cross_val_score, StratifiedKFold
+
+# K-fold cross-validation
+cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+scores = cross_val_score(model, X, y, cv=cv, scoring='accuracy')
+
+print(f"Cross-validation scores: {scores}")
+print(f"Mean accuracy: {scores.mean():.2f} (+/- {scores.std() * 2:.2f})")
+        </pre>
+
+        <h3 class="section-head">6. Hyperparameter Tuning</h3>
+
+        <h4 class="subsection-head">6.1 Grid Search</h4>
+        <pre>
+from sklearn.model_selection import GridSearchCV
+
+# Define parameter grid
+param_grid = {
+    'n_estimators': [50, 100, 200],
+    'max_depth': [3, 5, 7],
+    'learning_rate': [0.01, 0.1, 0.3]
+}
+
+# Grid search
+grid_search = GridSearchCV(
+    estimator=GradientBoostingClassifier(random_state=42),
+    param_grid=param_grid,
+    cv=5,
+    scoring='accuracy',
+    n_jobs=-1
+)
+
+grid_search.fit(X_train, y_train)
+print(f"Best parameters: {grid_search.best_params_}")
+print(f"Best score: {grid_search.best_score_:.2f}")
+        </pre>
+
+        <h4 class="subsection-head">6.2 Random Search</h4>
+        <pre>
+from sklearn.model_selection import RandomizedSearchCV
+from scipy.stats import uniform, randint
+
+# Define parameter distributions
+param_dist = {
+    'n_estimators': randint(50, 300),
+    'max_depth': randint(3, 10),
+    'learning_rate': uniform(0.01, 0.3)
+}
+
+# Random search
+random_search = RandomizedSearchCV(
+    estimator=GradientBoostingClassifier(random_state=42),
+    param_distributions=param_dist,
+    n_iter=50,
+    cv=5,
+    scoring='accuracy',
+    random_state=42,
+    n_jobs=-1
+)
+
+random_search.fit(X_train, y_train)
+        </pre>
+
+        <h3 class="section-head">7. Algorithm Selection Guidelines</h3>
+        <div style="overflow-x: auto; margin: 20px 0;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="background: #f1f5f9;">
+                    <tr>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Scenario</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Recommended Algorithm</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Reason</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Linear relationship</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Linear/Logistic Regression</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Interpretable, fast</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Nonlinear, small dataset</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">SVM with RBF kernel</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Effective in high dimensions</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Tabular data, need interpretability</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Decision Trees/Random Forest</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Feature importance, visualization</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Maximum predictive performance</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Gradient Boosting/XGBoost</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">State-of-the-art for tabular data</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Unlabeled data, find groups</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">K-means/DBSCAN</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Group similar data points</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> Start with simple models (linear/logistic regression) to establish a baseline, then gradually move to more complex models if needed. Always consider the trade-off between model complexity and interpretability.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 04: Advanced ML & Ensemble Methods
+        </button>
+    `
+},
+{
+    title: "Module 04: Advanced ML & Ensemble Methods",
+    desc: "Boosting, Bagging & Stacking Techniques",
+    content: `
+        <span class="module-tag"><i class="fas fa-chess-queen"></i> Advanced ML</span>
+        <h2 class="mod-title">Boosting, Bagging & Stacking Ensemble Techniques</h2>
+
+        <p class="body-text">
+            Ensemble methods combine multiple models to achieve better performance than any single model. 
+            In this module, you'll master advanced techniques like boosting, bagging, and stacking that power winning solutions in data science competitions and production systems.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Ensemble methods often achieve state-of-the-art performance on tabular data problems. Understanding how and when to use them is crucial for elite data scientists.
+        </div>
+
+        <h3 class="section-head">1. Ensemble Learning Principles</h3>
+        <p class="body-text">
+            The core idea: Combine multiple weak learners to create a strong learner. Key principles:
+        </p>
+        <ul style="margin-left: 25px;">
+            <li><b>Diversity:</b> Models should make different errors</li>
+            <li><b>Accuracy:</b> Each model should be better than random guessing</li>
+            <li><b>Independence:</b> Ideally, models should be uncorrelated</li>
+        </ul>
+
+        <h4 class="subsection-head">1.1 Bias-Variance Tradeoff</h4>
+        <p class="body-text">
+            Ensembles help balance bias and variance:
+        </p>
+        <ul style="margin-left: 25px;">
+            <li><b>Bagging:</b> Reduces variance without increasing bias</li>
+            <li><b>Boosting:</b> Reduces bias and can also reduce variance</li>
+            <li><b>Stacking:</b> Can optimize both bias and variance</li>
+        </ul>
+
+        <h3 class="section-head">2. Bagging (Bootstrap Aggregating)</h3>
+        <p class="body-text">
+            Creates multiple versions of training data through bootstrapping, trains models independently, and aggregates predictions:
+        </p>
+
+        <h4 class="subsection-head">2.1 Random Forest</h4>
+        <p class="body-text">
+            Ensemble of decision trees with two types of randomness:
+        </p>
+        <pre>
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.metrics import accuracy_score
+import numpy as np
+
+# Random Forest Classifier
+rf_classifier = RandomForestClassifier(
+    n_estimators=100,
+    max_depth=10,
+    min_samples_split=5,
+    min_samples_leaf=2,
+    max_features='sqrt',  # Feature bagging
+    bootstrap=True,       # Sample bagging
+    random_state=42,
+    n_jobs=-1
+)
+
+rf_classifier.fit(X_train, y_train)
+y_pred = rf_classifier.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Random Forest Accuracy: {accuracy:.3f}")
+
+# Feature Importance
+importances = rf_classifier.feature_importances_
+std = np.std([tree.feature_importances_ for tree in rf_classifier.estimators_], axis=0)
+        </pre>
+
+        <h4 class="subsection-head">2.2 Extra Trees</h4>
+        <p class="body-text">
+            Extremely Randomized Trees - adds more randomness by using random thresholds:
+        </p>
+        <pre>
+from sklearn.ensemble import ExtraTreesClassifier
+
+extra_trees = ExtraTreesClassifier(
+    n_estimators=100,
+    max_depth=None,
+    min_samples_split=2,
+    min_samples_leaf=1,
+    max_features='auto',
+    bootstrap=False,  # Uses whole dataset
+    random_state=42
+)
+
+extra_trees.fit(X_train, y_train)
+        </pre>
+
+        <h4 class="subsection-head">2.3 Bagging with Different Base Learners</h4>
+        <pre>
+from sklearn.ensemble import BaggingClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
+
+# Bagging with Decision Trees
+bagging_dt = BaggingClassifier(
+    estimator=DecisionTreeClassifier(max_depth=5),
+    n_estimators=50,
+    max_samples=0.8,  # 80% of samples
+    max_features=0.8, # 80% of features
+    bootstrap=True,
+    bootstrap_features=True,
+    random_state=42
+)
+
+# Bagging with SVMs
+bagging_svm = BaggingClassifier(
+    estimator=SVC(kernel='linear', probability=True),
+    n_estimators=20,
+    max_samples=0.8,
+    max_features=0.8,
+    bootstrap=True,
+    random_state=42
+)
+        </pre>
+
+        <h3 class="section-head">3. Boosting Algorithms</h3>
+        <p class="body-text">
+            Sequentially trains models, each focusing on previous models' errors:
+        </p>
+
+        <h4 class="subsection-head">3.1 AdaBoost (Adaptive Boosting)</h4>
+        <pre>
+from sklearn.ensemble import AdaBoostClassifier
+
+adaboost = AdaBoostClassifier(
+    estimator=DecisionTreeClassifier(max_depth=1),  # Stumps
+    n_estimators=50,
+    learning_rate=1.0,
+    algorithm='SAMME.R',
+    random_state=42
+)
+
+adaboost.fit(X_train, y_train)
+
+# Model weights
+print(f"Model weights: {adaboost.estimator_weights_}")
+print(f"Model errors: {adaboost.estimator_errors_}")
+        </pre>
+
+        <h4 class="subsection-head">3.2 Gradient Boosting Machines (GBM)</h4>
+        <pre>
+from sklearn.ensemble import GradientBoostingClassifier
+
+gbm = GradientBoostingClassifier(
+    n_estimators=100,
+    learning_rate=0.1,
+    max_depth=3,
+    min_samples_split=2,
+    min_samples_leaf=1,
+    subsample=0.8,  # Stochastic Gradient Boosting
+    max_features=None,
+    random_state=42
+)
+
+gbm.fit(X_train, y_train)
+
+# Stage scores (train loss)
+train_score = gbm.train_score_
+plt.plot(train_score)
+plt.xlabel('Number of Trees')
+plt.ylabel('Training Loss')
+plt.title('GBM Training Loss')
+plt.show()
+        </pre>
+
+        <h4 class="subsection-head">3.3 XGBoost (Extreme Gradient Boosting)</h4>
+        <pre>
+import xgboost as xgb
+from xgboost import plot_importance
+
+# DMatrix format (optimized for XGBoost)
+dtrain = xgb.DMatrix(X_train, label=y_train)
+dtest = xgb.DMatrix(X_test, label=y_test)
+
+# Parameters
+params = {
+    'objective': 'binary:logistic',
+    'max_depth': 6,
+    'learning_rate': 0.1,
+    'subsample': 0.8,
+    'colsample_bytree': 0.8,
+    'gamma': 0,
+    'reg_alpha': 0,  # L1 regularization
+    'reg_lambda': 1,  # L2 regularization
+    'random_state': 42
+}
+
+# Train with early stopping
+model = xgb.train(
+    params,
+    dtrain,
+    num_boost_round=1000,
+    evals=[(dtest, 'eval')],
+    early_stopping_rounds=50,
+    verbose_eval=100
+)
+
+# Feature importance
+plot_importance(model, max_num_features=10)
+plt.show()
+        </pre>
+
+        <h4 class="subsection-head">3.4 LightGBM</h4>
+        <pre>
+import lightgbm as lgb
+
+# Dataset
+train_data = lgb.Dataset(X_train, label=y_train)
+test_data = lgb.Dataset(X_test, label=y_test, reference=train_data)
+
+# Parameters
+params = {
+    'objective': 'binary',
+    'metric': 'binary_logloss',
+    'boosting_type': 'gbdt',
+    'num_leaves': 31,
+    'learning_rate': 0.1,
+    'feature_fraction': 0.9,
+    'bagging_fraction': 0.8,
+    'bagging_freq': 5,
+    'verbose': 0,
+    'random_state': 42
+}
+
+# Train
+model = lgb.train(
+    params,
+    train_data,
+    valid_sets=[test_data],
+    num_boost_round=1000,
+    callbacks=[lgb.early_stopping(50)]
+)
+        </pre>
+
+        <h4 class="subsection-head">3.5 CatBoost</h4>
+        <pre>
+from catboost import CatBoostClassifier, Pool
+
+# Prepare data
+train_pool = Pool(X_train, y_train)
+test_pool = Pool(X_test, y_test)
+
+# Model
+model = CatBoostClassifier(
+    iterations=1000,
+    learning_rate=0.1,
+    depth=6,
+    l2_leaf_reg=3,
+    bootstrap_type='Bernoulli',
+    subsample=0.8,
+    random_seed=42,
+    task_type='CPU',
+    verbose=100
+)
+
+# Train with early stopping
+model.fit(
+    train_pool,
+    eval_set=test_pool,
+    early_stopping_rounds=50,
+    use_best_model=True
+)
+        </pre>
+
+        <h3 class="section-head">4. Stacking (Stacked Generalization)</h3>
+        <p class="body-text">
+            Combines multiple models using a meta-learner:
+        </p>
+
+        <h4 class="subsection-head">4.1 Basic Stacking Implementation</h4>
+        <pre>
+from sklearn.ensemble import StackingClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
+
+# Define base estimators
+base_estimators = [
+    ('rf', RandomForestClassifier(n_estimators=100, random_state=42)),
+    ('svm', SVC(probability=True, random_state=42)),
+    ('knn', KNeighborsClassifier(n_neighbors=5))
+]
+
+# Define meta-learner
+meta_learner = LogisticRegression()
+
+# Create stacking classifier
+stacking_model = StackingClassifier(
+    estimators=base_estimators,
+    final_estimator=meta_learner,
+    cv=5,  # Use cross-validation for training base models
+    stack_method='auto',
+    n_jobs=-1
+)
+
+stacking_model.fit(X_train, y_train)
+        </pre>
+
+        <h4 class="subsection-head">4.2 Advanced Stacking with Multiple Layers</h4>
+        <pre>
+from sklearn.ensemble import StackingClassifier
+from sklearn.model_selection import cross_val_predict
+
+# First layer models
+layer1_estimators = [
+    ('rf1', RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42)),
+    ('rf2', RandomForestClassifier(n_estimators=200, max_depth=5, random_state=42)),
+    ('xgb', xgb.XGBClassifier(n_estimators=100, max_depth=3, random_state=42)),
+    ('lgbm', lgb.LGBMClassifier(n_estimators=100, random_state=42))
+]
+
+# Second layer models
+layer2_estimators = [
+    ('catboost', CatBoostClassifier(iterations=100, verbose=0, random_seed=42)),
+    ('gbm', GradientBoostingClassifier(n_estimators=100, random_state=42))
+]
+
+# First layer stacking
+layer1_stacking = StackingClassifier(
+    estimators=layer1_estimators,
+    final_estimator=LogisticRegression(),
+    cv=5
+)
+
+# Final stacking with two layers
+final_stacking = StackingClassifier(
+    estimators=[
+        ('layer1', layer1_stacking),
+        ('catboost', CatBoostClassifier(iterations=100, verbose=0, random_seed=42))
+    ],
+    final_estimator=LogisticRegression(),
+    cv=5
+)
+
+final_stacking.fit(X_train, y_train)
+        </pre>
+
+        <h3 class="section-head">5. Voting Classifiers</h3>
+        <p class="body-text">
+            Combines predictions from multiple models through voting:
+        </p>
+
+        <h4 class="subsection-head">5.1 Hard Voting</h4>
+        <pre>
+from sklearn.ensemble import VotingClassifier
+
+voting_hard = VotingClassifier(
+    estimators=[
+        ('rf', RandomForestClassifier(n_estimators=100, random_state=42)),
+        ('svm', SVC(probability=False, random_state=42)),
+        ('lr', LogisticRegression(random_state=42))
+    ],
+    voting='hard'  # Majority vote
+)
+
+voting_hard.fit(X_train, y_train)
+        </pre>
+
+        <h4 class="subsection-head">5.2 Soft Voting</h4>
+        <pre>
+voting_soft = VotingClassifier(
+    estimators=[
+        ('rf', RandomForestClassifier(n_estimators=100, random_state=42)),
+        ('svm', SVC(probability=True, random_state=42)),
+        ('lr', LogisticRegression(random_state=42))
+    ],
+    voting='soft',  # Weighted average of probabilities
+    weights=[2, 1, 1]  # Custom weights
+)
+
+voting_soft.fit(X_train, y_train)
+        </pre>
+
+        <h3 class="section-head">6. Ensemble Diversity Metrics</h3>
+        <p class="body-text">
+            Measure diversity to ensure effective ensembles:
+        </p>
+
+        <h4 class="subsection-head">6.1 Q-Statistic</h4>
+        <pre>
+import numpy as np
+from scipy.stats import pearsonr
+
+def q_statistic(predictions1, predictions2):
+    """Calculate Q-statistic between two classifiers"""
+    n00 = np.sum((predictions1 == 0) & (predictions2 == 0))
+    n01 = np.sum((predictions1 == 0) & (predictions2 == 1))
+    n10 = np.sum((predictions1 == 1) & (predictions2 == 0))
+    n11 = np.sum((predictions1 == 1) & (predictions2 == 1))
+    
+    q = (n00 * n11 - n01 * n10) / (n00 * n11 + n01 * n10)
+    return q
+        </pre>
+
+        <h4 class="subsection-head">6.2 Double Fault Measure</h4>
+        <pre>
+def double_fault(predictions1, predictions2, y_true):
+    """Proportion of examples both classifiers get wrong"""
+    both_wrong = np.sum((predictions1 != y_true) & (predictions2 != y_true))
+    total = len(y_true)
+    return both_wrong / total
+        </pre>
+
+        <h3 class="section-head">7. Ensemble Optimization Techniques</h3>
+
+        <h4 class="subsection-head">7.1 Ensemble Pruning</h4>
+        <pre>
+from sklearn.metrics import accuracy_score
+
+def prune_ensemble(models, X_val, y_val):
+    """Prune ensemble by removing poorly performing models"""
+    scores = []
+    for model in models:
+        y_pred = model.predict(X_val)
+        score = accuracy_score(y_val, y_pred)
+        scores.append(score)
+    
+    # Keep top performing models
+    threshold = np.percentile(scores, 50)  # Keep top 50%
+    pruned_models = [models[i] for i in range(len(models)) if scores[i] >= threshold]
+    return pruned_models
+        </pre>
+
+        <h4 class="subsection-head">7.2 Dynamic Ensemble Selection</h4>
+        <pre>
+from sklearn.neighbors import KNeighborsClassifier
+
+class DES:
+    """Dynamic Ensemble Selection"""
+    def __init__(self, models, k=5):
+        self.models = models
+        self.k = k
+        self.knn = KNeighborsClassifier(n_neighbors=k)
+        
+    def fit(self, X, y):
+        # Get predictions from all models
+        all_preds = np.column_stack([model.predict(X) for model in self.models])
+        self.knn.fit(all_preds, y)
+        
+    def predict(self, X):
+        # Get predictions from all models
+        all_preds = np.column_stack([model.predict(X) for model in self.models])
+        return self.knn.predict(all_preds)
+        </pre>
+
+        <h3 class="section-head">8. Practical Considerations</h3>
+        <ul style="margin-left: 25px;">
+            <li><b>Computational Cost:</b> Ensembles are more expensive to train and predict</li>
+            <li><b>Interpretability:</b> Complex ensembles are hard to interpret</li>
+            <li><b>Overfitting:</b> Risk of overfitting with too many models</li>
+            <li><b>Deployment:</b> Larger memory footprint and slower inference</li>
+        </ul>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> For production systems, consider the trade-off between model performance and inference speed. Sometimes a single well-tuned model is better than a complex ensemble.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 05: Deep Learning Fundamentals
+        </button>
+    `
+},
+{
+    title: "Module 05: Deep Learning Fundamentals",
+    desc: "Neural Networks, CNNs & RNNs",
+    content: `
+        <span class="module-tag"><i class="fas fa-network-wired"></i> Deep Learning</span>
+        <h2 class="mod-title">Neural Networks, Convolutional & Recurrent Networks</h2>
+
+        <p class="body-text">
+            Deep learning has revolutionized artificial intelligence, achieving state-of-the-art results in computer vision, natural language processing, and beyond. 
+            In this module, you'll build neural networks from scratch, understand backpropagation, and master CNN and RNN architectures.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Deep learning requires substantial computational resources. Start with small networks and datasets to understand concepts before scaling up.
+        </div>
+
+        <h3 class="section-head">1. Neural Network Fundamentals</h3>
+
+        <h4 class="subsection-head">1.1 Biological Inspiration</h4>
+        <p class="body-text">
+            Neural networks are inspired by biological neurons:
+        </p>
+        <ul style="margin-left: 25px;">
+            <li><b>Neurons:</b> Basic processing units</li>
+            <li><b>Dendrites:</b> Input receivers</li>
+            <li><b>Axons:</b> Output transmitters</li>
+            <li><b>Synapses:</b> Connections with weights</li>
+        </ul>
+
+        <h4 class="subsection-head">1.2 Artificial Neuron (Perceptron)</h4>
+        <pre>
+import numpy as np
+
+class Perceptron:
+    def __init__(self, input_size, learning_rate=0.01):
+        self.weights = np.random.randn(input_size)
+        self.bias = np.random.randn()
+        self.learning_rate = learning_rate
+    
+    def sigmoid(self, x):
+        return 1 / (1 + np.exp(-x))
+    
+    def forward(self, inputs):
+        z = np.dot(inputs, self.weights) + self.bias
+        return self.sigmoid(z)
+    
+    def train(self, inputs, target):
+        # Forward pass
+        output = self.forward(inputs)
+        
+        # Backward pass
+        error = target - output
+        gradient = output * (1 - output) * error
+        
+        # Update weights
+        self.weights += self.learning_rate * gradient * inputs
+        self.bias += self.learning_rate * gradient
+        
+        return error
+
+# Example usage
+perceptron = Perceptron(input_size=3)
+inputs = np.array([0.5, 0.3, 0.2])
+output = perceptron.forward(inputs)
+print(f"Perceptron output: {output:.4f}")
+        </pre>
+
+        <h3 class="section-head">2. Multi-Layer Perceptron (MLP)</h3>
+
+        <h4 class="subsection-head">2.1 Network Architecture</h4>
+        <p class="body-text">
+            MLP consists of:
+        </p>
+        <ul style="margin-left: 25px;">
+            <li><b>Input Layer:</b> Receives features</li>
+            <li><b>Hidden Layers:</b> Perform transformations</li>
+            <li><b>Output Layer:</b> Produces predictions</li>
+            <li><b>Weights & Biases:</b> Learnable parameters</li>
+        </ul>
+
+        <h4 class="subsection-head">2.2 MLP Implementation from Scratch</h4>
+        <pre>
+import numpy as np
+
+class MLP:
+    def __init__(self, layer_sizes):
+        self.layer_sizes = layer_sizes
+        self.weights = []
+        self.biases = []
+        
+        # Initialize weights and biases
+        for i in range(len(layer_sizes) - 1):
+            w = np.random.randn(layer_sizes[i], layer_sizes[i+1]) * np.sqrt(2/layer_sizes[i])
+            b = np.zeros((1, layer_sizes[i+1]))
+            self.weights.append(w)
+            self.biases.append(b)
+    
+    def relu(self, x):
+        return np.maximum(0, x)
+    
+    def softmax(self, x):
+        exp_x = np.exp(x - np.max(x, axis=1, keepdims=True))
+        return exp_x / np.sum(exp_x, axis=1, keepdims=True)
+    
+    def forward(self, X):
+        self.activations = [X]
+        self.z_values = []
+        
+        # Hidden layers (ReLU activation)
+        for i in range(len(self.weights) - 1):
+            z = np.dot(self.activations[-1], self.weights[i]) + self.biases[i]
+            a = self.relu(z)
+            self.z_values.append(z)
+            self.activations.append(a)
+        
+        # Output layer (softmax activation)
+        z = np.dot(self.activations[-1], self.weights[-1]) + self.biases[-1]
+        a = self.softmax(z)
+        self.z_values.append(z)
+        self.activations.append(a)
+        
+        return a
+    
+    def backward(self, X, y, learning_rate=0.01):
+        m = X.shape[0]
+        gradients_w = []
+        gradients_b = []
+        
+        # Output layer gradient
+        dz = self.activations[-1] - y
+        dw = np.dot(self.activations[-2].T, dz) / m
+        db = np.sum(dz, axis=0, keepdims=True) / m
+        gradients_w.insert(0, dw)
+        gradients_b.insert(0, db)
+        
+        # Hidden layers gradients
+        for i in range(len(self.weights)-2, -1, -1):
+            da = np.dot(dz, self.weights[i+1].T)
+            dz = da * (self.z_values[i] > 0)  # ReLU derivative
+            dw = np.dot(self.activations[i].T, dz) / m
+            db = np.sum(dz, axis=0, keepdims=True) / m
+            gradients_w.insert(0, dw)
+            gradients_b.insert(0, db)
+        
+        # Update weights and biases
+        for i in range(len(self.weights)):
+            self.weights[i] -= learning_rate * gradients_w[i]
+            self.biases[i] -= learning_rate * gradients_b[i]
+
+# Example usage
+mlp = MLP([10, 64, 32, 3])  # 10 inputs, 2 hidden layers, 3 outputs
+X_sample = np.random.randn(100, 10)
+y_sample = np.random.randn(100, 3)
+output = mlp.forward(X_sample)
+print(f"MLP output shape: {output.shape}")
+        </pre>
+
+        <h3 class="section-head">3. Activation Functions</h3>
+
+        <h4 class="subsection-head">3.1 Common Activation Functions</h4>
+        <div style="overflow-x: auto; margin: 20px 0;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="background: #f1f5f9;">
+                    <tr>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Function</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Formula</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Range</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Use Case</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Sigmoid</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">σ(x) = 1/(1+e⁻ˣ)</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">(0, 1)</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Binary classification output</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Tanh</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">tanh(x)</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">(-1, 1)</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Hidden layers</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">ReLU</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">max(0, x)</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">[0, ∞)</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Most hidden layers</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Leaky ReLU</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">max(αx, x)</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">(-∞, ∞)</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Avoid dying ReLU</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Softmax</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">eˣʲ/Σeˣⁱ</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">(0, 1), sums to 1</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Multi-class output</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 class="subsection-head">3.2 Activation Function Visualization</h4>
+        <pre>
+import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.linspace(-5, 5, 100)
+
+# Define activation functions
+sigmoid = 1 / (1 + np.exp(-x))
+tanh = np.tanh(x)
+relu = np.maximum(0, x)
+leaky_relu = np.maximum(0.1*x, x)
+
+# Plot
+fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+axes[0,0].plot(x, sigmoid)
+axes[0,0].set_title('Sigmoid')
+axes[0,1].plot(x, tanh)
+axes[0,1].set_title('Tanh')
+axes[1,0].plot(x, relu)
+axes[1,0].set_title('ReLU')
+axes[1,1].plot(x, leaky_relu)
+axes[1,1].set_title('Leaky ReLU')
+
+plt.tight_layout()
+plt.show()
+        </pre>
+
+        <h3 class="section-head">4. Optimization Algorithms</h3>
+
+        <h4 class="subsection-head">4.1 Gradient Descent Variants</h4>
+        <pre>
+class Optimizer:
+    def __init__(self, learning_rate=0.01):
+        self.learning_rate = learning_rate
+    
+    def sgd(self, weights, gradients):
+        """Stochastic Gradient Descent"""
+        return weights - self.learning_rate * gradients
+    
+    def momentum(self, weights, gradients, velocity, beta=0.9):
+        """Gradient Descent with Momentum"""
+        velocity = beta * velocity + (1 - beta) * gradients
+        return weights - self.learning_rate * velocity, velocity
+    
+    def rmsprop(self, weights, gradients, cache, beta=0.9, epsilon=1e-8):
+        """RMSProp optimizer"""
+        cache = beta * cache + (1 - beta) * gradients**2
+        update = gradients / (np.sqrt(cache) + epsilon)
+        return weights - self.learning_rate * update, cache
+    
+    def adam(self, weights, gradients, m, v, t, beta1=0.9, beta2=0.999, epsilon=1e-8):
+        """Adam optimizer"""
+        t += 1
+        m = beta1 * m + (1 - beta1) * gradients
+        v = beta2 * v + (1 - beta2) * gradients**2
+        
+        # Bias correction
+        m_hat = m / (1 - beta1**t)
+        v_hat = v / (1 - beta2**t)
+        
+        update = m_hat / (np.sqrt(v_hat) + epsilon)
+        return weights - self.learning_rate * update, m, v, t
+        </pre>
+
+        <h3 class="section-head">5. Convolutional Neural Networks (CNNs)</h3>
+
+        <h4 class="subsection-head">5.1 CNN Architecture Components</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>Convolutional Layers:</b> Extract features using filters</li>
+            <li><b>Pooling Layers:</b> Reduce spatial dimensions</li>
+            <li><b>Fully Connected Layers:</b> Make predictions</li>
+            <li><b>Activation Functions:</b> Introduce non-linearity</li>
+        </ul>
+
+        <h4 class="subsection-head">5.2 CNN Implementation with PyTorch</h4>
+        <pre>
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class CNN(nn.Module):
+    def __init__(self, num_classes=10):
+        super(CNN, self).__init__()
+        
+        # Convolutional layers
+        self.conv1 = nn.Conv2d(3, 32, kernel_size=3, padding=1)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
+        
+        # Pooling layer
+        self.pool = nn.MaxPool2d(2, 2)
+        
+        # Fully connected layers
+        self.fc1 = nn.Linear(128 * 4 * 4, 512)
+        self.fc2 = nn.Linear(512, num_classes)
+        
+        # Dropout for regularization
+        self.dropout = nn.Dropout(0.5)
+    
+    def forward(self, x):
+        # Convolutional blocks
+        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu(self.conv2(x)))
+        x = self.pool(F.relu(self.conv3(x)))
+        
+        # Flatten
+        x = x.view(-1, 128 * 4 * 4)
+        
+        # Fully connected layers
+        x = F.relu(self.fc1(x))
+        x = self.dropout(x)
+        x = self.fc2(x)
+        
+        return x
+
+# Create model
+model = CNN(num_classes=10)
+print(model)
+
+# Forward pass example
+input_tensor = torch.randn(32, 3, 32, 32)  # batch_size=32, channels=3, height=32, width=32
+output = model(input_tensor)
+print(f"Output shape: {output.shape}")
+        </pre>
+
+        <h3 class="section-head">6. Recurrent Neural Networks (RNNs)</h3>
+
+        <h4 class="subsection-head">6.1 RNN Architecture</h4>
+        <p class="body-text">
+            RNNs process sequential data by maintaining hidden state:
+        </p>
+        <pre>
+class SimpleRNN(nn.Module):
+    def __init__(self, input_size, hidden_size, output_size):
+        super(SimpleRNN, self).__init__()
+        
+        self.hidden_size = hidden_size
+        
+        # RNN weights
+        self.Wxh = nn.Linear(input_size, hidden_size)  # Input to hidden
+        self.Whh = nn.Linear(hidden_size, hidden_size)  # Hidden to hidden
+        self.Why = nn.Linear(hidden_size, output_size)  # Hidden to output
+        
+        # Activation
+        self.tanh = nn.Tanh()
+    
+    def forward(self, x, hidden=None):
+        batch_size = x.size(0)
+        seq_len = x.size(1)
+        
+        if hidden is None:
+            hidden = torch.zeros(batch_size, self.hidden_size)
+        
+        outputs = []
+        for t in range(seq_len):
+            # Get input at time t
+            x_t = x[:, t, :]
+            
+            # RNN update
+            hidden = self.tanh(self.Wxh(x_t) + self.Whh(hidden))
+            output = self.Why(hidden)
+            
+            outputs.append(output.unsqueeze(1))
+        
+        # Stack outputs
+        outputs = torch.cat(outputs, dim=1)
+        return outputs, hidden
+
+# Example usage
+rnn = SimpleRNN(input_size=10, hidden_size=20, output_size=5)
+input_seq = torch.randn(32, 25, 10)  # batch=32, seq_len=25, features=10
+output_seq, final_hidden = rnn(input_seq)
+print(f"Output sequence shape: {output_seq.shape}")
+        </pre>
+
+        <h4 class="subsection-head">6.2 LSTM (Long Short-Term Memory)</h4>
+        <pre>
+class LSTM(nn.Module):
+    def __init__(self, input_size, hidden_size):
+        super(LSTM, self).__init__()
+        
+        self.hidden_size = hidden_size
+        
+        # Gates
+        self.forget_gate = nn.Linear(input_size + hidden_size, hidden_size)
+        self.input_gate = nn.Linear(input_size + hidden_size, hidden_size)
+        self.output_gate = nn.Linear(input_size + hidden_size, hidden_size)
+        self.candidate_gate = nn.Linear(input_size + hidden_size, hidden_size)
+        
+        # Activations
+        self.sigmoid = nn.Sigmoid()
+        self.tanh = nn.Tanh()
+    
+    def forward(self, x, hidden_state=None):
+        batch_size = x.size(0)
+        seq_len = x.size(1)
+        
+        if hidden_state is None:
+            h = torch.zeros(batch_size, self.hidden_size)
+            c = torch.zeros(batch_size, self.hidden_size)
+        else:
+            h, c = hidden_state
+        
+        outputs = []
+        for t in range(seq_len):
+            x_t = x[:, t, :]
+            
+            # Concatenate input and previous hidden state
+            combined = torch.cat((x_t, h), dim=1)
+            
+            # Gates
+            f = self.sigmoid(self.forget_gate(combined))
+            i = self.sigmoid(self.input_gate(combined))
+            o = self.sigmoid(self.output_gate(combined))
+            g = self.tanh(self.candidate_gate(combined))
+            
+            # Cell state update
+            c = f * c + i * g
+            
+            # Hidden state update
+            h = o * self.tanh(c)
+            
+            outputs.append(h.unsqueeze(1))
+        
+        outputs = torch.cat(outputs, dim=1)
+        return outputs, (h, c)
+        </pre>
+
+        <h3 class="section-head">7. Training Deep Networks</h3>
+
+        <h4 class="subsection-head">7.1 Training Loop</h4>
+        <pre>
+import torch.optim as optim
+from torch.utils.data import DataLoader, TensorDataset
+
+def train_model(model, train_loader, val_loader, num_epochs=10, learning_rate=0.001):
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    model = model.to(device)
+    
+    # Loss and optimizer
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    
+    # Training history
+    history = {'train_loss': [], 'val_loss': [], 'train_acc': [], 'val_acc': []}
+    
+    for epoch in range(num_epochs):
+        # Training phase
+        model.train()
+        train_loss = 0.0
+        train_correct = 0
+        train_total = 0
+        
+        for batch_idx, (inputs, targets) in enumerate(train_loader):
+            inputs, targets = inputs.to(device), targets.to(device)
+            
+            # Forward pass
+            outputs = model(inputs)
+            loss = criterion(outputs, targets)
+            
+            # Backward pass
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            
+            # Statistics
+            train_loss += loss.item()
+            _, predicted = outputs.max(1)
+            train_total += targets.size(0)
+            train_correct += predicted.eq(targets).sum().item()
+        
+        # Validation phase
+        model.eval()
+        val_loss = 0.0
+        val_correct = 0
+        val_total = 0
+        
+        with torch.no_grad():
+            for inputs, targets in val_loader:
+                inputs, targets = inputs.to(device), targets.to(device)
+                outputs = model(inputs)
+                loss = criterion(outputs, targets)
+                
+                val_loss += loss.item()
+                _, predicted = outputs.max(1)
+                val_total += targets.size(0)
+                val_correct += predicted.eq(targets).sum().item()
+        
+        # Calculate metrics
+        train_loss = train_loss / len(train_loader)
+        train_acc = 100. * train_correct / train_total
+        val_loss = val_loss / len(val_loader)
+        val_acc = 100. * val_correct / val_total
+        
+        # Store history
+        history['train_loss'].append(train_loss)
+        history['train_acc'].append(train_acc)
+        history['val_loss'].append(val_loss)
+        history['val_acc'].append(val_acc)
+        
+        print(f'Epoch {epoch+1}/{num_epochs}: '
+              f'Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%, '
+              f'Val Loss: {val_loss:.4f}, Val Acc: {val_acc:.2f}%')
+    
+    return history
+        </pre>
+
+        <h4 class="subsection-head">7.2 Regularization Techniques</h4>
+        <pre>
+# Dropout
+dropout_layer = nn.Dropout(p=0.5)
+
+# Batch Normalization
+batch_norm = nn.BatchNorm2d(num_features=64)
+
+# Weight Decay (L2 regularization)
+optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-5)
+
+# Early Stopping
+class EarlyStopping:
+    def __init__(self, patience=10, min_delta=0):
+        self.patience = patience
+        self.min_delta = min_delta
+        self.counter = 0
+        self.best_loss = None
+        self.early_stop = False
+    
+    def __call__(self, val_loss):
+        if self.best_loss is None:
+            self.best_loss = val_loss
+        elif val_loss > self.best_loss - self.min_delta:
+            self.counter += 1
+            if self.counter >= self.patience:
+                self.early_stop = True
+        else:
+            self.best_loss = val_loss
+            self.counter = 0
+        return self.early_stop
+        </pre>
+
+        <h3 class="section-head">8. Transfer Learning</h3>
+
+        <h4 class="subsection-head">8.1 Using Pretrained Models</h4>
+        <pre>
+import torchvision.models as models
+from torchvision import transforms
+
+# Load pretrained model
+pretrained_model = models.resnet50(pretrained=True)
+
+# Freeze all layers
+for param in pretrained_model.parameters():
+    param.requires_grad = False
+
+# Replace final layer
+num_features = pretrained_model.fc.in_features
+pretrained_model.fc = nn.Linear(num_features, 10)  # 10 classes
+
+# Unfreeze last few layers for fine-tuning
+for param in pretrained_model.layer4.parameters():
+    param.requires_grad = True
+
+# Data transformations
+transform = transforms.Compose([
+    transforms.Resize(256),
+    transforms.CenterCrop(224),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                         std=[0.229, 0.224, 0.225])
+])
+        </pre>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> When training deep networks, monitor both training and validation metrics. Large gaps indicate overfitting, while poor performance on both indicates underfitting or architectural issues.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 06: Natural Language Processing
+        </button>
+    `
+},
+{
+    title: "Module 06: Natural Language Processing",
+    desc: "Text Processing, Transformers & LLMs",
+    content: `
+        <span class="module-tag"><i class="fas fa-language"></i> NLP</span>
+        <h2 class="mod-title">Text Processing, Transformers & Large Language Models</h2>
+
+        <p class="body-text">
+            Natural Language Processing enables machines to understand, interpret, and generate human language. 
+            This module covers text preprocessing, word embeddings, transformer architectures, and practical applications of Large Language Models (LLMs).
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> NLP tasks range from simple text classification to complex dialogue systems. Start with foundational techniques before tackling advanced transformer models.
+        </div>
+
+        <h3 class="section-head">1. Text Preprocessing Pipeline</h3>
+
+        <h4 class="subsection-head">1.1 Basic Text Cleaning</h4>
+        <pre>
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+
+def clean_text(text):
+    # Convert to lowercase
+    text = text.lower()
+    
+    # Remove URLs
+    text = re.sub(r'https?://\S+|www\.\S+', '', text)
+    
+    # Remove HTML tags
+    text = re.sub(r'<.*?>', '', text)
+    
+    # Remove special characters and digits
+    text = re.sub(r'[^a-zA-Z\s]', '', text)
+    
+    # Remove extra whitespace
+    text = ' '.join(text.split())
+    
+    return text
+
+def tokenize_text(text):
+    return word_tokenize(text)
+
+def remove_stopwords(tokens):
+    stop_words = set(stopwords.words('english'))
+    return [token for token in tokens if token not in stop_words]
+
+def stem_tokens(tokens):
+    stemmer = PorterStemmer()
+    return [stemmer.stem(token) for token in tokens]
+
+def lemmatize_tokens(tokens):
+    lemmatizer = WordNetLemmatizer()
+    return [lemmatizer.lemmatize(token) for token in tokens]
+
+# Complete preprocessing pipeline
+def preprocess_pipeline(text):
+    cleaned = clean_text(text)
+    tokens = tokenize_text(cleaned)
+    tokens = remove_stopwords(tokens)
+    tokens = lemmatize_tokens(tokens)
+    return ' '.join(tokens)
+
+# Example
+sample_text = "Hello World! This is a sample text with URL: https://example.com"
+processed = preprocess_pipeline(sample_text)
+print(f"Processed text: {processed}")
+        </pre>
+
+        <h3 class="section-head">2. Text Representation</h3>
+
+        <h4 class="subsection-head">2.1 Bag of Words (BoW)</h4>
+        <pre>
+from sklearn.feature_extraction.text import CountVectorizer
+
+# Sample documents
+documents = [
+    "The cat sat on the mat",
+    "The dog sat on the log",
+    "Cats and dogs are pets"
+]
+
+# Create CountVectorizer
+vectorizer = CountVectorizer()
+bow_matrix = vectorizer.fit_transform(documents)
+
+# Convert to DataFrame for visualization
+import pandas as pd
+bow_df = pd.DataFrame(
+    bow_matrix.toarray(),
+    columns=vectorizer.get_feature_names_out()
+)
+print(bow_df)
+        </pre>
+
+        <h4 class="subsection-head">2.2 TF-IDF (Term Frequency-Inverse Document Frequency)</h4>
+        <pre>
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+tfidf_vectorizer = TfidfVectorizer(
+    max_features=1000,
+    min_df=2,
+    max_df=0.8,
+    stop_words='english',
+    ngram_range=(1, 2)  # Include unigrams and bigrams
+)
+
+tfidf_matrix = tfidf_vectorizer.fit_transform(documents)
+tfidf_df = pd.DataFrame(
+    tfidf_matrix.toarray(),
+    columns=tfidf_vectorizer.get_feature_names_out()
+)
+print(tfidf_df.head())
+        </pre>
+
+        <h4 class="subsection-head">2.3 Word Embeddings</h4>
+        <pre>
+import gensim
+from gensim.models import Word2Vec
+import numpy as np
+
+# Sample sentences
+sentences = [
+    ["the", "cat", "sat", "on", "the", "mat"],
+    ["the", "dog", "sat", "on", "the", "log"],
+    ["cats", "and", "dogs", "are", "pets"]
+]
+
+# Train Word2Vec model
+model = Word2Vec(
+    sentences,
+    vector_size=100,      # Embedding dimension
+    window=5,            # Context window size
+    min_count=1,         # Minimum word frequency
+    workers=4,
+    sg=1                 # 1 for skip-gram, 0 for CBOW
+)
+
+# Get word vector
+cat_vector = model.wv['cat']
+print(f"Vector for 'cat': shape {cat_vector.shape}")
+
+# Find similar words
+similar_words = model.wv.most_similar('cat', topn=3)
+print(f"Words similar to 'cat': {similar_words}")
+        </pre>
+
+        <h3 class="section-head">3. Traditional NLP Models</h3>
+
+        <h4 class="subsection-head">3.1 Naive Bayes Classifier</h4>
+        <pre>
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
+
+# Prepare data
+X = tfidf_matrix
+y = [0, 1, 0]  # Example labels
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Train model
+nb_classifier = MultinomialNB()
+nb_classifier.fit(X_train, y_train)
+
+# Predict
+y_pred = nb_classifier.predict(X_test)
+print(classification_report(y_test, y_pred))
+        </pre>
+
+        <h4 class="subsection-head">3.2 LSTM for Text Classification</h4>
+        <pre>
+import torch
+import torch.nn as nn
+from torch.utils.data import Dataset, DataLoader
+
+class TextDataset(Dataset):
+    def __init__(self, texts, labels, tokenizer, max_len):
+        self.texts = texts
+        self.labels = labels
+        self.tokenizer = tokenizer
+        self.max_len = max_len
+    
+    def __len__(self):
+        return len(self.texts)
+    
+    def __getitem__(self, idx):
+        text = str(self.texts[idx])
+        label = self.labels[idx]
+        
+        encoding = self.tokenizer.encode_plus(
+            text,
+            add_special_tokens=True,
+            max_length=self.max_len,
+            padding='max_length',
+            truncation=True,
+            return_attention_mask=True,
+            return_tensors='pt'
+        )
+        
+        return {
+            'input_ids': encoding['input_ids'].flatten(),
+            'attention_mask': encoding['attention_mask'].flatten(),
+            'labels': torch.tensor(label, dtype=torch.long)
+        }
+
+class LSTMClassifier(nn.Module):
+    def __init__(self, vocab_size, embedding_dim, hidden_dim, output_dim, n_layers, dropout):
+        super(LSTMClassifier, self).__init__()
+        
+        self.embedding = nn.Embedding(vocab_size, embedding_dim)
+        self.lstm = nn.LSTM(
+            embedding_dim,
+            hidden_dim,
+            num_layers=n_layers,
+            bidirectional=True,
+            dropout=dropout,
+            batch_first=True
+        )
+        self.fc = nn.Linear(hidden_dim * 2, output_dim)
+        self.dropout = nn.Dropout(dropout)
+    
+    def forward(self, input_ids, attention_mask):
+        embedded = self.dropout(self.embedding(input_ids))
+        
+        packed_output, (hidden, cell) = self.lstm(embedded)
+        
+        # Concatenate final forward and backward hidden states
+        hidden = torch.cat((hidden[-2, :, :], hidden[-1, :, :]), dim=1)
+        
+        output = self.fc(self.dropout(hidden))
+        return output
+        </pre>
+
+        <h3 class="section-head">4. Transformer Architecture</h3>
+
+        <h4 class="subsection-head">4.1 Self-Attention Mechanism</h4>
+        <pre>
+import torch
+import torch.nn as nn
+import math
+
+class SelfAttention(nn.Module):
+    def __init__(self, embed_size, heads):
+        super(SelfAttention, self).__init__()
+        self.embed_size = embed_size
+        self.heads = heads
+        self.head_dim = embed_size // heads
+        
+        assert self.head_dim * heads == embed_size, "Embed size must be divisible by heads"
+        
+        self.values = nn.Linear(self.head_dim, self.head_dim, bias=False)
+        self.keys = nn.Linear(self.head_dim, self.head_dim, bias=False)
+        self.queries = nn.Linear(self.head_dim, self.head_dim, bias=False)
+        self.fc_out = nn.Linear(heads * self.head_dim, embed_size)
+    
+    def forward(self, values, keys, query, mask):
+        N = query.shape[0]
+        value_len, key_len, query_len = values.shape[1], keys.shape[1], query.shape[1]
+        
+        # Split embedding into self.heads pieces
+        values = values.reshape(N, value_len, self.heads, self.head_dim)
+        keys = keys.reshape(N, key_len, self.heads, self.head_dim)
+        queries = query.reshape(N, query_len, self.heads, self.head_dim)
+        
+        values = self.values(values)
+        keys = self.keys(keys)
+        queries = self.queries(queries)
+        
+        # Scaled dot-product attention
+        energy = torch.einsum("nqhd,nkhd->nhqk", [queries, keys])
+        
+        if mask is not None:
+            energy = energy.masked_fill(mask == 0, float("-1e20"))
+        
+        attention = torch.softmax(energy / (self.embed_size ** (1/2)), dim=3)
+        
+        out = torch.einsum("nhql,nlhd->nqhd", [attention, values]).reshape(
+            N, query_len, self.heads * self.head_dim
+        )
+        
+        out = self.fc_out(out)
+        return out
+        </pre>
+
+        <h4 class="subsection-head">4.2 Transformer Block</h4>
+        <pre>
+class TransformerBlock(nn.Module):
+    def __init__(self, embed_size, heads, dropout, forward_expansion):
+        super(TransformerBlock, self).__init__()
+        self.attention = SelfAttention(embed_size, heads)
+        self.norm1 = nn.LayerNorm(embed_size)
+        self.norm2 = nn.LayerNorm(embed_size)
+        
+        self.feed_forward = nn.Sequential(
+            nn.Linear(embed_size, forward_expansion * embed_size),
+            nn.ReLU(),
+            nn.Linear(forward_expansion * embed_size, embed_size)
+        )
+        
+        self.dropout = nn.Dropout(dropout)
+    
+    def forward(self, value, key, query, mask):
+        attention = self.attention(value, key, query, mask)
+        
+        # Add & Norm
+        x = self.dropout(self.norm1(attention + query))
+        forward = self.feed_forward(x)
+        out = self.dropout(self.norm2(forward + x))
+        
+        return out
+        </pre>
+
+        <h3 class="section-head">5. BERT (Bidirectional Encoder Representations from Transformers)</h3>
+
+        <h4 class="subsection-head">5.1 Using Pretrained BERT</h4>
+        <pre>
+from transformers import BertTokenizer, BertModel, BertForSequenceClassification
+import torch
+
+# Load tokenizer and model
+tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+model = BertModel.from_pretrained('bert-base-uncased')
+
+# Tokenize text
+text = "Natural language processing with transformers is amazing!"
+inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True)
+
+# Get embeddings
+with torch.no_grad():
+    outputs = model(**inputs)
+    
+# Last hidden states
+last_hidden_states = outputs.last_hidden_state
+print(f"BERT output shape: {last_hidden_states.shape}")
+
+# Pooled output (CLS token)
+pooled_output = outputs.pooler_output
+print(f"Pooled output shape: {pooled_output.shape}")
+        </pre>
+
+        <h4 class="subsection-head">5.2 Fine-tuning BERT for Classification</h4>
+        <pre>
+from transformers import BertForSequenceClassification, Trainer, TrainingArguments
+from sklearn.model_selection import train_test_split
+import numpy as np
+from datasets import Dataset
+
+# Prepare dataset
+def prepare_dataset(texts, labels):
+    encodings = tokenizer(texts, truncation=True, padding=True, max_length=128)
+    return Dataset.from_dict({
+        'input_ids': encodings['input_ids'],
+        'attention_mask': encodings['attention_mask'],
+        'labels': labels
+    })
+
+# Split data
+train_texts, val_texts, train_labels, val_labels = train_test_split(
+    texts, labels, test_size=0.2, random_state=42
+)
+
+train_dataset = prepare_dataset(train_texts, train_labels)
+val_dataset = prepare_dataset(val_texts, val_labels)
+
+# Load model
+model = BertForSequenceClassification.from_pretrained(
+    'bert-base-uncased',
+    num_labels=2  # Binary classification
+)
+
+# Training arguments
+training_args = TrainingArguments(
+    output_dir='./results',
+    num_train_epochs=3,
+    per_device_train_batch_size=16,
+    per_device_eval_batch_size=64,
+    warmup_steps=500,
+    weight_decay=0.01,
+    logging_dir='./logs',
+    logging_steps=10,
+    evaluation_strategy="epoch",
+    save_strategy="epoch",
+    load_best_model_at_end=True
+)
+
+# Trainer
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=train_dataset,
+    eval_dataset=val_dataset,
+    tokenizer=tokenizer
+)
+
+# Train
+trainer.train()
+        </pre>
+
+        <h3 class="section-head">6. Large Language Models (LLMs)</h3>
+
+        <h4 class="subsection-head">6.1 GPT-style Text Generation</h4>
+        <pre>
+from transformers import GPT2Tokenizer, GPT2LMHeadModel
+import torch
+
+# Load model and tokenizer
+tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+model = GPT2LMHeadModel.from_pretrained('gpt2')
+
+# Add padding token if not present
+if tokenizer.pad_token is None:
+    tokenizer.pad_token = tokenizer.eos_token
+
+def generate_text(prompt, max_length=100, temperature=0.7, top_p=0.9):
+    inputs = tokenizer.encode(prompt, return_tensors='pt')
+    
+    # Generate text
+    outputs = model.generate(
+        inputs,
+        max_length=max_length,
+        temperature=temperature,
+        top_p=top_p,
+        do_sample=True,
+        pad_token_id=tokenizer.pad_token_id,
+        eos_token_id=tokenizer.eos_token_id,
+        no_repeat_ngram_size=2,
+        repetition_penalty=1.2
+    )
+    
+    generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    return generated_text
+
+# Example generation
+prompt = "The future of artificial intelligence is"
+generated = generate_text(prompt)
+print(f"Generated text: {generated}")
+        </pre>
+
+        <h4 class="subsection-head">6.2 Prompt Engineering</h4>
+        <pre>
+class PromptEngineer:
+    def __init__(self, model_name='gpt2'):
+        self.tokenizer = GPT2Tokenizer.from_pretrained(model_name)
+        self.model = GPT2LMHeadModel.from_pretrained(model_name)
+    
+    def zero_shot_prompt(self, task, input_text):
+        prompt = f"""Task: {task}
+Input: {input_text}
+Output:"""
+        return self._generate(prompt)
+    
+    def few_shot_prompt(self, task, examples, input_text):
+        prompt = f"""Task: {task}
+        
+Examples:"""
+        for example_input, example_output in examples:
+            prompt += f"\nInput: {example_input}\nOutput: {example_output}"
+        
+        prompt += f"\n\nInput: {input_text}\nOutput:"
+        return self._generate(prompt)
+    
+    def chain_of_thought(self, problem):
+        prompt = f"""Question: {problem}
+Let's think step by step."""
+        return self._generate(prompt)
+    
+    def _generate(self, prompt, max_length=200):
+        inputs = self.tokenizer.encode(prompt, return_tensors='pt')
+        outputs = self.model.generate(
+            inputs,
+            max_length=max_length,
+            temperature=0.7,
+            do_sample=True
+        )
+        return self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+# Example usage
+engineer = PromptEngineer()
+result = engineer.chain_of_thought("If a train travels 60 mph for 2 hours, how far does it travel?")
+print(f"Chain of thought reasoning: {result}")
+        </pre>
+
+        <h3 class="section-head">7. Advanced NLP Applications</h3>
+
+        <h4 class="subsection-head">7.1 Named Entity Recognition (NER)</h4>
+        <pre>
+from transformers import AutoTokenizer, AutoModelForTokenClassification
+from transformers import pipeline
+
+# Load NER pipeline
+ner_pipeline = pipeline(
+    "ner",
+    model="dbmdz/bert-large-cased-finetuned-conll03-english",
+    tokenizer="dbmdz/bert-large-cased-finetuned-conll03-english",
+    aggregation_strategy="simple"
+)
+
+# Example text
+text = "Apple Inc. was founded by Steve Jobs in Cupertino, California."
+
+# Perform NER
+entities = ner_pipeline(text)
+for entity in entities:
+    print(f"Entity: {entity['word']}, Label: {entity['entity_group']}, Score: {entity['score']:.2f}")
+        </pre>
+
+        <h4 class="subsection-head">7.2 Text Summarization</h4>
+        <pre>
+from transformers import pipeline
+
+# Load summarization pipeline
+summarizer = pipeline(
+    "summarization",
+    model="facebook/bart-large-cnn",
+    tokenizer="facebook/bart-large-cnn"
+)
+
+# Example long text
+long_text = """
+Artificial intelligence (AI) is intelligence demonstrated by machines, as opposed to the natural intelligence displayed by animals including humans. Leading AI textbooks define the field as the study of "intelligent agents": any system that perceives its environment and takes actions that maximize its chance of achieving its goals. Some popular accounts use the term "artificial intelligence" to describe machines that mimic "cognitive" functions that humans associate with the human mind, such as "learning" and "problem solving", however, this definition is rejected by major AI researchers.
+"""
+
+# Generate summary
+summary = summarizer(long_text, max_length=100, min_length=30, do_sample=False)
+print(f"Summary: {summary[0]['summary_text']}")
+        </pre>
+
+        <h4 class="subsection-head">7.3 Sentiment Analysis</h4>
+        <pre>
+from transformers import pipeline
+
+# Load sentiment analysis pipeline
+sentiment_pipeline = pipeline("sentiment-analysis")
+
+# Analyze sentiment
+texts = [
+    "I absolutely love this product! It's amazing.",
+    "This is the worst experience I've ever had.",
+    "The product is okay, nothing special."
+]
+
+for text in texts:
+    result = sentiment_pipeline(text)[0]
+    print(f"Text: {text}")
+    print(f"Sentiment: {result['label']}, Confidence: {result['score']:.2f}")
+    print()
+        </pre>
+
+        <h3 class="section-head">8. Evaluation Metrics for NLP</h3>
+
+        <h4 class="subsection-head">8.1 Classification Metrics</h4>
+        <pre>
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report
+
+# Example predictions
+y_true = [0, 1, 0, 1, 0, 1, 0, 1]
+y_pred = [0, 1, 0, 0, 0, 1, 1, 1]
+
+print(f"Accuracy: {accuracy_score(y_true, y_pred):.3f}")
+print(f"Precision: {precision_score(y_true, y_pred):.3f}")
+print(f"Recall: {recall_score(y_true, y_pred):.3f}")
+print(f"F1-Score: {f1_score(y_true, y_pred):.3f}")
+print("\nClassification Report:")
+print(classification_report(y_true, y_pred))
+        </pre>
+
+        <h4 class="subsection-head">8.2 Text Generation Metrics</h4>
+        <pre>
+from rouge_score import rouge_scorer
+
+scorer = rouge_scorer.RougeScorer(['rouge1', 'rouge2', 'rougeL'], use_stemmer=True)
+
+# Example reference and candidate
+reference = "The cat sat on the mat"
+candidate = "The cat was sitting on the mat"
+
+scores = scorer.score(reference, candidate)
+for key in scores:
+    print(f"{key}: Precision={scores[key].precision:.3f}, Recall={scores[key].recall:.3f}, F1={scores[key].fmeasure:.3f}")
+        </pre>
+
+        <h4 class="subsection-head">8.3 Perplexity (for language models)</h4>
+        <pre>
+import torch
+from transformers import GPT2LMHeadModel, GPT2Tokenizer
+
+def calculate_perplexity(model, tokenizer, text):
+    inputs = tokenizer(text, return_tensors='pt')
+    
+    with torch.no_grad():
+        outputs = model(**inputs, labels=inputs['input_ids'])
+        loss = outputs.loss
+    
+    perplexity = torch.exp(loss)
+    return perplexity.item()
+
+# Example
+perplexity = calculate_perplexity(model, tokenizer, "The quick brown fox jumps over the lazy dog")
+print(f"Perplexity: {perplexity:.2f}")
+        </pre>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> When working with transformers, pay attention to tokenization. Different models use different tokenizers, and improper tokenization can lead to poor performance.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 07: Computer Vision
+        </button>
+    `
+},
+{
+    title: "Module 07: Computer Vision",
+    desc: "Image Processing & Deep Learning for Vision",
+    content: `
+        <span class="module-tag"><i class="fas fa-eye"></i> Computer Vision</span>
+        <h2 class="mod-title">Image Processing & Deep Learning for Vision Tasks</h2>
+
+        <p class="body-text">
+            Computer Vision enables machines to interpret and understand visual information from the world. 
+            This module covers image processing fundamentals, convolutional neural networks (CNNs), object detection, segmentation, and modern vision transformers.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Computer vision models require substantial data and computational resources. Data augmentation and transfer learning are essential techniques for success.
+        </div>
+
+        <h3 class="section-head">1. Image Fundamentals & Processing</h3>
+
+        <h4 class="subsection-head">1.1 Image Representation</h4>
+        <pre>
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+
+# Load image
+image = cv2.imread('image.jpg')
+image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+print(f"Image shape: {image.shape}")
+print(f"Image dtype: {image.dtype}")
+print(f"Min pixel value: {image.min()}, Max pixel value: {image.max()}")
+
+# Display image
+plt.figure(figsize=(10, 6))
+plt.subplot(1, 2, 1)
+plt.imshow(image_rgb)
+plt.title('Original Image')
+plt.axis('off')
+
+# Convert to grayscale
+gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+plt.subplot(1, 2, 2)
+plt.imshow(gray_image, cmap='gray')
+plt.title('Grayscale Image')
+plt.axis('off')
+plt.show()
+        </pre>
+
+        <h4 class="subsection-head">1.2 Basic Image Operations</h4>
+        <pre>
+# Resize image
+resized = cv2.resize(image, (224, 224))
+
+# Crop image
+height, width = image.shape[:2]
+cropped = image[50:200, 100:300]  # y_start:y_end, x_start:x_end
+
+# Rotate image
+(h, w) = image.shape[:2]
+center = (w // 2, h // 2)
+rotation_matrix = cv2.getRotationMatrix2D(center, 45, 1.0)  # 45 degrees
+rotated = cv2.warpAffine(image, rotation_matrix, (w, h))
+
+# Adjust brightness and contrast
+alpha = 1.5  # Contrast control (1.0-3.0)
+beta = 50    # Brightness control (0-100)
+adjusted = cv2.convertScaleAbs(image, alpha=alpha, beta=beta)
+
+# Apply Gaussian blur
+blurred = cv2.GaussianBlur(image, (5, 5), 0)
+        </pre>
+
+        <h3 class="section-head">2. Image Filtering & Enhancement</h3>
+
+        <h4 class="subsection-head">2.1 Convolution Operations</h4>
+        <pre>
+def apply_convolution(image, kernel):
+    """Apply convolution operation manually"""
+    image_height, image_width = image.shape
+    kernel_height, kernel_width = kernel.shape
+    pad_height = kernel_height // 2
+    pad_width = kernel_width // 2
+    
+    # Pad image
+    padded = np.pad(image, ((pad_height, pad_height), (pad_width, pad_width)), mode='constant')
+    
+    # Initialize output
+    output = np.zeros_like(image)
+    
+    # Apply convolution
+    for i in range(image_height):
+        for j in range(image_width):
+            region = padded[i:i+kernel_height, j:j+kernel_width]
+            output[i, j] = np.sum(region * kernel)
+    
+    return output
+
+# Example kernels
+# Sobel filter for edge detection
+sobel_x = np.array([[-1, 0, 1],
+                    [-2, 0, 2],
+                    [-1, 0, 1]])
+
+sobel_y = np.array([[-1, -2, -1],
+                    [0, 0, 0],
+                    [1, 2, 1]])
+
+# Gaussian blur kernel
+gaussian = np.array([[1, 2, 1],
+                     [2, 4, 2],
+                     [1, 2, 1]]) / 16
+
+# Apply kernels
+edges_x = apply_convolution(gray_image, sobel_x)
+edges_y = apply_convolution(gray_image, sobel_y)
+edges = np.sqrt(edges_x**2 + edges_y**2)
+        </pre>
+
+        <h4 class="subsection-head">2.2 Edge Detection</h4>
+        <pre>
+# Canny edge detection
+edges_canny = cv2.Canny(gray_image, threshold1=100, threshold2=200)
+
+# Laplacian edge detection
+laplacian = cv2.Laplacian(gray_image, cv2.CV_64F)
+
+# Visualize results
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+axes[0,0].imshow(gray_image, cmap='gray')
+axes[0,0].set_title('Original')
+axes[0,0].axis('off')
+
+axes[0,1].imshow(edges, cmap='gray')
+axes[0,1].set_title('Sobel Edges')
+axes[0,1].axis('off')
+
+axes[1,0].imshow(edges_canny, cmap='gray')
+axes[1,0].set_title('Canny Edges')
+axes[1,0].axis('off')
+
+axes[1,1].imshow(laplacian, cmap='gray')
+axes[1,1].set_title('Laplacian')
+axes[1,1].axis('off')
+plt.show()
+        </pre>
+
+        <h3 class="section-head">3. Feature Extraction</h3>
+
+        <h4 class="subsection-head">3.1 SIFT (Scale-Invariant Feature Transform)</h4>
+        <pre>
+# Initialize SIFT detector
+sift = cv2.SIFT_create()
+
+# Detect keypoints and compute descriptors
+keypoints, descriptors = sift.detectAndCompute(gray_image, None)
+
+print(f"Number of keypoints detected: {len(keypoints)}")
+print(f"Descriptor shape: {descriptors.shape}")
+
+# Draw keypoints
+image_with_keypoints = cv2.drawKeypoints(
+    image_rgb, keypoints, None,
+    flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS
+)
+
+plt.imshow(image_with_keypoints)
+plt.title(f'SIFT Keypoints ({len(keypoints)} detected)')
+plt.axis('off')
+plt.show()
+        </pre>
+
+        <h4 class="subsection-head">3.2 ORB (Oriented FAST and Rotated BRIEF)</h4>
+        <pre>
+# Initialize ORB detector
+orb = cv2.ORB_create(nfeatures=500)
+
+# Detect and compute
+keypoints_orb, descriptors_orb = orb.detectAndCompute(gray_image, None)
+
+# Draw keypoints
+image_orb = cv2.drawKeypoints(
+    image_rgb, keypoints_orb, None,
+    color=(0, 255, 0), flags=0
+)
+
+# Feature matching between two images
+image2 = cv2.imread('image2.jpg')
+gray2 = cv2.cvtColor(image2, cv2.COLOR_BGR2GRAY)
+keypoints2, descriptors2 = orb.detectAndCompute(gray2, None)
+
+# Create BFMatcher
+bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
+matches = bf.match(descriptors_orb, descriptors2)
+
+# Sort matches by distance
+matches = sorted(matches, key=lambda x: x.distance)
+
+# Draw matches
+matched_image = cv2.drawMatches(
+    image_rgb, keypoints_orb,
+    cv2.cvtColor(image2, cv2.COLOR_BGR2RGB), keypoints2,
+    matches[:50], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS
+)
+
+plt.imshow(matched_image)
+plt.title('Feature Matching with ORB')
+plt.axis('off')
+plt.show()
+        </pre>
+
+        <h3 class="section-head">4. Convolutional Neural Networks (CNNs)</h3>
+
+        <h4 class="subsection-head">4.1 CNN Architecture from Scratch</h4>
+        <pre>
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class CNN(nn.Module):
+    def __init__(self, num_classes=10):
+        super(CNN, self).__init__()
+        
+        # Convolutional layers
+        self.conv1 = nn.Conv2d(3, 32, kernel_size=3, padding=1)
+        self.bn1 = nn.BatchNorm2d(32)
+        
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
+        self.bn2 = nn.BatchNorm2d(64)
+        
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
+        self.bn3 = nn.BatchNorm2d(128)
+        
+        self.conv4 = nn.Conv2d(128, 256, kernel_size=3, padding=1)
+        self.bn4 = nn.BatchNorm2d(256)
+        
+        # Pooling layer
+        self.pool = nn.MaxPool2d(2, 2)
+        
+        # Dropout for regularization
+        self.dropout = nn.Dropout(0.5)
+        
+        # Fully connected layers
+        self.fc1 = nn.Linear(256 * 4 * 4, 512)
+        self.fc2 = nn.Linear(512, num_classes)
+        
+    def forward(self, x):
+        # Block 1
+        x = self.pool(F.relu(self.bn1(self.conv1(x))))
+        
+        # Block 2
+        x = self.pool(F.relu(self.bn2(self.conv2(x))))
+        
+        # Block 3
+        x = self.pool(F.relu(self.bn3(self.conv3(x))))
+        
+        # Block 4
+        x = self.pool(F.relu(self.bn4(self.conv4(x))))
+        
+        # Flatten
+        x = x.view(-1, 256 * 4 * 4)
+        
+        # Fully connected layers
+        x = self.dropout(F.relu(self.fc1(x)))
+        x = self.fc2(x)
+        
+        return x
+
+# Create model
+model = CNN(num_classes=10)
+print(model)
+
+# Test forward pass
+input_tensor = torch.randn(32, 3, 64, 64)  # batch_size=32, channels=3, 64x64 images
+output = model(input_tensor)
+print(f"Input shape: {input_tensor.shape}")
+print(f"Output shape: {output.shape}")
+        </pre>
+
+        <h4 class="subsection-head">4.2 Advanced CNN Architectures</h4>
+        <pre>
+import torchvision.models as models
+
+# ResNet
+resnet18 = models.resnet18(pretrained=True)
+resnet50 = models.resnet50(pretrained=True)
+
+# VGG
+vgg16 = models.vgg16(pretrained=True)
+
+# EfficientNet
+from efficientnet_pytorch import EfficientNet
+efficientnet_b0 = EfficientNet.from_pretrained('efficientnet-b0')
+
+# Vision Transformer
+from transformers import ViTFeatureExtractor, ViTForImageClassification
+vit = ViTForImageClassification.from_pretrained('google/vit-base-patch16-224')
+
+# Print model architectures
+print("ResNet50 Architecture:")
+print(resnet50)
+
+print("\nVGG16 Architecture:")
+print(vgg16)
+        </pre>
+
+        <h3 class="section-head">5. Object Detection</h3>
+
+        <h4 class="subsection-head">5.1 YOLO (You Only Look Once)</h4>
+        <pre>
+import torch
+from PIL import Image
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+
+# Load YOLOv5 (using Ultralytics implementation)
+model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
+
+# Perform detection
+img = Image.open('image.jpg')
+results = model(img)
+
+# Display results
+results.print()  # Print results
+results.show()   # Show image with bounding boxes
+
+# Get detections as pandas dataframe
+detections = results.pandas().xyxy[0]
+print(detections)
+
+# Plot with custom visualization
+fig, ax = plt.subplots(1, figsize=(12, 8))
+ax.imshow(img)
+
+for _, row in detections.iterrows():
+    if row['confidence'] > 0.5:  # Confidence threshold
+        # Create rectangle patch
+        rect = patches.Rectangle(
+            (row['xmin'], row['ymin']),
+            row['xmax'] - row['xmin'],
+            row['ymax'] - row['ymin'],
+            linewidth=2,
+            edgecolor='r',
+            facecolor='none'
+        )
+        ax.add_patch(rect)
+        
+        # Add label
+        label = f"{row['name']}: {row['confidence']:.2f}"
+        ax.text(
+            row['xmin'], row['ymin'] - 10,
+            label,
+            color='white',
+            fontsize=10,
+            bbox=dict(facecolor='red', alpha=0.8)
+        )
+
+plt.axis('off')
+plt.title('YOLO Object Detection')
+plt.show()
+        </pre>
+
+        <h4 class="subsection-head">5.2 Faster R-CNN</h4>
+        <pre>
+import torchvision
+from torchvision.models.detection import fasterrcnn_resnet50_fpn
+from torchvision.transforms import functional as F
+from torchvision.utils import draw_bounding_boxes
+
+# Load pretrained model
+model = fasterrcnn_resnet50_fpn(pretrained=True)
+model.eval()
+
+# Preprocess image
+image = Image.open('image.jpg')
+image_tensor = F.to_tensor(image).unsqueeze(0)
+
+# Perform detection
+with torch.no_grad():
+    predictions = model(image_tensor)
+
+# Get predictions
+pred = predictions[0]
+boxes = pred['boxes']
+scores = pred['scores']
+labels = pred['labels']
+
+# Filter by confidence threshold
+confidence_threshold = 0.5
+mask = scores > confidence_threshold
+boxes = boxes[mask]
+labels = labels[mask]
+scores = scores[mask]
+
+# COCO class names
+COCO_CLASSES = [
+    '__background__', 'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus',
+    'train', 'truck', 'boat', 'traffic light', 'fire hydrant', 'stop sign',
+    'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse', 'sheep', 'cow',
+    'elephant', 'bear', 'zebra', 'giraffe', 'backpack', 'umbrella', 'handbag', 'tie',
+    'suitcase', 'frisbee', 'skis', 'snowboard', 'sports ball', 'kite', 'baseball bat',
+    'baseball glove', 'skateboard', 'surfboard', 'tennis racket', 'bottle', 'wine glass',
+    'cup', 'fork', 'knife', 'spoon', 'bowl', 'banana', 'apple', 'sandwich', 'orange',
+    'broccoli', 'carrot', 'hot dog', 'pizza', 'donut', 'cake', 'chair', 'couch',
+    'potted plant', 'bed', 'dining table', 'toilet', 'tv', 'laptop', 'mouse', 'remote',
+    'keyboard', 'cell phone', 'microwave', 'oven', 'toaster', 'sink', 'refrigerator',
+    'book', 'clock', 'vase', 'scissors', 'teddy bear', 'hair drier', 'toothbrush'
+]
+
+# Draw bounding boxes
+image_tensor = (image_tensor * 255).byte()
+result_image = draw_bounding_boxes(
+    image_tensor[0],
+    boxes,
+    labels=[COCO_CLASSES[label] for label in labels],
+    colors='red',
+    width=3
+)
+
+# Convert to PIL for display
+result_image = F.to_pil_image(result_image)
+plt.imshow(result_image)
+plt.axis('off')
+plt.title('Faster R-CNN Detection')
+plt.show()
+        </pre>
+
+        <h3 class="section-head">6. Image Segmentation</h3>
+
+        <h4 class="subsection-head">6.1 Semantic Segmentation with U-Net</h4>
+        <pre>
+import torch
+import torch.nn as nn
+
+class UNet(nn.Module):
+    def __init__(self, in_channels=3, out_channels=1):
+        super(UNet, self).__init__()
+        
+        # Encoder (downsampling)
+        self.enc1 = self.conv_block(in_channels, 64)
+        self.enc2 = self.conv_block(64, 128)
+        self.enc3 = self.conv_block(128, 256)
+        self.enc4 = self.conv_block(256, 512)
+        
+        # Bottleneck
+        self.bottleneck = self.conv_block(512, 1024)
+        
+        # Decoder (upsampling)
+        self.upconv4 = nn.ConvTranspose2d(1024, 512, kernel_size=2, stride=2)
+        self.dec4 = self.conv_block(1024, 512)
+        
+        self.upconv3 = nn.ConvTranspose2d(512, 256, kernel_size=2, stride=2)
+        self.dec3 = self.conv_block(512, 256)
+        
+        self.upconv2 = nn.ConvTranspose2d(256, 128, kernel_size=2, stride=2)
+        self.dec2 = self.conv_block(256, 128)
+        
+        self.upconv1 = nn.ConvTranspose2d(128, 64, kernel_size=2, stride=2)
+        self.dec1 = self.conv_block(128, 64)
+        
+        # Output layer
+        self.out_conv = nn.Conv2d(64, out_channels, kernel_size=1)
+        
+        # Pooling
+        self.pool = nn.MaxPool2d(2, 2)
+    
+    def conv_block(self, in_channels, out_channels):
+        return nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1),
+            nn.BatchNorm2d(out_channels),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1),
+            nn.BatchNorm2d(out_channels),
+            nn.ReLU(inplace=True)
+        )
+    
+    def forward(self, x):
+        # Encoder
+        enc1 = self.enc1(x)
+        enc2 = self.enc2(self.pool(enc1))
+        enc3 = self.enc3(self.pool(enc2))
+        enc4 = self.enc4(self.pool(enc3))
+        
+        # Bottleneck
+        bottleneck = self.bottleneck(self.pool(enc4))
+        
+        # Decoder with skip connections
+        dec4 = self.upconv4(bottleneck)
+        dec4 = torch.cat((dec4, enc4), dim=1)
+        dec4 = self.dec4(dec4)
+        
+        dec3 = self.upconv3(dec4)
+        dec3 = torch.cat((dec3, enc3), dim=1)
+        dec3 = self.dec3(dec3)
+        
+        dec2 = self.upconv2(dec3)
+        dec2 = torch.cat((dec2, enc2), dim=1)
+        dec2 = self.dec2(dec2)
+        
+        dec1 = self.upconv1(dec2)
+        dec1 = torch.cat((dec1, enc1), dim=1)
+        dec1 = self.dec1(dec1)
+        
+        # Output
+        out = self.out_conv(dec1)
+        return torch.sigmoid(out)
+
+# Create model
+model = UNet(in_channels=3, out_channels=1)
+print(f"UNet parameters: {sum(p.numel() for p in model.parameters()):,}")
+        </pre>
+
+        <h4 class="subsection-head">6.2 Instance Segmentation with Mask R-CNN</h4>
+        <pre>
+from torchvision.models.detection import maskrcnn_resnet50_fpn
+from torchvision.utils import draw_segmentation_masks
+
+# Load pretrained Mask R-CNN
+model = maskrcnn_resnet50_fpn(pretrained=True)
+model.eval()
+
+# Load and preprocess image
+image = Image.open('image.jpg')
+image_tensor = F.to_tensor(image).unsqueeze(0)
+
+# Perform segmentation
+with torch.no_grad():
+    predictions = model(image_tensor)
+
+# Process predictions
+pred = predictions[0]
+masks = pred['masks']
+boxes = pred['boxes']
+labels = pred['labels']
+scores = pred['scores']
+
+# Filter by confidence
+confidence_threshold = 0.5
+mask = scores > confidence_threshold
+masks = masks[mask]
+boxes = boxes[mask]
+labels = labels[mask]
+
+# Convert masks to boolean
+masks = masks > 0.5
+
+# Draw segmentation masks
+image_tensor = (image_tensor * 255).byte()
+result_image = draw_segmentation_masks(
+    image_tensor[0],
+    masks.squeeze(1),
+    alpha=0.8,
+    colors=['red', 'green', 'blue', 'yellow', 'purple']
+)
+
+# Convert to PIL for display
+result_image = F.to_pil_image(result_image)
+plt.imshow(result_image)
+plt.axis('off')
+plt.title('Mask R-CNN Instance Segmentation')
+plt.show()
+        </pre>
+
+        <h3 class="section-head">7. Vision Transformers (ViT)</h3>
+
+        <h4 class="subsection-head">7.1 Vision Transformer Implementation</h4>
+        <pre>
+import torch
+import torch.nn as nn
+import math
+
+class PatchEmbedding(nn.Module):
+    def __init__(self, img_size=224, patch_size=16, in_channels=3, embed_dim=768):
+        super().__init__()
+        self.img_size = img_size
+        self.patch_size = patch_size
+        self.n_patches = (img_size // patch_size) ** 2
+        
+        self.proj = nn.Conv2d(
+            in_channels, embed_dim,
+            kernel_size=patch_size, stride=patch_size
+        )
+    
+    def forward(self, x):
+        x = self.proj(x)  # (B, embed_dim, H', W')
+        x = x.flatten(2)  # (B, embed_dim, N)
+        x = x.transpose(1, 2)  # (B, N, embed_dim)
+        return x
+
+class VisionTransformer(nn.Module):
+    def __init__(self, img_size=224, patch_size=16, in_channels=3, num_classes=1000,
+                 embed_dim=768, depth=12, num_heads=12, mlp_ratio=4.0, dropout=0.1):
+        super().__init__()
+        
+        # Patch embedding
+        self.patch_embed = PatchEmbedding(img_size, patch_size, in_channels, embed_dim)
+        num_patches = self.patch_embed.n_patches
+        
+        # Class token and position embedding
+        self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
+        self.pos_embed = nn.Parameter(torch.zeros(1, num_patches + 1, embed_dim))
+        self.pos_drop = nn.Dropout(p=dropout)
+        
+        # Transformer encoder
+        self.blocks = nn.ModuleList([
+            TransformerBlock(embed_dim, num_heads, mlp_ratio, dropout)
+            for _ in range(depth)
+        ])
+        
+        # Layer norm and classifier
+        self.norm = nn.LayerNorm(embed_dim)
+        self.head = nn.Linear(embed_dim, num_classes)
+        
+        # Initialize weights
+        nn.init.trunc_normal_(self.pos_embed, std=0.02)
+        nn.init.trunc_normal_(self.cls_token, std=0.02)
+    
+    def forward(self, x):
+        B = x.shape[0]
+        
+        # Patch embedding
+        x = self.patch_embed(x)
+        
+        # Add class token
+        cls_tokens = self.cls_token.expand(B, -1, -1)
+        x = torch.cat((cls_tokens, x), dim=1)
+        
+        # Add position embedding
+        x = x + self.pos_embed
+        x = self.pos_drop(x)
+        
+        # Transformer blocks
+        for block in self.blocks:
+            x = block(x)
+        
+        # Final layer norm
+        x = self.norm(x)
+        
+        # Classifier
+        cls_output = x[:, 0]
+        out = self.head(cls_output)
+        
+        return out
+
+class TransformerBlock(nn.Module):
+    def __init__(self, embed_dim, num_heads, mlp_ratio=4.0, dropout=0.1):
+        super().__init__()
+        self.norm1 = nn.LayerNorm(embed_dim)
+        self.attn = MultiHeadAttention(embed_dim, num_heads, dropout)
+        self.norm2 = nn.LayerNorm(embed_dim)
+        self.mlp = MLP(embed_dim, int(embed_dim * mlp_ratio), dropout)
+    
+    def forward(self, x):
+        # Self-attention with residual
+        x = x + self.attn(self.norm1(x))
+        # MLP with residual
+        x = x + self.mlp(self.norm2(x))
+        return x
+
+class MultiHeadAttention(nn.Module):
+    def __init__(self, embed_dim, num_heads, dropout=0.1):
+        super().__init__()
+        self.embed_dim = embed_dim
+        self.num_heads = num_heads
+        self.head_dim = embed_dim // num_heads
+        
+        self.qkv = nn.Linear(embed_dim, embed_dim * 3)
+        self.proj = nn.Linear(embed_dim, embed_dim)
+        self.dropout = nn.Dropout(dropout)
+    
+    def forward(self, x):
+        B, N, C = x.shape
+        
+        # QKV projection
+        qkv = self.qkv(x).reshape(B, N, 3, self.num_heads, self.head_dim).permute(2, 0, 3, 1, 4)
+        q, k, v = qkv[0], qkv[1], qkv[2]
+        
+        # Scaled dot-product attention
+        attn = (q @ k.transpose(-2, -1)) * (self.head_dim ** -0.5)
+        attn = attn.softmax(dim=-1)
+        attn = self.dropout(attn)
+        
+        # Output projection
+        x = (attn @ v).transpose(1, 2).reshape(B, N, C)
+        x = self.proj(x)
+        x = self.dropout(x)
+        
+        return x
+
+class MLP(nn.Module):
+    def __init__(self, in_features, hidden_features, dropout=0.1):
+        super().__init__()
+        self.fc1 = nn.Linear(in_features, hidden_features)
+        self.act = nn.GELU()
+        self.fc2 = nn.Linear(hidden_features, in_features)
+        self.dropout = nn.Dropout(dropout)
+    
+    def forward(self, x):
+        x = self.fc1(x)
+        x = self.act(x)
+        x = self.dropout(x)
+        x = self.fc2(x)
+        x = self.dropout(x)
+        return x
+
+# Create Vision Transformer
+vit = VisionTransformer(
+    img_size=224,
+    patch_size=16,
+    num_classes=1000,
+    embed_dim=768,
+    depth=12,
+    num_heads=12
+)
+
+print(f"Vision Transformer parameters: {sum(p.numel() for p in vit.parameters()):,}")
+        </pre>
+
+        <h3 class="section-head">8. Data Augmentation for Computer Vision</h3>
+
+        <h4 class="subsection-head">8.1 Common Augmentation Techniques</h4>
+        <pre>
+from torchvision import transforms
+
+# Define augmentation pipeline
+train_transform = transforms.Compose([
+    transforms.Resize((256, 256)),
+    transforms.RandomCrop(224),
+    transforms.RandomHorizontalFlip(p=0.5),
+    transforms.RandomRotation(degrees=15),
+    transforms.ColorJitter(
+        brightness=0.2,
+        contrast=0.2,
+        saturation=0.2,
+        hue=0.1
+    ),
+    transforms.RandomAffine(
+        degrees=0,
+        translate=(0.1, 0.1),
+        scale=(0.9, 1.1),
+        shear=10
+    ),
+    transforms.RandomPerspective(distortion_scale=0.2, p=0.5),
+    transforms.ToTensor(),
+    transforms.Normalize(
+        mean=[0.485, 0.456, 0.406],
+        std=[0.229, 0.224, 0.225]
+    )
+])
+
+# Validation transform (no augmentation)
+val_transform = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+    transforms.Normalize(
+        mean=[0.485, 0.456, 0.406],
+        std=[0.229, 0.224, 0.225]
+    )
+])
+
+# Apply augmentations
+image = Image.open('image.jpg')
+augmented_images = []
+
+for i in range(5):
+    augmented = train_transform(image)
+    augmented_images.append(augmented)
+
+# Visualize augmentations
+fig, axes = plt.subplots(2, 3, figsize=(12, 8))
+axes[0,0].imshow(image)
+axes[0,0].set_title('Original')
+axes[0,0].axis('off')
+
+for i in range(5):
+    row = (i + 1) // 3
+    col = (i + 1) % 3
+    ax = axes[row, col]
+    ax.imshow(augmented_images[i].permute(1, 2, 0))
+    ax.set_title(f'Augmentation {i+1}')
+    ax.axis('off')
+
+plt.tight_layout()
+plt.show()
+        </pre>
+
+        <h4 class="subsection-head">8.2 Advanced Augmentation with Albumentations</h4>
+        <pre>
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
+
+# Define Albumentations pipeline
+transform = A.Compose([
+    A.Resize(256, 256),
+    A.RandomCrop(224, 224),
+    A.HorizontalFlip(p=0.5),
+    A.ShiftScaleRotate(
+        shift_limit=0.1,
+        scale_limit=0.2,
+        rotate_limit=30,
+        p=0.5
+    ),
+    A.OneOf([
+        A.GaussNoise(var_limit=(10.0, 50.0)),
+        A.GaussianBlur(blur_limit=3),
+        A.MotionBlur(blur_limit=3),
+    ], p=0.5),
+    A.OneOf([
+        A.RandomBrightnessContrast(),
+        A.RandomGamma(),
+        A.CLAHE(),
+    ], p=0.5),
+    A.Normalize(
+        mean=[0.485, 0.456, 0.406],
+        std=[0.229, 0.224, 0.225]
+    ),
+    ToTensorV2()
+])
+
+# Apply augmentation
+image_np = np.array(image)
+augmented = transform(image=image_np)['image']
+
+plt.imshow(augmented.permute(1, 2, 0))
+plt.title('Albumentations Augmentation')
+plt.axis('off')
+plt.show()
+        </pre>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> For computer vision projects, focus on building a robust data pipeline first. Quality data and proper augmentation often matter more than model architecture.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 08: Time Series Analysis
+        </button>
+    `
+},
+
+{
+    title: "Module 08: Time Series Analysis",
+    desc: "Forecasting, Anomaly Detection & Sequential Data",
+    content: `
+        <span class="module-tag"><i class="fas fa-chart-line"></i> Time Series</span>
+        <h2 class="mod-title">Forecasting, Anomaly Detection & Sequential Data Analysis</h2>
+
+        <p class="body-text">
+            Time series analysis involves working with data points indexed in time order. This module covers statistical methods, 
+            machine learning approaches, and deep learning techniques for time series forecasting, anomaly detection, and pattern recognition.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Time series data has unique characteristics like trend, seasonality, and autocorrelation. Understanding these patterns is crucial for effective modeling.
+        </div>
+
+        <h3 class="section-head">1. Time Series Fundamentals</h3>
+
+        <h4 class="subsection-head">1.1 Characteristics of Time Series</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>Trend:</b> Long-term increase or decrease</li>
+            <li><b>Seasonality:</b> Regular pattern repeating at fixed intervals</li>
+            <li><b>Cyclical:</b> Patterns without fixed period (business cycles)</li>
+            <li><b>Irregular/Random:</b> Unpredictable fluctuations</li>
+            <li><b>Autocorrelation:</b> Correlation between observations at different time lags</li>
+        </ul>
+
+        <h4 class="subsection-head">1.2 Loading and Visualizing Time Series</h4>
+        <pre>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from datetime import datetime, timedelta
+
+# Create sample time series data
+dates = pd.date_range(start='2020-01-01', end='2023-12-31', freq='D')
+np.random.seed(42)
+
+# Generate synthetic time series with trend and seasonality
+trend = np.linspace(0, 10, len(dates))
+seasonality = 5 * np.sin(2 * np.pi * np.arange(len(dates)) / 365)
+noise = np.random.normal(0, 1, len(dates))
+
+# Combine components
+values = trend + seasonality + noise
+
+# Create DataFrame
+df = pd.DataFrame({
+    'date': dates,
+    'value': values
+})
+df.set_index('date', inplace=True)
+
+print(df.head())
+print(f"\nData shape: {df.shape}")
+print(f"Date range: {df.index.min()} to {df.index.max()}")
+
+# Plot time series
+plt.figure(figsize=(15, 6))
+plt.plot(df.index, df['value'], linewidth=1)
+plt.title('Time Series Data with Trend and Seasonality')
+plt.xlabel('Date')
+plt.ylabel('Value')
+plt.grid(True, alpha=0.3)
+plt.show()
+        </pre>
+
+        <h3 class="section-head">2. Time Series Decomposition</h3>
+
+        <h4 class="subsection-head">2.1 Additive vs Multiplicative Decomposition</h4>
+        <pre>
+from statsmodels.tsa.seasonal import seasonal_decompose
+
+# Decompose time series
+result = seasonal_decompose(df['value'], model='additive', period=365)
+
+# Plot decomposition
+fig, axes = plt.subplots(4, 1, figsize=(15, 12))
+
+axes[0].plot(result.observed)
+axes[0].set_ylabel('Observed')
+axes[0].set_title('Time Series Decomposition')
+
+axes[1].plot(result.trend)
+axes[1].set_ylabel('Trend')
+
+axes[2].plot(result.seasonal)
+axes[2].set_ylabel('Seasonal')
+
+axes[3].plot(result.resid)
+axes[3].set_ylabel('Residual')
+axes[3].set_xlabel('Date')
+
+plt.tight_layout()
+plt.show()
+
+# Calculate decomposition statistics
+print(f"Trend Range: {result.trend.min():.2f} to {result.trend.max():.2f}")
+print(f"Seasonal Range: {result.seasonal.min():.2f} to {result.seasonal.max():.2f}")
+print(f"Residual Mean: {result.resid.mean():.2f}, Std: {result.resid.std():.2f}")
+        </pre>
+
+        <h4 class="subsection-head">2.2 Stationarity Testing</h4>
+        <pre>
+from statsmodels.tsa.stattools import adfuller, kpss
+
+def test_stationarity(timeseries, alpha=0.05):
+    """Perform ADF and KPSS tests for stationarity"""
+    
+    # ADF Test
+    adf_result = adfuller(timeseries.dropna())
+    adf_statistic = adf_result[0]
+    adf_pvalue = adf_result[1]
+    adf_critical = adf_result[4]
+    
+    print('=== Augmented Dickey-Fuller Test ===')
+    print(f'ADF Statistic: {adf_statistic:.4f}')
+    print(f'p-value: {adf_pvalue:.4f}')
+    print('Critical Values:')
+    for key, value in adf_critical.items():
+        print(f'   {key}: {value:.4f}')
+    
+    if adf_pvalue < alpha:
+        print('Result: Series is stationary (reject H0)')
+    else:
+        print('Result: Series is non-stationary (fail to reject H0)')
+    
+    # KPSS Test
+    kpss_result = kpss(timeseries.dropna(), regression='c')
+    kpss_statistic = kpss_result[0]
+    kpss_pvalue = kpss_result[1]
+    kpss_critical = kpss_result[3]
+    
+    print('\n=== KPSS Test ===')
+    print(f'KPSS Statistic: {kpss_statistic:.4f}')
+    print(f'p-value: {kpss_pvalue:.4f}')
+    print('Critical Values:')
+    for key, value in kpss_critical.items():
+        print(f'   {key}: {value:.4f}')
+    
+    if kpss_pvalue < alpha:
+        print('Result: Series is non-stationary (reject H0)')
+    else:
+        print('Result: Series is stationary (fail to reject H0)')
+
+# Test original series
+print("Testing Original Series:")
+test_stationarity(df['value'])
+
+# Test differenced series (to make it stationary)
+df_diff = df['value'].diff().dropna()
+print("\n\nTesting Differenced Series:")
+test_stationarity(df_diff)
+        </pre>
+
+        <h3 class="section-head">3. Statistical Time Series Models</h3>
+
+        <h4 class="subsection-head">3.1 ARIMA (AutoRegressive Integrated Moving Average)</h4>
+        <pre>
+from statsmodels.tsa.arima.model import ARIMA
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+import warnings
+warnings.filterwarnings('ignore')
+
+# Split data
+train_size = int(len(df) * 0.8)
+train, test = df['value'].iloc[:train_size], df['value'].iloc[train_size:]
+
+# Fit ARIMA model
+model = ARIMA(train, order=(2,1,2))  # (p,d,q) order
+model_fit = model.fit()
+
+print(model_fit.summary())
+
+# Forecast
+forecast_steps = len(test)
+forecast = model_fit.forecast(steps=forecast_steps)
+
+# Calculate metrics
+mse = mean_squared_error(test, forecast)
+rmse = np.sqrt(mse)
+mae = mean_absolute_error(test, forecast)
+
+print(f'\nForecast Metrics:')
+print(f'MSE: {mse:.4f}')
+print(f'RMSE: {rmse:.4f}')
+print(f'MAE: {mae:.4f}')
+
+# Plot results
+plt.figure(figsize=(15, 6))
+plt.plot(train.index, train, label='Training Data', alpha=0.7)
+plt.plot(test.index, test, label='Actual Test Data', alpha=0.7)
+plt.plot(test.index, forecast, label='ARIMA Forecast', linestyle='--', linewidth=2)
+plt.fill_between(test.index, 
+                 forecast - 1.96*model_fit.resid.std(),
+                 forecast + 1.96*model_fit.resid.std(),
+                 alpha=0.2, label='95% Confidence Interval')
+plt.title('ARIMA Model Forecast')
+plt.xlabel('Date')
+plt.ylabel('Value')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+        </pre>
+
+        <h4 class="subsection-head">3.2 SARIMA (Seasonal ARIMA)</h4>
+        <pre>
+from statsmodels.tsa.statespace.sarimax import SARIMAX
+
+# Define seasonal order (P,D,Q,s)
+seasonal_order = (1, 1, 1, 7)  # Weekly seasonality for daily data
+
+# Fit SARIMA model
+sarima_model = SARIMAX(train,
+                      order=(2,1,2),
+                      seasonal_order=seasonal_order,
+                      enforce_stationarity=False,
+                      enforce_invertibility=False)
+
+sarima_fit = sarima_model.fit(disp=False)
+print(sarima_fit.summary())
+
+# Forecast with SARIMA
+sarima_forecast = sarima_fit.forecast(steps=forecast_steps)
+
+# Calculate metrics
+sarima_mse = mean_squared_error(test, sarima_forecast)
+sarima_rmse = np.sqrt(sarima_mse)
+
+print(f'\nSARIMA Forecast Metrics:')
+print(f'MSE: {sarima_mse:.4f}')
+print(f'RMSE: {sarima_rmse:.4f}')
+
+# Compare ARIMA and SARIMA
+plt.figure(figsize=(15, 6))
+plt.plot(test.index, test, label='Actual', alpha=0.7, linewidth=2)
+plt.plot(test.index, forecast, label='ARIMA', linestyle='--', alpha=0.7)
+plt.plot(test.index, sarima_forecast, label='SARIMA', linestyle='--', alpha=0.7)
+plt.title('ARIMA vs SARIMA Forecast Comparison')
+plt.xlabel('Date')
+plt.ylabel('Value')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+        </pre>
+
+        <h3 class="section-head">4. Exponential Smoothing Methods</h3>
+
+        <h4 class="subsection-head">4.1 Simple, Double, and Triple Exponential Smoothing</h4>
+        <pre>
+from statsmodels.tsa.holtwinters import SimpleExpSmoothing, ExponentialSmoothing
+
+# Simple Exponential Smoothing
+ses_model = SimpleExpSmoothing(train)
+ses_fit = ses_model.fit(optimized=True)
+ses_forecast = ses_fit.forecast(forecast_steps)
+
+# Holt's Linear Trend Method
+holt_model = ExponentialSmoothing(train, trend='additive', seasonal=None)
+holt_fit = holt_model.fit()
+holt_forecast = holt_fit.forecast(forecast_steps)
+
+# Holt-Winters Seasonal Method
+hw_model = ExponentialSmoothing(train,
+                               trend='additive',
+                               seasonal='additive',
+                               seasonal_periods=7)  # Weekly seasonality
+hw_fit = hw_model.fit()
+hw_forecast = hw_fit.forecast(forecast_steps)
+
+# Plot all methods
+plt.figure(figsize=(15, 8))
+plt.plot(test.index, test, label='Actual', alpha=0.8, linewidth=2)
+plt.plot(test.index, ses_forecast, label='Simple ES', linestyle='--')
+plt.plot(test.index, holt_forecast, label="Holt's Linear", linestyle='--')
+plt.plot(test.index, hw_forecast, label='Holt-Winters', linestyle='--')
+plt.title('Exponential Smoothing Methods Comparison')
+plt.xlabel('Date')
+plt.ylabel('Value')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# Calculate metrics for comparison
+methods = {
+    'Simple ES': ses_forecast,
+    "Holt's Linear": holt_forecast,
+    'Holt-Winters': hw_forecast
+}
+
+print("Exponential Smoothing Methods Performance:")
+print("=" * 50)
+for name, forecast in methods.items():
+    mse = mean_squared_error(test, forecast)
+    rmse = np.sqrt(mse)
+    mae = mean_absolute_error(test, forecast)
+    print(f"{name}:")
+    print(f"  MSE: {mse:.4f}, RMSE: {rmse:.4f}, MAE: {mae:.4f}")
+    print()
+        </pre>
+
+        <h3 class="section-head">5. Machine Learning for Time Series</h3>
+
+        <h4 class="subsection-head">5.1 Feature Engineering for Time Series</h4>
+        <pre>
+def create_time_features(df, target_col='value'):
+    """Create time-based features from datetime index"""
+    df_features = df.copy()
+    
+    # Extract datetime features
+    df_features['year'] = df_features.index.year
+    df_features['month'] = df_features.index.month
+    df_features['quarter'] = df_features.index.quarter
+    df_features['day'] = df_features.index.day
+    df_features['dayofweek'] = df_features.index.dayofweek
+    df_features['dayofyear'] = df_features.index.dayofyear
+    df_features['weekofyear'] = df_features.index.isocalendar().week
+    df_features['is_weekend'] = df_features['dayofweek'].isin([5, 6]).astype(int)
+    
+    # Lag features
+    for lag in [1, 2, 3, 7, 14, 30]:
+        df_features[f'lag_{lag}'] = df_features[target_col].shift(lag)
+    
+    # Rolling statistics
+    df_features['rolling_mean_7'] = df_features[target_col].rolling(window=7).mean()
+    df_features['rolling_std_7'] = df_features[target_col].rolling(window=7).std()
+    df_features['rolling_min_7'] = df_features[target_col].rolling(window=7).min()
+    df_features['rolling_max_7'] = df_features[target_col].rolling(window=7).max()
+    
+    # Expanding statistics
+    df_features['expanding_mean'] = df_features[target_col].expanding().mean()
+    
+    # Difference features
+    df_features['diff_1'] = df_features[target_col].diff(1)
+    df_features['diff_7'] = df_features[target_col].diff(7)
+    
+    # Seasonal differences
+    df_features['seasonal_diff_7'] = df_features[target_col].diff(7)
+    
+    # Percentage changes
+    df_features['pct_change_1'] = df_features[target_col].pct_change(1)
+    df_features['pct_change_7'] = df_features[target_col].pct_change(7)
+    
+    # Fourier terms for seasonality
+    for k in range(1, 4):
+        df_features[f'sin_{k}'] = np.sin(2 * np.pi * k * df_features['dayofyear'] / 365)
+        df_features[f'cos_{k}'] = np.cos(2 * np.pi * k * df_features['dayofyear'] / 365)
+    
+    # Drop rows with NaN values (from lag and rolling features)
+    df_features = df_features.dropna()
+    
+    return df_features
+
+# Create features
+df_features = create_time_features(df)
+print(f"Original shape: {df.shape}")
+print(f"With features shape: {df_features.shape}")
+print(f"\nFeature columns: {list(df_features.columns)}")
+        </pre>
+
+        <h4 class="subsection-head">5.2 Gradient Boosting for Time Series</h4>
+        <pre>
+from sklearn.model_selection import TimeSeriesSplit
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.preprocessing import StandardScaler
+import xgboost as xgb
+import lightgbm as lgb
+
+# Prepare data for ML
+X = df_features.drop('value', axis=1)
+y = df_features['value']
+
+# Time-based split
+tss = TimeSeriesSplit(n_splits=5)
+
+# Standardize features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Train-test split (chronological)
+train_size = int(len(X) * 0.8)
+X_train, X_test = X_scaled[:train_size], X_scaled[train_size:]
+y_train, y_test = y[:train_size], y[train_size:]
+
+# XGBoost
+xgb_model = xgb.XGBRegressor(
+    n_estimators=100,
+    learning_rate=0.1,
+    max_depth=5,
+    subsample=0.8,
+    colsample_bytree=0.8,
+    random_state=42
+)
+
+xgb_model.fit(X_train, y_train)
+xgb_pred = xgb_model.predict(X_test)
+
+# LightGBM
+lgb_model = lgb.LGBMRegressor(
+    n_estimators=100,
+    learning_rate=0.1,
+    max_depth=5,
+    subsample=0.8,
+    colsample_bytree=0.8,
+    random_state=42
+)
+
+lgb_model.fit(X_train, y_train)
+lgb_pred = lgb_model.predict(X_test)
+
+# Gradient Boosting
+gb_model = GradientBoostingRegressor(
+    n_estimators=100,
+    learning_rate=0.1,
+    max_depth=5,
+    random_state=42
+)
+
+gb_model.fit(X_train, y_train)
+gb_pred = gb_model.predict(X_test)
+
+# Evaluate models
+models = {
+    'XGBoost': xgb_pred,
+    'LightGBM': lgb_pred,
+    'Gradient Boosting': gb_pred
+}
+
+print("Machine Learning Models Performance:")
+print("=" * 50)
+for name, pred in models.items():
+    mse = mean_squared_error(y_test, pred)
+    rmse = np.sqrt(mse)
+    mae = mean_absolute_error(y_test, pred)
+    print(f"{name}:")
+    print(f"  MSE: {mse:.4f}, RMSE: {rmse:.4f}, MAE: {mae:.4f}")
+    print()
+
+# Plot predictions
+plt.figure(figsize=(15, 8))
+test_dates = df_features.index[train_size:]
+
+plt.plot(test_dates, y_test, label='Actual', alpha=0.8, linewidth=2)
+for name, pred in models.items():
+    plt.plot(test_dates, pred, label=name, linestyle='--', alpha=0.7)
+
+plt.title('Machine Learning Models Forecast Comparison')
+plt.xlabel('Date')
+plt.ylabel('Value')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+        </pre>
+
+        <h3 class="section-head">6. Deep Learning for Time Series</h3>
+
+        <h4 class="subsection-head">6.1 LSTM for Time Series Forecasting</h4>
+        <pre>
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import Dataset, DataLoader
+
+class TimeSeriesDataset(Dataset):
+    def __init__(self, data, sequence_length=30):
+        self.data = data
+        self.sequence_length = sequence_length
+    
+    def __len__(self):
+        return len(self.data) - self.sequence_length
+    
+    def __getitem__(self, idx):
+        x = self.data[idx:idx + self.sequence_length]
+        y = self.data[idx + self.sequence_length]
+        return torch.FloatTensor(x), torch.FloatTensor([y])
+
+class LSTMModel(nn.Module):
+    def __init__(self, input_size=1, hidden_size=50, num_layers=2, output_size=1):
+        super(LSTMModel, self).__init__()
+        
+        self.hidden_size = hidden_size
+        self.num_layers = num_layers
+        
+        self.lstm = nn.LSTM(
+            input_size=input_size,
+            hidden_size=hidden_size,
+            num_layers=num_layers,
+            batch_first=True,
+            dropout=0.2
+        )
+        
+        self.fc = nn.Linear(hidden_size, output_size)
+    
+    def forward(self, x):
+        # Initialize hidden state
+        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size)
+        c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size)
+        
+        # LSTM forward pass
+        out, _ = self.lstm(x, (h0, c0))
+        
+        # Get the last time step output
+        out = self.fc(out[:, -1, :])
+        return out
+
+# Prepare data for LSTM
+sequence_length = 30
+data_values = df['value'].values.reshape(-1, 1)
+
+# Normalize data
+from sklearn.preprocessing import MinMaxScaler
+scaler_lstm = MinMaxScaler(feature_range=(0, 1))
+data_scaled = scaler_lstm.fit_transform(data_values)
+
+# Create sequences
+X, y = [], []
+for i in range(len(data_scaled) - sequence_length):
+    X.append(data_scaled[i:i + sequence_length])
+    y.append(data_scaled[i + sequence_length])
+
+X = np.array(X)
+y = np.array(y)
+
+# Split data
+train_size = int(len(X) * 0.8)
+X_train, X_test = X[:train_size], X[train_size:]
+y_train, y_test = y[:train_size], y[train_size:]
+
+# Convert to PyTorch tensors
+X_train_tensor = torch.FloatTensor(X_train)
+y_train_tensor = torch.FloatTensor(y_train)
+X_test_tensor = torch.FloatTensor(X_test)
+y_test_tensor = torch.FloatTensor(y_test)
+
+# Create dataset and dataloader
+train_dataset = TimeSeriesDataset(data_scaled[:train_size], sequence_length)
+test_dataset = TimeSeriesDataset(data_scaled[train_size - sequence_length:], sequence_length)
+
+train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
+
+# Initialize model
+model = LSTMModel(input_size=1, hidden_size=50, num_layers=2, output_size=1)
+criterion = nn.MSELoss()
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+# Training loop
+num_epochs = 50
+train_losses = []
+val_losses = []
+
+for epoch in range(num_epochs):
+    # Training
+    model.train()
+    train_loss = 0
+    for batch_x, batch_y in train_loader:
+        optimizer.zero_grad()
+        outputs = model(batch_x)
+        loss = criterion(outputs, batch_y)
+        loss.backward()
+        optimizer.step()
+        train_loss += loss.item()
+    
+    # Validation
+    model.eval()
+    val_loss = 0
+    with torch.no_grad():
+        for batch_x, batch_y in test_loader:
+            outputs = model(batch_x)
+            loss = criterion(outputs, batch_y)
+            val_loss += loss.item()
+    
+    train_losses.append(train_loss / len(train_loader))
+    val_losses.append(val_loss / len(test_loader))
+    
+    if (epoch + 1) % 10 == 0:
+        print(f'Epoch [{epoch+1}/{num_epochs}], '
+              f'Train Loss: {train_losses[-1]:.4f}, '
+              f'Val Loss: {val_losses[-1]:.4f}')
+
+# Plot training history
+plt.figure(figsize=(12, 5))
+plt.plot(train_losses, label='Training Loss')
+plt.plot(val_losses, label='Validation Loss')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.title('LSTM Training History')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# Make predictions
+model.eval()
+with torch.no_grad():
+    test_predictions = model(X_test_tensor)
+    test_predictions = scaler_lstm.inverse_transform(test_predictions.numpy())
+    y_test_actual = scaler_lstm.inverse_transform(y_test)
+
+# Calculate metrics
+lstm_mse = mean_squared_error(y_test_actual, test_predictions)
+lstm_rmse = np.sqrt(lstm_mse)
+lstm_mae = mean_absolute_error(y_test_actual, test_predictions)
+
+print(f"\nLSTM Model Performance:")
+print(f"MSE: {lstm_mse:.4f}")
+print(f"RMSE: {lstm_rmse:.4f}")
+print(f"MAE: {lstm_mae:.4f}")
+        </pre>
+
+        <h4 class="subsection-head">6.2 Transformer for Time Series</h4>
+        <pre>
+class TimeSeriesTransformer(nn.Module):
+    def __init__(self, input_size=1, d_model=64, nhead=4, num_layers=3, output_size=1):
+        super(TimeSeriesTransformer, self).__init__()
+        
+        self.input_projection = nn.Linear(input_size, d_model)
+        self.pos_encoder = PositionalEncoding(d_model)
+        
+        encoder_layer = nn.TransformerEncoderLayer(
+            d_model=d_model,
+            nhead=nhead,
+            dim_feedforward=256,
+            dropout=0.1,
+            batch_first=True
+        )
+        
+        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
+        self.output_projection = nn.Linear(d_model, output_size)
+    
+    def forward(self, x):
+        # x shape: (batch_size, seq_length, input_size)
+        x = self.input_projection(x)
+        x = self.pos_encoder(x)
+        x = self.transformer_encoder(x)
+        x = x[:, -1, :]  # Take last time step
+        x = self.output_projection(x)
+        return x
+
+class PositionalEncoding(nn.Module):
+    def __init__(self, d_model, max_len=5000):
+        super(PositionalEncoding, self).__init__()
+        
+        pe = torch.zeros(max_len, d_model)
+        position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)
+        div_term = torch.exp(torch.arange(0, d_model, 2).float() * (-np.log(10000.0) / d_model))
+        
+        pe[:, 0::2] = torch.sin(position * div_term)
+        pe[:, 1::2] = torch.cos(position * div_term)
+        pe = pe.unsqueeze(0)
+        
+        self.register_buffer('pe', pe)
+    
+    def forward(self, x):
+        x = x + self.pe[:, :x.size(1)]
+        return x
+
+# Initialize transformer model
+transformer_model = TimeSeriesTransformer(
+    input_size=1,
+    d_model=64,
+    nhead=4,
+    num_layers=3,
+    output_size=1
+)
+
+transformer_criterion = nn.MSELoss()
+transformer_optimizer = optim.Adam(transformer_model.parameters(), lr=0.001)
+
+# Training transformer
+transformer_train_losses = []
+transformer_val_losses = []
+
+for epoch in range(num_epochs):
+    # Training
+    transformer_model.train()
+    train_loss = 0
+    for batch_x, batch_y in train_loader:
+        transformer_optimizer.zero_grad()
+        outputs = transformer_model(batch_x)
+        loss = transformer_criterion(outputs, batch_y)
+        loss.backward()
+        transformer_optimizer.step()
+        train_loss += loss.item()
+    
+    # Validation
+    transformer_model.eval()
+    val_loss = 0
+    with torch.no_grad():
+        for batch_x, batch_y in test_loader:
+            outputs = transformer_model(batch_x)
+            loss = transformer_criterion(outputs, batch_y)
+            val_loss += loss.item()
+    
+    transformer_train_losses.append(train_loss / len(train_loader))
+    transformer_val_losses.append(val_loss / len(test_loader))
+    
+    if (epoch + 1) % 10 == 0:
+        print(f'Epoch [{epoch+1}/{num_epochs}], '
+              f'Train Loss: {transformer_train_losses[-1]:.4f}, '
+              f'Val Loss: {transformer_val_losses[-1]:.4f}')
+
+# Compare LSTM and Transformer
+plt.figure(figsize=(12, 5))
+plt.plot(train_losses, label='LSTM Train', alpha=0.7)
+plt.plot(val_losses, label='LSTM Val', alpha=0.7)
+plt.plot(transformer_train_losses, label='Transformer Train', alpha=0.7)
+plt.plot(transformer_val_losses, label='Transformer Val', alpha=0.7)
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.title('LSTM vs Transformer Training Comparison')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+        </pre>
+
+        <h3 class="section-head">7. Anomaly Detection in Time Series</h3>
+
+        <h4 class="subsection-head">7.1 Statistical Anomaly Detection</h4>
+        <pre>
+def detect_anomalies_statistical(data, window=30, n_std=3):
+    """Detect anomalies using rolling statistics"""
+    rolling_mean = data.rolling(window=window).mean()
+    rolling_std = data.rolling(window=window).std()
+    
+    upper_bound = rolling_mean + (n_std * rolling_std)
+    lower_bound = rolling_mean - (n_std * rolling_std)
+    
+    anomalies = (data > upper_bound) | (data < lower_bound)
+    
+    return anomalies, upper_bound, lower_bound
+
+# Detect anomalies
+anomalies, upper_bound, lower_bound = detect_anomalies_statistical(df['value'], window=30, n_std=3)
+
+# Plot anomalies
+plt.figure(figsize=(15, 6))
+plt.plot(df.index, df['value'], label='Time Series', alpha=0.7)
+plt.fill_between(df.index, lower_bound, upper_bound, alpha=0.2, label='Normal Range')
+plt.scatter(df.index[anomalies], df['value'][anomalies], 
+           color='red', s=50, label='Anomalies', zorder=5)
+plt.title('Statistical Anomaly Detection')
+plt.xlabel('Date')
+plt.ylabel('Value')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+
+print(f"Detected {anomalies.sum()} anomalies ({anomalies.mean()*100:.2f}% of data)")
+        </pre>
+
+        <h4 class="subsection-head">7.2 Isolation Forest for Anomaly Detection</h4>
+        <pre>
+from sklearn.ensemble import IsolationForest
+from sklearn.preprocessing import StandardScaler
+
+# Prepare features for anomaly detection
+def prepare_anomaly_features(data, window=10):
+    features = pd.DataFrame(index=data.index)
+    
+    # Basic statistics
+    features['value'] = data
+    features['rolling_mean'] = data.rolling(window=window).mean()
+    features['rolling_std'] = data.rolling(window=window).std()
+    features['rolling_max'] = data.rolling(window=window).max()
+    features['rolling_min'] = data.rolling(window=window).min()
+    
+    # Differences
+    features['diff'] = data.diff()
+    features['diff_rolling_mean'] = features['diff'].rolling(window=window).mean()
+    
+    # Remove NaN
+    features = features.dropna()
+    
+    return features
+
+# Create features
+anomaly_features = prepare_anomaly_features(df['value'], window=10)
+
+# Standardize features
+scaler_anomaly = StandardScaler()
+X_anomaly = scaler_anomaly.fit_transform(anomaly_features)
+
+# Fit Isolation Forest
+iso_forest = IsolationForest(
+    n_estimators=100,
+    contamination=0.05,  # Expected proportion of anomalies
+    random_state=42
+)
+
+anomaly_predictions = iso_forest.fit_predict(X_anomaly)
+anomaly_scores = iso_forest.decision_function(X_anomaly)
+
+# Convert predictions to boolean (True for anomalies)
+anomaly_detected = anomaly_predictions == -1
+
+# Plot results
+fig, axes = plt.subplots(2, 1, figsize=(15, 10))
+
+# Plot 1: Time series with anomalies
+axes[0].plot(df.index, df['value'], label='Time Series', alpha=0.7)
+axes[0].scatter(anomaly_features.index[anomaly_detected], 
+               anomaly_features['value'][anomaly_detected],
+               color='red', s=50, label='Anomalies', zorder=5)
+axes[0].set_title('Isolation Forest Anomaly Detection')
+axes[0].set_xlabel('Date')
+axes[0].set_ylabel('Value')
+axes[0].legend()
+axes[0].grid(True, alpha=0.3)
+
+# Plot 2: Anomaly scores
+axes[1].plot(anomaly_features.index, anomaly_scores, color='purple', alpha=0.7)
+axes[1].axhline(y=0, color='red', linestyle='--', alpha=0.5, label='Threshold')
+axes[1].fill_between(anomaly_features.index, anomaly_scores, 0, 
+                    where=(anomaly_scores < 0), color='red', alpha=0.3)
+axes[1].set_title('Anomaly Scores')
+axes[1].set_xlabel('Date')
+axes[1].set_ylabel('Anomaly Score')
+axes[1].legend()
+axes[1].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+print(f"Isolation Forest detected {anomaly_detected.sum()} anomalies")
+        </pre>
+
+        <h3 class="section-head">8. Model Evaluation and Comparison</h3>
+
+        <h4 class="subsection-head">8.1 Comprehensive Model Evaluation</h4>
+        <pre>
+from sklearn.metrics import mean_squared_error, mean_absolute_error, mean_absolute_percentage_error, r2_score
+
+def evaluate_model(y_true, y_pred, model_name):
+    """Calculate comprehensive evaluation metrics"""
+    metrics = {
+        'MSE': mean_squared_error(y_true, y_pred),
+        'RMSE': np.sqrt(mean_squared_error(y_true, y_pred)),
+        'MAE': mean_absolute_error(y_true, y_pred),
+        'MAPE': mean_absolute_percentage_error(y_true, y_pred),
+        'R2': r2_score(y_true, y_pred),
+        'Max Error': np.max(np.abs(y_true - y_pred))
+    }
+    
+    return pd.DataFrame(metrics, index=[model_name])
+
+# Collect predictions from all models
+predictions = {
+    'ARIMA': forecast,
+    'SARIMA': sarima_forecast,
+    'Holt-Winters': hw_forecast,
+    'XGBoost': xgb_pred,
+    'LightGBM': lgb_pred,
+    'LSTM': test_predictions.flatten()[:len(test)]  # Align lengths
+}
+
+# Evaluate all models
+results = []
+for model_name, pred in predictions.items():
+    # Ensure same length
+    min_len = min(len(test), len(pred))
+    y_true_trimmed = test.values[:min_len]
+    y_pred_trimmed = pred[:min_len]
+    
+    result = evaluate_model(y_true_trimmed, y_pred_trimmed, model_name)
+    results.append(result)
+
+# Combine results
+results_df = pd.concat(results)
+print("Model Performance Comparison:")
+print("=" * 60)
+print(results_df.round(4))
+
+# Visualize comparison
+fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+axes = axes.flatten()
+
+for idx, (model_name, pred) in enumerate(predictions.items()):
+    if idx >= len(axes):
+        break
+    
+    min_len = min(len(test), len(pred))
+    ax = axes[idx]
+    ax.plot(test.index[:min_len], test.values[:min_len], label='Actual', alpha=0.7)
+    ax.plot(test.index[:min_len], pred[:min_len], label='Predicted', alpha=0.7)
+    ax.set_title(model_name)
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Value')
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Plot metrics comparison
+metrics_to_plot = ['RMSE', 'MAE', 'R2']
+fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+
+for idx, metric in enumerate(metrics_to_plot):
+    axes[idx].bar(results_df.index, results_df[metric])
+    axes[idx].set_title(f'{metric} Comparison')
+    axes[idx].set_ylabel(metric)
+    axes[idx].tick_params(axis='x', rotation=45)
+    axes[idx].grid(True, alpha=0.3, axis='y')
+
+plt.tight_layout()
+plt.show()
+        </pre>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> For time series forecasting, always use time-based cross-validation instead of random splits. This preserves the temporal order of data and provides more realistic performance estimates.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-trophy"></i> Take Final Exam & Claim Certificate
+        </button>
+    `
+},
+
+
+];
+
+const quizData = [
+    { 
+        q: "Exploratory Data Analysis (EDA) mein features ke beech linear relationship check karne ke liye sabse common visualization tool kya hai?", 
+        options: ["Box Plot", "Heatmap (Correlation matrix)", "Histogram", "Violin Plot"], 
+        correct: 1 
+    },
+    { 
+        q: "Agar aapka data significantly 'Right Skewed' hai, toh variance stabilize karne ke liye kaunsa transformation sabse best rahega?", 
+        options: ["Standardization", "Min-Max Scaling", "Log Transformation", "One-Hot Encoding"], 
+        correct: 2 
+    },
+    { 
+        q: "Lasso Regression (L1 Regularization) ka sabse bada advantage kya hai jo Ridge Regression mein nahi hota?", 
+        options: ["Outliers handle karna", "Automatic Feature Selection (coefficients zero karna)", "Multicollinearity badhana", "Bias ko zero karna"], 
+        correct: 1 
+    },
+    { 
+        q: "Random Forest mein 'Bootstrap Aggregating' (Bagging) ka primary maqsad kya hota hai?", 
+        options: ["Bias ko kam karna", "Model training speed badhana", "Variance aur overfitting ko kam karna", "Deep learning mein convert karna"], 
+        correct: 2 
+    },
+    { 
+        q: "Unsupervised Learning mein 'Elbow Method' ka use kis liye kiya jata hai?", 
+        options: ["Optimal number of clusters (K) dhundne ke liye", "Outliers delete karne ke liye", "Neural network ki layers count karne ke liye", "Gradient descent optimize karne ke liye"], 
+        correct: 0 
+    },
+    { 
+        q: "Deep Learning mein 'Dropout' layer ka use kyun kiya jata hai?", 
+        options: ["Training speed badhane ke liye", "Overfitting ko prevent karne ke liye", "Activation function change karne ke liye", "Missing values fill karne ke liye"], 
+        correct: 1 
+    },
+    { 
+        q: "NLP mein 'TF-IDF' ka main use-case kya hai?", 
+        options: ["Text ko translate karna", "Document mein important words ko weight dena", "Grammar check karna", "Speech ko text mein badalna"], 
+        correct: 1 
+    },
+    { 
+        q: "Computer Vision mein 'Max Pooling' operation ka primary role kya hai?", 
+        options: ["Image brightness badhana", "Spatial dimensions ko reduce karna aur important features rakhna", "Color channels ko merge karna", "Kernel size fix karna"], 
+        correct: 1 
+    },
+    { 
+        q: "Time Series mein 'Stationarity' check karne ke liye kaunsa statistical test use hota hai?", 
+        options: ["T-Test", "Z-Test", "ADF (Augmented Dickey-Fuller) Test", "Chi-Square Test"], 
+        correct: 2 
+    },
+    { 
+        q: "Transformers architecture mein 'Self-Attention' mechanism ka kya kaam hai?", 
+        options: ["Data cleaning", "Sequence mein words ke beech relevant context aur relationships identify karna", "Only previous word ko yaad rakhna", "Image ko patches mein divide karna"], 
+        correct: 1 
+    }
+];
+
+let maxUnlocked = 0;
+let currentModule = 0;
+let examScore = 0;
+let examTaken = false;
+
+function toggleSidebar(){
+    document.getElementById('toc').classList.toggle('active');
+    document.getElementById('overlay').classList.toggle('active');
+}
+
+function startCourse(){
+    document.getElementById('welcome-screen').classList.add('hidden');
+    document.getElementById('course-player').classList.remove('hidden');
+    document.querySelector('.sidebar-toggle').style.display='block';
+    loadModule(0); 
+    renderTOC();
+}
+
+function renderTOC(){
+    const toc = document.getElementById('toc');
+    let html = `
+        <div class="sidebar-header">
+            <h3 class="sidebar-title"><i class="fas fa-book-open"></i> COURSE MODULES</h3>
+            <div style="color: #94a3b8; font-size: 0.85rem; margin-top: 5px;">${syllabus.length} comprehensive modules</div>
+        </div>
+    `;
+    
+    syllabus.forEach((mod,i)=>{
+        const locked = i > maxUnlocked;
+        const completed = i < maxUnlocked;
+        const active = i === currentModule;
+        
+        html += `
+        <div class="module-item ${active?'active':''} ${locked?'locked':''}" onclick="${!locked?`loadModule(${i})`:''}">
+            <div class="module-number">${i+1}</div>
+            <div class="module-text">
+                <div class="module-title">${mod.title.replace("Module " + (i+1).toString().padStart(2, '0') + ": ", "")}</div>
+                <div class="module-desc">${mod.desc}</div>
+            </div>
+            <div class="module-status">
+                ${locked ? 
+                    '<i class="fas fa-lock" style="color: #94a3b8;"></i>' : 
+                    completed ? 
+                    '<i class="fas fa-check-circle" style="color: var(--success);"></i>' : 
+                    '<i class="fas fa-play-circle" style="color: var(--primary);"></i>'
+                }
+            </div>
+        </div>`;
+    });
+    
+    html += `
+        <div style="padding: 25px; text-align: center; margin-top: 20px; border-top: 1px solid var(--border-dark);">
+            <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 10px;">Progress</div>
+            <div style="background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                <div style="height: 100%; width: ${Math.round((maxUnlocked/(syllabus.length-1))*100)}%; background: var(--primary); border-radius: 3px;"></div>
+            </div>
+            <div style="color: white; font-size: 0.9rem; margin-top: 10px; font-weight: 600;">
+                ${maxUnlocked}/${syllabus.length} modules completed
+            </div>
+        </div>
+    `;
+    
+    toc.innerHTML = html;
+}
+
+function loadModule(idx){
+    currentModule = idx;
+    document.getElementById('loader').classList.add('active');
+    
+    setTimeout(() => {
+        document.getElementById('module-content').classList.remove('hidden');
+        document.getElementById('exam-section').classList.add('hidden');
+        document.getElementById('final-step-section').classList.add('hidden');
+        document.getElementById('module-content').innerHTML = syllabus[idx].content;
+        
+        const prog = Math.round((maxUnlocked/(syllabus.length-1))*100);
+        document.getElementById('progress-fill').style.width = prog + "%";
+        document.getElementById('prog-stat-text').innerText = prog + "% COMPLETE";
+        
+        renderTOC(); 
+        window.scrollTo(0,0);
+        document.getElementById('loader').classList.remove('active');
+    }, 300);
+}
+
+function completeModule(){
+    if(currentModule === syllabus.length-1){
+        showExam();
+    } else {
+        if(currentModule === maxUnlocked) {
+            maxUnlocked++;
+            Swal.fire({
+                title: "Module Completed!",
+                text: `You've unlocked Module ${currentModule+2}`,
+                icon: "success",
+                confirmButtonText: "Continue",
+                confirmButtonColor: "var(--primary)"
+            });
+        }
+        loadModule(currentModule+1);
+    }
+}
+
+function showExam(){
+    document.getElementById('module-content').classList.add('hidden');
+    const examBox = document.getElementById('exam-section');
+    examBox.classList.remove('hidden');
+
+    let html = `
+        <span class="module-tag"><i class="fas fa-graduation-cap"></i> FINAL ASSESSMENT</span>
+        <h2 class="mod-title">Proctored Final Exam</h2>
+        <p class="body-text">Complete this final assessment to earn your Elite Python Mastery certificate. Score 50% or above to pass.</p>
+        
+        <div style="background: #f0f9ff; padding: 20px; border-radius: 16px; margin-bottom: 30px; border-left: 4px solid var(--primary);">
+            <h4 style="font-weight: 700; margin-bottom: 10px; color: var(--dark-bg);"><i class="fas fa-info-circle"></i> Exam Details</h4>
+            <p style="color: #475569; margin-bottom: 5px;"><b>Questions:</b> ${quizData.length} multiple choice</p>
+            <p style="color: #475569; margin-bottom: 5px;"><b>Passing Score:</b> 50% or higher</p>
+            <p style="color: #475569;"><b>Time:</b> No time limit</p>
+        </div>
+    `;
+    
+    quizData.forEach((item,i)=>{
+        html += `<div class="q-block">
+            <p style="font-weight: 600; font-size: 1.1rem; margin-bottom: 15px; color: var(--dark-bg);">
+                <span style="background: var(--primary); color: white; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.9rem; margin-right: 10px;">${i+1}</span>
+                ${item.q}
+            </p>`;
+        item.options.forEach((opt,oi)=>{
+            html += `
+            <label class="option-label">
+                <input type="radio" name="q_${i}" value="${oi}">
+                ${opt}
+            </label>`;
+        });
+        html += `</div>`;
+    });
+    
+    html += `<button class="btn-primary" onclick="submitExam()">
+        <i class="fas fa-paper-plane"></i> Submit Exam
+    </button>`;
+    
+    examBox.innerHTML = html;
+    window.scrollTo(0,0);
+}
+
+function submitExam(){
+    let score = 0;
+    const results = [];
+    
+    quizData.forEach((item,i)=>{
+        const ans = document.querySelector(`input[name="q_${i}"]:checked`);
+        if(ans && parseInt(ans.value) === item.correct){
+            score++;
+            results.push({question: i, correct: true});
+        } else {
+            results.push({question: i, correct: false, selected: ans ? parseInt(ans.value) : null});
+        }
+    });
+
+    examScore = score;
+    const percent = Math.round((score/quizData.length)*100);
+    examTaken = true;
+
+    // Create detailed results HTML
+    let resultsHTML = `
+        <div class="score-display">
+            <h3 style="margin-bottom: 10px; font-weight: 700;">Exam Results</h3>
+            <div class="score-value">${percent}%</div>
+            <p style="font-size: 1.1rem; margin-bottom: 20px;">${score}/${quizData.length} Correct Answers</p>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; margin-top: 15px;">
+                <p style="margin-bottom: 8px;"><b>Status:</b> <span style="color: ${percent >= 50 ? '#4ade80' : '#f87171'}">${percent >= 50 ? 'PASSED' : 'FAILED'}</span></p>
+                <p><b>Required to pass:</b> 50%</p>
+            </div>
+        </div>
+        
+        <h3 style="margin: 30px 0 15px; color: var(--dark-bg);">Question Review</h3>
+    `;
+    
+    results.forEach((result, i) => {
+        resultsHTML += `
+        <div style="background: ${result.correct ? '#f0fdf4' : '#fef2f2'}; padding: 15px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid ${result.correct ? '#10b981' : '#ef4444'};">
+            <p style="font-weight: 600; margin-bottom: 8px; color: var(--dark-bg);">${i+1}. ${quizData[i].q}</p>
+            <p style="margin-bottom: 5px;"><b>Your answer:</b> ${result.selected !== null ? quizData[i].options[result.selected] : 'Not answered'}</p>
+            <p><b>Correct answer:</b> ${quizData[i].options[quizData[i].correct]}</p>
+        </div>`;
+    });
+
+    if(percent >= 50){
+        Swal.fire({
+            title: "Congratulations!",
+            html: `<div style="text-align: left;">${resultsHTML}</div>`,
+            icon: "success",
+            confirmButtonText: "Claim Certificate",
+            confirmButtonColor: "var(--primary)",
+            width: 800
+        }).then(()=>{
+            document.getElementById('exam-section').classList.add('hidden');
+            document.getElementById('final-step-section').classList.remove('hidden');
+        });
+    } else {
+        Swal.fire({
+            title: "Try Again",
+            html: `<div style="text-align: left;">${resultsHTML}</div>`,
+            icon: "error",
+            confirmButtonText: "Retry Exam",
+            confirmButtonColor: "var(--primary)",
+            width: 800
+        }).then(() => {
+            // Allow retaking the exam
+            showExam();
+        });
+    }
+}
+
+function claimCertificate(){
+    const name = document.getElementById('student-name').value.trim();
+    const course = "Elite Python Mastery"; // The proper course name
+
+    if(!name) {
+        return Swal.fire("Error","Please enter your full name.","error");
+    }
+    
+    // Save to localStorage as backup
+    localStorage.setItem("internadda_cert_name", name);
+    localStorage.setItem("internadda_course_name", course);
+    
+    Swal.fire({
+        title: "Generating Certificate...",
+        text: "Redirecting you to your official certificate.",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false
+    }).then(() => {
+        // Construct the URL with encoded parameters for safety
+        const urlName = encodeURIComponent(name);
+        const urlCourse = encodeURIComponent(course);
+        
+        // Redirect to certificate.html with parameters
+        window.location.href = `certificate.html?name=${urlName}&course=${urlCourse}`;
+    });
+}
+
+</script>
+</body>
+</html>
