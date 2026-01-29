@@ -358,7 +358,7 @@
             <div class="trust-badges">
                 <div class="trust-badge"><i class="fas fa-check-circle"></i> Industry-recognized</div>
                 <div class="trust-badge"><i class="fas fa-clock"></i> Self-paced learning</div>
-                <div class="trust-badge"><i class="fas fa-users"></i> 8,000+ professionals trained</div>
+                <div class="trust-badge"><i class="fas fa-users"></i> 25,000+ Students enrolled</div>
             </div>
 
             <button class="btn-primary" style="max-width:320px; margin:50px auto 0; opacity: 0; animation: reveal 0.8s 0.8s forwards;" onclick="startCourse()">
@@ -5558,54 +5558,54 @@ End Sub
 
 const quizData = [
     { 
-        q:"CPython mein Global Interpreter Lock (GIL) ka primary function kya hai?", 
-        options:["Multi-core utilization badhana","Python objects ko thread-safe rakhna","Bytecode ko machine code mein badalna","Memory leak rokna"], 
-        correct:1 
+        q: "In Excel's calculation engine, what is the primary performance drawback of 'Volatile Functions' like OFFSET() or INDIRECT()?", 
+        options: ["They only calculate when the file is opened", "They trigger recalculation of the entire workbook every time any change is made", "They disable multi-threaded calculation", "They are only compatible with 32-bit Excel"], 
+        correct: 1 
     },
     { 
-        q:"Python ka 'Generational Garbage Collector' main roop se kis problem ko solve karta hai?", 
-        options:["Slow execution","Syntax errors","Circular references","Stack overflow"], 
-        correct:2 
+        q: "When using Excel 365 Dynamic Arrays, what does the '#' symbol signify in a cell reference (e.g., =SUM(A2#))?", 
+        options: ["It refers to a hidden comment", "It forces the formula to be an absolute reference", "It references the entire 'Spill Range' starting from that cell", "It flags an error in the calculation chain"], 
+        correct: 2 
     },
     { 
-        q:"Agar aapko memory usage optimize karni hai aur attributes ko fix rakhna hai, toh aap kya use karenge?", 
-        options:["__init__","__dict__","__slots__","__cache__"], 
-        correct:2 
+        q: "In Power Query, which concept involves pushing data transformation steps back to the source database to improve efficiency?", 
+        options: ["Query Merging", "Query Folding", "Data Modeling", "M-Language Compilation"], 
+        correct: 1 
     },
     { 
-        q:"Ek list mein element search karne ki 'Average Case' time complexity kya hoti hai?", 
-        options:["O(1)","O(log n)","O(n)","O(n^2)"], 
-        correct:2 
+        q: "What is the fundamental difference between a 'Calculated Column' and a 'Measure' in DAX (Power Pivot)?", 
+        options: ["Measures are stored in the database, while columns are not", "Calculated Columns increase model size; Measures are calculated on-the-fly based on filter context", "Measures can only be used in Power BI, not Excel", "Calculated Columns are faster for large datasets"], 
+        correct: 1 
     },
     { 
-        q:"Method Resolution Order (MRO) ko check karne ke liye kis attribute ka use kiya jata hai?", 
-        options:["__order__","__mro__","__resolve__","__hierarchy__"], 
-        correct:1 
+        q: "Which Excel function is designed to assign names to calculation results, reducing redundant calculations and improving formula readability?", 
+        options: ["LAMBDA", "XLOOKUP", "LET", "SWITCH"], 
+        correct: 2 
     },
     { 
-        q:"Bina memory mein pura data load kiye sequence produce karne ke liye kya best hai?", 
-        options:["List Comprehension","Dictionaries","Generators","Tuples"], 
-        correct:2 
+        q: "In Financial Modeling, which Excel feature must be enabled to allow a model to resolve a circular reference intentionally?", 
+        options: ["Automatic Recalculation", "Multi-threaded Processing", "Iterative Calculation", "Data Validation"], 
+        correct: 2 
     },
     { 
-        q:"CPU-bound tasks ke liye Python mein GIL ko bypass karne ka sahi tarika kya hai?", 
-        options:["Multithreading","Asyncio","Multiprocessing","Recursion"], 
-        correct:2 
+        q: "What is the most memory-efficient way to process a large range of data in VBA?", 
+        options: ["Looping through each cell using 'For Each Cell In Range'", "Using 'Select' and 'Activate' on every iteration", "Reading the entire Range into a Variant Array and processing it in memory", "Writing results to the sheet one cell at a time"], 
+        correct: 2 
     },
     { 
-        q:"PCA (Principal Component Analysis) ka main uddeshya (objective) kya hota hai?", 
-        options:["Outliers hatana","Dimensionality reduction","Data labeling","Clustering"], 
-        correct:1 
+        q: "In a Star Schema data model, what is the primary characteristic of a 'Fact Table'?", 
+        options: ["It contains unique descriptive attributes of a business entity", "It contains quantitative metrics and foreign keys to dimension tables", "It is usually the smallest table in the model", "It stores the M-language scripts for Power Query"], 
+        correct: 1 
     },
     { 
-        q:"Deep Learning mein 'Vanishing Gradient' ki problem ko solve karne ke liye kaunsa activation function behtar hai?", 
-        options:["Sigmoid","Tanh","ReLU","Step Function"], 
-        correct:2 
+        q: "When performing Regression Analysis in Excel, which statistic indicates the proportion of the variance for a dependent variable that's explained by an independent variable?", 
+        options: ["Standard Error", "F-Statistic", "R-Squared", "P-Value"], 
+        correct: 2 
     },
     { 
-        q:"MLOps mein 'Concept Drift' ka kya matlab hai?", 
-        options:["Model ka code delete ho jana","Data distributions badalne se model ki accuracy girna","Server ka slow ho jana","Docker container ka crash hona"], 
-        correct:1 
+        q: "In Monte Carlo simulations, why do we use functions like NORM.INV(RAND(), mean, std_dev)?", 
+        options: ["To find the exact average of a historical dataset", "To generate a random value based on a specific probability distribution", "To prevent Excel from crashing during high-volume calculations", "To sort data into clusters automatically"], 
+        correct: 1 
     }
 ];
 
@@ -5825,7 +5825,7 @@ function submitExam(){
 
 function claimCertificate(){
     const name = document.getElementById('student-name').value.trim();
-    const course = "Elite Python Mastery"; // The proper course name
+    const course = "Elite Excel Mastery"; // The proper course name
 
     if(!name) {
         return Swal.fire("Error","Please enter your full name.","error");
