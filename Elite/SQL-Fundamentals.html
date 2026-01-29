@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Elite SQL Mastery | Internadda</title>
+    <title>Elite SQL Fundamentals | Internadda</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -333,7 +333,7 @@
                 <div class="module-tag"><i class="fas fa-crown"></i> ELITE MASTERY PROGRAM</div>
             </div>
             
-            <h1 class="hero-title">Master SQL at an <span style="background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Expert Level</span></h1>
+            <h1 class="hero-title">Master SQL at an <span style="background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Fundamental Level</span></h1>
             <p style="color:var(--text-light); font-size: 1.25rem; margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto; opacity: 0; animation: reveal 0.8s 0.3s forwards;">
                 Engineered for data engineers and analysts who want to build production-grade database systems, optimize query performance, and master advanced SQL concepts.
             </p>
@@ -358,7 +358,7 @@
             <div class="trust-badges">
                 <div class="trust-badge"><i class="fas fa-check-circle"></i> Industry-recognized</div>
                 <div class="trust-badge"><i class="fas fa-clock"></i> Self-paced learning</div>
-                <div class="trust-badge"><i class="fas fa-users"></i> 5,000+ students</div>
+                <div class="trust-badge"><i class="fas fa-users"></i> 8,000+ students</div>
             </div>
 
             <button class="btn-primary" style="max-width:320px; margin:50px auto 0; opacity: 0; animation: reveal 0.8s 0.8s forwards;" onclick="startCourse()">
@@ -380,7 +380,7 @@
                     <div style="background: #f0f9ff; padding: 25px; border-radius: 16px; margin: 30px 0; border-left: 4px solid var(--success);">
                         <h4 style="font-weight: 700; margin-bottom: 10px; color: var(--dark-bg);"><i class="fas fa-certificate"></i> Certificate Details</h4>
                         <p style="color: #475569; margin-bottom: 5px;"><b>Issued by:</b> Internadda Academy</p>
-                        <p style="color: #475569; margin-bottom: 5px;"><b>Course:</b> Elite SQL Fundamentals Mastery</p>
+                        <p style="color: #475569; margin-bottom: 5px;"><b>Course:</b> Elite SQL Fundamentals</p>
                         <p style="color: #475569;"><b>Verification ID:</b> SQL-ELITE-${Math.random().toString(36).substr(2, 9).toUpperCase()}</p>
                     </div>
                     
@@ -403,7 +403,7 @@ const syllabus = [
         <h2 class="mod-title">Relational Theory, ACID Properties & SQL Execution Engine</h2>
 
         <p class="body-text">
-            Welcome to the first module of <b>Elite SQL Fundamentals Mastery</b>. Here, we go beyond basic queries — 
+            Welcome to the first module of <b>Elite SQL Fundamentals</b>. Here, we go beyond basic queries — 
             we explore how databases work at a fundamental level. You will gain a deep understanding of relational theory, 
             transaction management, and how SQL queries are executed. By the end of this module, you will be able to write 
             SQL like a <b>database engineer</b>.
@@ -2780,7 +2780,7 @@ function submitExam(){
 
 function claimCertificate(){
     const name = document.getElementById('student-name').value.trim();
-    const course = "Elite SQL Fundamentals Mastery"; // Updated course name
+    const course = "Elite SQL Fundamentals"; // Updated course name
 
     if(!name) {
         return Swal.fire("Error","Please enter your full name.","error");
