@@ -1,0 +1,2811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Elite SQL Mastery | Internadda</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        :root {
+            --primary: #4338ca; 
+            --primary-hover: #3730a3;
+            --secondary: #10b981;
+            --accent: #8b5cf6;
+            --dark-bg: #0f172a;
+            --dark-card: #1e293b;
+            --text-main: #1e293b;
+            --text-light: #64748b;
+            --white: #ffffff;
+            --off-white: #f8fafc;
+            --border: #e2e8f0;
+            --border-dark: #334155;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --header-height: 75px;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
+            --gradient-primary: linear-gradient(135deg, #4338ca 0%, #7c3aed 100%);
+            --gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--off-white); color: var(--text-main); line-height: 1.8; overflow-x: hidden; }
+
+        /* --- HEADER & PROGRESS --- */
+        header { 
+            background: var(--white); 
+            border-bottom: 1px solid var(--border); 
+            box-shadow: var(--shadow-sm);
+            position: fixed; top: 0; width: 100%; z-index: 1000; height: var(--header-height);
+            display: flex; align-items: center; padding: 0 25px;
+        }
+        .nav-container { 
+            display: flex; align-items: center; justify-content: space-between; 
+            width: 100%; max-width: 1400px; margin: 0 auto; 
+        }
+        .logo-container { display: flex; align-items: center; gap: 10px; }
+        .logo-icon { color: var(--primary); font-size: 1.8rem; }
+        .logo-text { font-weight: 800; font-size: 1.5rem; color: #0f172a; text-decoration: none; letter-spacing: -0.5px; }
+        .logo-text span { background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .progress-stats { display: flex; align-items: center; gap: 15px; }
+        .progress-percent { font-weight: 800; font-size: 1rem; color: var(--primary); background: #eef2ff; padding: 6px 12px; border-radius: 20px; }
+        @media (max-width: 768px) {
+            .nav-container { 
+                display: flex; 
+                justify-content: center; /* Centers the logo container */
+                align-items: center;
+                position: relative; 
+            }
+            .sidebar-toggle { 
+                display: block !important; 
+                position: absolute; /* Takes toggle out of flow so logo can center */
+                left: 0; 
+                z-index: 1001; 
+            }
+            .logo-text { font-size: 1.3rem; }
+            .progress-stats { display: none !important; } /* Hide % in header */
+        }
+        /* --- SIDEBAR & OVERLAY --- */
+        .sidebar {
+            position: fixed; top: 0; left: -350px; width: 320px; height: 100vh;
+            background: var(--dark-bg); z-index: 1100; padding: 30px 0;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); color: white; overflow-y: auto;
+            box-shadow: 5px 0 30px rgba(0,0,0,0.2);
+        }
+        .sidebar.active { left: 0; }
+        .sidebar-overlay { 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1050; display: none; 
+            backdrop-filter: blur(3px); 
+        }
+        .sidebar-overlay.active { display: block; }
+        .sidebar-header { padding: 0 25px 25px; border-bottom: 1px solid var(--border-dark); margin-bottom: 20px; }
+        .sidebar-title { font-size: 1.1rem; font-weight: 700; color: #cbd5e1; letter-spacing: 0.5px; }
+        .module-item { 
+            padding: 16px 25px; margin: 0 15px 8px; border-radius: 12px; cursor: pointer; 
+            display: flex; align-items: center; gap: 15px; transition: all 0.3s; 
+            background: rgba(255,255,255,0.03); border: 1px solid transparent; 
+        }
+        .module-item:hover { background: rgba(255,255,255,0.07); }
+        .module-item.active { 
+            background: rgba(67, 56, 202, 0.15); border-color: var(--primary); 
+            box-shadow: 0 4px 12px rgba(67, 56, 202, 0.15); 
+        }
+        .module-number { 
+            width: 28px; height: 28px; background: rgba(255,255,255,0.1); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            font-size: 0.85rem; font-weight: 700; 
+        }
+        .module-item.active .module-number { background: var(--primary); }
+        .module-text { flex: 1; }
+        .module-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 3px; }
+        .module-desc { font-size: 0.8rem; color: #94a3b8; }
+        .module-status { font-size: 0.9rem; }
+        .module-item.locked { opacity: 0.6; cursor: not-allowed; }
+
+        /* --- CONTENT UI --- */
+        .main-layout { 
+            margin-top: calc(var(--header-height) + 30px); padding: 0 20px 80px; 
+            display: flex; justify-content: center; 
+        }
+        .content-card { 
+            background: white; border-radius: 28px; padding: 50px; max-width: 920px; width: 100%; 
+            border: 1px solid var(--border); box-shadow: var(--shadow-md); 
+            position: relative; overflow: hidden; 
+        }
+        .content-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+            background: var(--gradient-primary);
+        }
+        
+        @keyframes reveal { 
+            from { opacity: 0; transform: translateY(30px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        .animate-content { animation: reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+        .module-tag { 
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #eef2ff; color: var(--primary); padding: 6px 14px; 
+            border-radius: 20px; font-size: 0.75rem; font-weight: 800; 
+            text-transform: uppercase; margin-bottom: 20px; letter-spacing: 0.5px; 
+        }
+        .mod-title { 
+            font-size: 2.4rem; font-weight: 800; color: var(--dark-bg); 
+            margin-bottom: 25px; letter-spacing: -1px; line-height: 1.2; 
+        }
+        .body-text { 
+            margin-bottom: 25px; font-size: 1.1rem; color: #334155; 
+            line-height: 1.7; 
+        }
+        
+        pre { 
+            background: #0f172a; color: #e2e8f0; padding: 25px; border-radius: 16px; 
+            margin: 25px 0; overflow-x: auto; font-family: 'Fira Code', monospace; 
+            font-size: 0.9rem; border: 1px solid #1e293b; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2); 
+            position: relative; 
+        }
+        pre::before {
+            content: 'SQL'; position: absolute; top: 0; right: 20px;
+            background: var(--primary); color: white; padding: 4px 12px;
+            font-size: 0.7rem; border-radius: 0 0 6px 6px; font-weight: 700;
+        }
+
+        .section-head { 
+            font-size: 1.6rem; font-weight: 700; color: var(--dark-bg); 
+            margin: 35px 0 15px; padding-bottom: 10px; border-bottom: 2px solid #eef2ff; 
+        }
+        .subsection-head { 
+            font-size: 1.2rem; font-weight: 600; color: var(--dark-bg); 
+            margin: 25px 0 12px; 
+        }
+        .pro-note {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid #0ea5e9; padding: 20px; border-radius: 12px;
+            margin: 25px 0; font-size: 0.95rem;
+        }
+        .pro-note b { color: #0369a1; }
+
+        /* --- BUTTONS --- */
+        .btn-primary, .btn-premium { 
+            background: var(--gradient-primary); color: white; padding: 18px 35px; 
+            border-radius: 14px; border: none; font-weight: 700; cursor: pointer; 
+            transition: all 0.3s ease; width: 100%; display: flex; align-items: center; 
+            justify-content: center; gap: 12px; font-size: 1rem; letter-spacing: 0.3px;
+            box-shadow: 0 6px 20px rgba(67, 56, 202, 0.25); margin-top: 30px;
+        }
+        .btn-primary:hover, .btn-premium:hover { 
+            transform: translateY(-3px); box-shadow: 0 12px 25px rgba(67, 56, 202, 0.35); 
+        }
+
+        /* Landing Page Enhancements */
+        .hero-section { 
+            text-align: center; padding: 140px 20px 80px; max-width: 1000px; margin: 0 auto; 
+        }
+        .hero-title { 
+            font-size: 3.8rem; font-weight: 800; margin-bottom: 25px; letter-spacing: -2px; 
+            line-height: 1.1; opacity: 0; animation: reveal 0.8s 0.2s forwards; 
+        }
+        
+        .instructor-card { 
+            background: #fff; border: 1px solid var(--border); border-radius: 24px; 
+            padding: 30px; display: flex; align-items: center; gap: 25px; 
+            max-width: 550px; margin: 40px auto; text-align: left;
+            box-shadow: var(--shadow-md); opacity: 0; animation: reveal 0.8s 0.6s forwards;
+        }
+        .instructor-img { 
+            width: 80px; height: 80px; border-radius: 50%; background: #ddd; 
+            object-fit: cover; border: 4px solid #eef2ff; box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+        }
+        .badge-verified { 
+            color: var(--success); font-size: 0.8rem; font-weight: 700; 
+            background: #f0f9ff; padding: 4px 12px; border-radius: 20px; 
+            display: inline-flex; align-items: center; gap: 5px; margin-bottom: 8px; 
+        }
+
+        .perks-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+            gap: 20px; max-width: 900px; margin: 50px auto; 
+            opacity: 0; animation: reveal 0.8s 0.4s forwards;
+        }
+        .perk-item { 
+            background: white; padding: 25px 20px; border-radius: 18px; 
+            border: 1px solid var(--border); font-size: 0.9rem; font-weight: 700; 
+            text-align: center; box-shadow: var(--shadow-sm); transition: transform 0.3s;
+        }
+        .perk-item:hover { transform: translateY(-5px); }
+        .perk-item i { 
+            color: var(--primary); margin-bottom: 12px; display: block; 
+            font-size: 1.8rem; 
+        }
+
+        /* Quiz Styles */
+        .quiz-box, .cert-input-box { 
+            margin-top: 40px; animation: reveal 0.5s ease; 
+        }
+        .q-block { margin-bottom: 30px; }
+        .option-label { 
+            display: flex; align-items: center; background: white; padding: 20px; 
+            margin-bottom: 15px; border: 2px solid var(--border); border-radius: 16px; 
+            cursor: pointer; transition: all 0.2s; position: relative; 
+        }
+        .option-label:hover { border-color: #c7d2fe; background: #f8fafc; }
+        .option-input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; left:0; top:0; }
+        .option-label:has(.option-input:checked) { 
+            border-color: var(--primary); background: #f5f7ff; 
+            box-shadow: 0 4px 12px rgba(67, 56, 202, 0.1); 
+        }
+        
+        .score-display {
+            background: var(--gradient-dark); color: white; padding: 25px;
+            border-radius: 20px; text-align: center; margin: 30px 0;
+            box-shadow: var(--shadow-lg);
+        }
+        .score-value {
+            font-size: 3.5rem; font-weight: 800; margin: 10px 0;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        
+        .cert-input-box input {
+            width: 100%; padding: 20px; border-radius: 14px; 
+            border: 2px solid var(--border); font-size: 1rem; 
+            margin-bottom: 25px; transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        .cert-input-box input:focus {
+            outline: none; border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.1);
+        }
+
+        .hidden { display: none !important; }
+        
+        /* Trust Badges */
+        .trust-badges {
+            display: flex; justify-content: center; gap: 30px;
+            margin-top: 60px; flex-wrap: wrap;
+        }
+        .trust-badge {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 0.9rem; color: var(--text-light);
+        }
+        .trust-badge i { color: var(--success); font-size: 1.2rem; }
+        
+        /* Loading Animation */
+        .loader { display: none; }
+        .loader.active {
+            display: block; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(255,255,255,0.9);
+            z-index: 2000; display: flex; align-items: center;
+            justify-content: center; flex-direction: column; gap: 20px;
+        }
+        .spinner {
+            width: 60px; height: 60px; border: 5px solid #e2e8f0;
+            border-top-color: var(--primary); border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        /* Achievement Badge */
+        .achievement-badge {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white; padding: 8px 16px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 700; display: inline-flex;
+            align-items: center; gap: 5px; margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+        <p style="color: var(--text-main); font-weight: 600;">Loading Module...</p>
+    </div>
+
+<header>
+        <div class="nav-container">
+            <button class="sidebar-toggle" onclick="toggleSidebar()" style="background:none; border:none; cursor:pointer; font-size:1.4rem; display:none; color: var(--text-main);">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="logo-container">
+                <i class="fas fa-graduation-cap logo-icon"></i>
+                <a href="#" class="logo-text">Intern<span>adda</span></a>
+            </div>
+
+            <div class="progress-stats">
+                <div class="progress-percent" id="prog-stat-text">0% COMPLETE</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="mobile-progress-container"><div id="progress-fill"></div></div>
+    <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
+    <aside class="sidebar" id="toc"></aside>
+
+    <div id="welcome-screen">
+        <section class="hero-section">
+            <div style="opacity: 0; animation: reveal 0.8s 0.1s forwards;">
+                <div class="module-tag"><i class="fas fa-crown"></i> ELITE MASTERY PROGRAM</div>
+            </div>
+            
+            <h1 class="hero-title">Master SQL at an <span style="background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Expert Level</span></h1>
+            <p style="color:var(--text-light); font-size: 1.25rem; margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto; opacity: 0; animation: reveal 0.8s 0.3s forwards;">
+                Engineered for data engineers and analysts who want to build production-grade database systems, optimize query performance, and master advanced SQL concepts.
+            </p>
+            
+            <div class="perks-grid">
+                <div class="perk-item"><i class="fas fa-award"></i>Professional Credentials</div>
+                <div class="perk-item"><i class="fas fa-database"></i> 40+ Hands-on Queries</div>
+                <div class="perk-item"><i class="fas fa-chart-line"></i> Real-world Database Projects</div>
+                <div class="perk-item"><i class="fas fa-certificate"></i> Verified Certificate</div>
+            </div>
+
+            <div class="instructor-card">
+                <img src="lucky.jpg" alt="Lucky Tiwari" class="instructor-img">
+                <div>
+                    <span class="badge-verified"><i class="fas fa-shield-alt"></i> VERIFIED INSTRUCTOR</span>
+                    <h4 style="font-weight: 800; font-size: 1.2rem; margin-bottom: 5px;">Lucky Tiwari</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-light);">Founder of Internadda & Senior Database Architect</p>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin-top: 8px;">7+ years in production SQL systems</p>
+                </div>
+            </div>
+
+            <div class="trust-badges">
+                <div class="trust-badge"><i class="fas fa-check-circle"></i> Industry-recognized</div>
+                <div class="trust-badge"><i class="fas fa-clock"></i> Self-paced learning</div>
+                <div class="trust-badge"><i class="fas fa-users"></i> 5,000+ students</div>
+            </div>
+
+            <button class="btn-primary" style="max-width:320px; margin:50px auto 0; opacity: 0; animation: reveal 0.8s 0.8s forwards;" onclick="startCourse()">
+                <i class="fas fa-rocket"></i> Start Learning Now
+            </button>
+        </section>
+    </div>
+
+    <div id="course-player" class="hidden">
+        <main class="main-layout">
+            <div class="content-card">
+                <div id="module-content"></div>
+                <div id="exam-section" class="hidden quiz-box"></div>
+                <div id="final-step-section" class="hidden cert-input-box">
+                    <span class="module-tag"><i class="fas fa-trophy"></i> ACHIEVEMENT UNLOCKED</span>
+                    <h2 class="mod-title">Claim Your Certificate</h2>
+                    <p class="body-text">Congratulations! You've successfully completed all modules and passed the final exam. Your certificate is ready for generation.</p>
+                    
+                    <div style="background: #f0f9ff; padding: 25px; border-radius: 16px; margin: 30px 0; border-left: 4px solid var(--success);">
+                        <h4 style="font-weight: 700; margin-bottom: 10px; color: var(--dark-bg);"><i class="fas fa-certificate"></i> Certificate Details</h4>
+                        <p style="color: #475569; margin-bottom: 5px;"><b>Issued by:</b> Internadda Academy</p>
+                        <p style="color: #475569; margin-bottom: 5px;"><b>Course:</b> Elite SQL Fundamentals Mastery</p>
+                        <p style="color: #475569;"><b>Verification ID:</b> SQL-ELITE-${Math.random().toString(36).substr(2, 9).toUpperCase()}</p>
+                    </div>
+                    
+                    <input type="text" id="student-name" placeholder="Enter your full name as it should appear on certificate">
+                    <button class="btn-primary" onclick="claimCertificate()">
+                        <i class="fas fa-file-certificate"></i> Generate & Download Certificate
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+const syllabus = [
+{
+    title: "Module 01: SQL Foundations & Database Architecture",
+    desc: "Relational Theory, ACID Properties & SQL Execution",
+    content: `
+        <span class="module-tag"><i class="fas fa-database"></i> Core Architecture</span>
+        <h2 class="mod-title">Relational Theory, ACID Properties & SQL Execution Engine</h2>
+
+        <p class="body-text">
+            Welcome to the first module of <b>Elite SQL Fundamentals Mastery</b>. Here, we go beyond basic queries — 
+            we explore how databases work at a fundamental level. You will gain a deep understanding of relational theory, 
+            transaction management, and how SQL queries are executed. By the end of this module, you will be able to write 
+            SQL like a <b>database engineer</b>.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Database Execution Overview:</b>
+            <ul style="margin-top: 10px; padding-left: 20px;">
+                <li><b>SQL Query</b> → Parser → <b>Query Tree</b> → Optimizer → <b>Execution Plan</b></li>
+                <li><b>Query Execution Engine</b> processes the plan using indexes, joins, and aggregations</li>
+                <li>Transaction Manager ensures <b>ACID compliance</b> throughout</li>
+                <li>Storage Engine retrieves data from disk with caching mechanisms</li>
+            </ul>
+        </div>
+
+        <h3 class="section-head">1. Relational Database Fundamentals</h3>
+        <p class="body-text">
+            SQL databases are built on <b>relational theory</b> proposed by E.F. Codd. Key concepts:
+        </p>
+        <ul style="margin-left: 25px; margin-bottom: 20px;">
+            <li><b>Tables:</b> Collections of rows (tuples) and columns (attributes)</li>
+            <li><b>Primary Keys:</b> Uniquely identify each row</li>
+            <li><b>Foreign Keys:</b> Establish relationships between tables</li>
+            <li><b>Normalization:</b> Eliminating data redundancy through design</li>
+        </ul>
+
+        <h3 class="section-head">2. ACID Properties</h3>
+        <p class="body-text">
+            ACID ensures reliable transaction processing:
+        </p>
+        <ul style="margin-left: 25px;">
+            <li><b>Atomicity:</b> Transactions are all-or-nothing</li>
+            <li><b>Consistency:</b> Database moves from one valid state to another</li>
+            <li><b>Isolation:</b> Concurrent transactions don't interfere</li>
+            <li><b>Durability:</b> Committed transactions survive system failures</li>
+        </ul>
+
+        <h4 class="subsection-head">2.1 Transaction Example</h4>
+        <pre>
+BEGIN TRANSACTION;
+
+UPDATE accounts SET balance = balance - 100 WHERE account_id = 1;
+UPDATE accounts SET balance = balance + 100 WHERE account_id = 2;
+
+-- If both succeed
+COMMIT;
+
+-- If any fails
+ROLLBACK;
+        </pre>
+
+        <h3 class="section-head">3. SQL Execution Engine</h3>
+        <p class="body-text">
+            Understanding how databases execute queries helps write efficient SQL:
+        </p>
+
+        <h4 class="subsection-head">3.1 Query Processing Steps</h4>
+        <ol style="margin-left: 25px;">
+            <li><b>Parsing:</b> Syntax validation and query tree generation</li>
+            <li><b>Optimization:</b> Choosing the most efficient execution plan</li>
+            <li><b>Execution:</b> Running the plan using appropriate algorithms</li>
+            <li><b>Result Return:</b> Formatting and returning data to client</li>
+        </ol>
+
+        <h4 class="subsection-head">3.2 EXPLAIN Plan Analysis</h4>
+        <pre>
+EXPLAIN ANALYZE
+SELECT customers.name, orders.total
+FROM customers
+JOIN orders ON customers.id = orders.customer_id
+WHERE customers.city = 'New York'
+ORDER BY orders.total DESC
+LIMIT 10;
+        </pre>
+
+        <h3 class="section-head">4. Indexing Fundamentals</h3>
+        <p class="body-text">
+            Indexes are data structures that improve query speed at the cost of write performance:
+        </p>
+        <ul style="margin-left: 25px;">
+            <li><b>B-Tree:</b> Balanced tree structure for range queries</li>
+            <li><b>Hash Index:</b> Fast equality lookups</li>
+            <li><b>Bitmap Index:</b> Efficient for low-cardinality columns</li>
+            <li><b>Composite Index:</b> Multiple columns in one index</li>
+        </ul>
+
+        <h4 class="subsection-head">4.1 Creating Indexes</h4>
+        <pre>
+-- Single column index
+CREATE INDEX idx_customer_name ON customers(name);
+
+-- Composite index
+CREATE INDEX idx_city_state ON customers(city, state);
+
+-- Unique index
+CREATE UNIQUE INDEX idx_email ON customers(email);
+        </pre>
+
+        <h3 class="section-head">5. Storage Engines & Data Files</h3>
+        <p class="body-text">
+            Different databases use different storage strategies:
+        </p>
+        <ul style="margin-left: 25px;">
+            <li><b>InnoDB (MySQL):</b> Row-level locking, ACID compliant</li>
+            <li><b>PostgreSQL:</b> MVCC (Multi-Version Concurrency Control)</li>
+            <li><b>Columnar Storage:</b> Optimized for analytics (e.g., Amazon Redshift)</li>
+        </ul>
+
+        <h3 class="section-head">6. Isolation Levels</h3>
+        <p class="body-text">
+            SQL defines four isolation levels that control transaction visibility:
+        </p>
+        <ul style="margin-left: 25px;">
+            <li><b>READ UNCOMMITTED:</b> Dirty reads allowed</li>
+            <li><b>READ COMMITTED:</b> Default in PostgreSQL</li>
+            <li><b>REPEATABLE READ:</b> Default in MySQL</li>
+            <li><b>SERIALIZABLE:</b> Highest isolation, prevents anomalies</li>
+        </ul>
+
+        <h4 class="subsection-head">6.1 Setting Isolation Level</h4>
+        <pre>
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+BEGIN;
+-- Your transaction
+COMMIT;
+        </pre>
+
+        <h3 class="section-head">7. Putting it All Together</h3>
+        <p class="body-text">
+            By understanding:
+        </p>
+        <ul style="margin-left: 25px;">
+            <li>Relational theory and normalization</li>
+            <li>ACID properties and transaction management</li>
+            <li>Query execution and optimization</li>
+            <li>Indexing strategies and storage engines</li>
+        </ul>
+        <p class="body-text">
+            You can now design databases and write SQL that is efficient, reliable, and scalable for enterprise systems.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-arrow-right"></i> Next Steps:</b> In Module 02, we explore Advanced SQL Queries including complex joins, subqueries, CTEs, and window functions for sophisticated data analysis.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 02: Advanced SQL Queries
+        </button>
+    `
+},
+
+{
+    title: "Module 02: Advanced SQL Queries",
+    desc: "Complex Joins, Subqueries, CTEs & Window Functions",
+    content: `
+        <span class="module-tag"><i class="fas fa-code"></i> Query Mastery</span>
+        <h2 class="mod-title">Complex Joins, Subqueries, CTEs & Window Functions</h2>
+
+        <p class="body-text">
+            In this module, we master SQL's most powerful querying capabilities. You'll learn to solve complex business problems 
+            with sophisticated joins, recursive queries, and analytical functions. These skills are essential for data analysis, 
+            reporting, and application development.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Understanding when to use CTEs vs subqueries vs window functions can make your queries 10x more efficient and readable.
+        </div>
+
+        <h3 class="section-head">1. Advanced JOIN Operations</h3>
+        <p class="body-text">
+            Beyond basic INNER JOIN, SQL provides several join types for different scenarios:
+        </p>
+
+        <h4 class="subsection-head">1.1 JOIN Types Comparison</h4>
+        <div style="overflow-x: auto; margin: 20px 0;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="background: #f1f5f9;">
+                    <tr><th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">JOIN Type</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Description</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Use Case</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">INNER JOIN</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Rows with matches in both tables</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Standard relationship queries</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">LEFT JOIN</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">All rows from left, matches from right</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Preserving all records from primary table</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">RIGHT JOIN</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">All rows from right, matches from left</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Less common, can be replaced with LEFT JOIN</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">FULL OUTER JOIN</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">All rows from both tables</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Finding unmatched records in both directions</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">CROSS JOIN</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Cartesian product of all rows</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Generating combinations or test data</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 class="subsection-head">1.2 Self-Join Example</h4>
+        <pre>
+-- Find employees and their managers
+SELECT e.name AS employee, m.name AS manager
+FROM employees e
+LEFT JOIN employees m ON e.manager_id = m.employee_id;
+        </pre>
+
+        <h3 class="section-head">2. Subqueries: Correlated vs Non-Correlated</h3>
+        <p class="body-text">
+            Subqueries can be used in SELECT, FROM, WHERE, and HAVING clauses:
+        </p>
+
+        <h4 class="subsection-head">2.1 Non-Correlated Subquery</h4>
+        <pre>
+-- Products more expensive than average
+SELECT product_name, price
+FROM products
+WHERE price > (SELECT AVG(price) FROM products);
+        </pre>
+
+        <h4 class="subsection-head">2.2 Correlated Subquery</h4>
+        <pre>
+-- Employees earning more than their department average
+SELECT e.name, e.salary, e.department_id
+FROM employees e
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM employees
+    WHERE department_id = e.department_id
+);
+        </pre>
+
+        <h3 class="section-head">3. Common Table Expressions (CTEs)</h3>
+        <p class="body-text">
+            CTEs make complex queries more readable and maintainable:
+        </p>
+
+        <h4 class="subsection-head">3.1 Basic CTE Example</h4>
+        <pre>
+WITH high_value_orders AS (
+    SELECT order_id, customer_id, total
+    FROM orders
+    WHERE total > 1000
+)
+SELECT c.name, hvo.total
+FROM high_value_orders hvo
+JOIN customers c ON hvo.customer_id = c.id;
+        </pre>
+
+        <h4 class="subsection-head">3.2 Recursive CTE Example</h4>
+        <pre>
+-- Organizational hierarchy
+WITH RECURSIVE org_chart AS (
+    -- Anchor member
+    SELECT employee_id, name, manager_id, 1 AS level
+    FROM employees
+    WHERE manager_id IS NULL
+    
+    UNION ALL
+    
+    -- Recursive member
+    SELECT e.employee_id, e.name, e.manager_id, oc.level + 1
+    FROM employees e
+    JOIN org_chart oc ON e.manager_id = oc.employee_id
+)
+SELECT * FROM org_chart ORDER BY level, name;
+        </pre>
+
+        <h3 class="section-head">4. Window Functions</h3>
+        <p class="body-text">
+            Window functions perform calculations across rows without grouping:
+        </p>
+
+        <h4 class="subsection-head">4.1 Common Window Functions</h4>
+        <div style="overflow-x: auto; margin: 20px 0;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="background: #f1f5f9;">
+                    <tr><th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Function</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">ROW_NUMBER()</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Unique sequential number</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">RANK()</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Rank with gaps for ties</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">DENSE_RANK()</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Rank without gaps</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">LAG() / LEAD()</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Access previous/next row</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">SUM() OVER()</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Running total</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 class="subsection-head">4.2 Window Function Examples</h4>
+        <pre>
+-- Running total and rank
+SELECT 
+    order_date,
+    total,
+    SUM(total) OVER (ORDER BY order_date) AS running_total,
+    RANK() OVER (ORDER BY total DESC) AS sales_rank
+FROM orders;
+
+-- Compare to previous period
+SELECT 
+    month,
+    revenue,
+    LAG(revenue) OVER (ORDER BY month) AS prev_month,
+    revenue - LAG(revenue) OVER (ORDER BY month) AS growth
+FROM monthly_sales;
+        </pre>
+
+        <h3 class="section-head">5. Pivoting Data</h3>
+        <p class="body-text">
+            Convert rows to columns for reporting:
+        </p>
+        <pre>
+-- Using CASE for pivot
+SELECT 
+    department,
+    SUM(CASE WHEN quarter = 'Q1' THEN sales END) AS Q1,
+    SUM(CASE WHEN quarter = 'Q2' THEN sales END) AS Q2,
+    SUM(CASE WHEN quarter = 'Q3' THEN sales END) AS Q3,
+    SUM(CASE WHEN quarter = 'Q4' THEN sales END) AS Q4
+FROM sales_data
+GROUP BY department;
+        </pre>
+
+        <h3 class="section-head">6. Performance Considerations</h3>
+        <ul style="margin-left: 25px;">
+            <li>CTEs can be materialized or inlined depending on database</li>
+            <li>Correlated subqueries can be slow - consider rewriting as joins</li>
+            <li>Window functions are evaluated after WHERE clause</li>
+            <li>Use appropriate indexes for JOIN conditions</li>
+        </ul>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> For complex analytical queries, window functions often outperform multiple self-joins and are more maintainable.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 03: Database Design & Optimization
+        </button>
+    `
+},
+{
+    title: "Module 03: Database Design & Optimization",
+    desc: "Normalization, Indexing Strategies & Query Tuning",
+    content: `
+        <span class="module-tag"><i class="fas fa-tachometer-alt"></i> Performance</span>
+        <h2 class="mod-title">Normalization, Indexing Strategies & Query Tuning</h2>
+
+        <p class="body-text">
+            In this module, we focus on designing efficient databases and optimizing SQL performance. 
+            You'll learn normalization principles, indexing strategies, and query tuning techniques that can 
+            improve performance by orders of magnitude in production systems.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> A well-designed database with proper indexes can handle millions of rows with sub-second response times, while a poorly designed one can struggle with thousands.
+        </div>
+
+        <h3 class="section-head">1. Database Normalization</h3>
+        <p class="body-text">
+            Normalization reduces data redundancy and improves data integrity through progressive normal forms:
+        </p>
+
+        <h4 class="subsection-head">1.1 Normal Forms Overview</h4>
+        <div style="overflow-x: auto; margin: 20px 0;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="background: #f1f5f9;">
+                    <tr><th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Normal Form</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Requirement</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Example Violation</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">1NF</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Atomic values, no repeating groups</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">CSV in a column: "red,blue,green"</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">2NF</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">No partial dependencies</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Order details depend on order_id + product_id</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">3NF</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">No transitive dependencies</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Customer city depends on customer zip code</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">BCNF</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Stricter 3NF</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Every determinant is a candidate key</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 class="subsection-head">1.2 Denormalization for Performance</h4>
+        <p class="body-text">
+            While normalization improves integrity, sometimes denormalization improves performance:
+        </p>
+        <ul style="margin-left: 25px;">
+            <li>Reporting databases often denormalize for faster queries</li>
+            <li>Materialized views pre-compute expensive joins</li>
+            <li>Add calculated columns to avoid expensive computations</li>
+        </ul>
+
+        <h3 class="section-head">2. Indexing Deep Dive</h3>
+        <p class="body-text">
+            Indexes are critical for query performance but come with trade-offs:
+        </p>
+
+        <h4 class="subsection-head">2.1 Index Types and Use Cases</h4>
+        <pre>
+-- B-Tree Index (Default)
+CREATE INDEX idx_email ON users(email);
+
+-- Hash Index (Exact matches only)
+CREATE INDEX idx_user_hash ON users USING HASH(username);
+
+-- GiST/SP-GiST (Geospatial, full-text)
+CREATE INDEX idx_location ON properties USING GIST(location);
+
+-- BRIN (Block Range Index for sorted data)
+CREATE INDEX idx_timestamp ON logs USING BRIN(timestamp);
+        </pre>
+
+        <h4 class="subsection-head">2.2 Composite Index Strategy</h4>
+        <pre>
+-- Good for queries filtering on both columns
+CREATE INDEX idx_city_state ON customers(city, state);
+
+-- Index only scanning (covering index)
+CREATE INDEX idx_covering ON orders(customer_id, order_date, total)
+INCLUDE (status, notes);
+        </pre>
+
+        <h3 class="section-head">3. Query Performance Analysis</h3>
+        <p class="body-text">
+            Use database tools to analyze and improve query performance:
+        </p>
+
+        <h4 class="subsection-head">3.1 EXPLAIN ANALYZE Interpretation</h4>
+        <pre>
+EXPLAIN ANALYZE
+SELECT c.name, SUM(o.total) as total_spent
+FROM customers c
+JOIN orders o ON c.id = o.customer_id
+WHERE c.country = 'USA'
+GROUP BY c.id
+HAVING SUM(o.total) > 1000;
+        </pre>
+
+        <p class="body-text">
+            Key metrics to watch:
+        </p>
+        <ul style="margin-left: 25px;">
+            <li><b>Seq Scan vs Index Scan:</b> Index scans are usually faster</li>
+            <li><b>Cost:</b> Lower is better</li>
+            <li><b>Rows:</b> Actual vs estimated shows optimizer accuracy</li>
+            <li><b>Loops:</b> Nested loops can be expensive</li>
+        </ul>
+
+        <h3 class="section-head">4. Query Tuning Techniques</h3>
+
+        <h4 class="subsection-head">4.1 Rewrite Subqueries as Joins</h4>
+        <pre>
+-- Before (Correlated subquery)
+SELECT name FROM products p
+WHERE price > (SELECT AVG(price) FROM products WHERE category = p.category);
+
+-- After (Join with aggregation)
+SELECT p.name 
+FROM products p
+JOIN (
+    SELECT category, AVG(price) as avg_price
+    FROM products
+    GROUP BY category
+) cat_avg ON p.category = cat_avg.category
+WHERE p.price > cat_avg.avg_price;
+        </pre>
+
+        <h4 class="subsection-head">4.2 Use EXISTS instead of IN for large datasets</h4>
+        <pre>
+-- IN (may be slower)
+SELECT * FROM customers
+WHERE id IN (SELECT customer_id FROM orders WHERE total > 1000);
+
+-- EXISTS (often faster)
+SELECT * FROM customers c
+WHERE EXISTS (
+    SELECT 1 FROM orders o 
+    WHERE o.customer_id = c.id AND o.total > 1000
+);
+        </pre>
+
+        <h3 class="section-head">5. Partitioning Strategies</h3>
+        <p class="body-text">
+            Partitioning divides large tables into smaller, manageable pieces:
+        </p>
+
+        <h4 class="subsection-head">5.1 Range Partitioning Example</h4>
+        <pre>
+-- PostgreSQL example
+CREATE TABLE sales (
+    id SERIAL,
+    sale_date DATE NOT NULL,
+    amount DECIMAL(10,2)
+) PARTITION BY RANGE (sale_date);
+
+CREATE TABLE sales_2023_q1 PARTITION OF sales
+FOR VALUES FROM ('2023-01-01') TO ('2023-04-01');
+
+CREATE TABLE sales_2023_q2 PARTITION OF sales
+FOR VALUES FROM ('2023-04-01') TO ('2023-07-01');
+        </pre>
+
+        <h3 class="section-head">6. Connection Pooling & Configuration</h3>
+        <p class="body-text">
+            Database configuration affects performance:
+        </p>
+        <ul style="margin-left: 25px;">
+            <li><b>shared_buffers (PostgreSQL):</b> Memory for caching</li>
+            <li><b>innodb_buffer_pool_size (MySQL):</b> InnoDB cache size</li>
+            <li><b>max_connections:</b> Limit concurrent connections</li>
+            <li><b>work_mem / sort_buffer_size:</b> Memory for sorting and hashing</li>
+        </ul>
+
+        <h3 class="section-head">7. Monitoring & Maintenance</h3>
+        <ul style="margin-left: 25px;">
+            <li>Regularly analyze tables for statistics updates</li>
+            <li>Monitor index usage and remove unused indexes</li>
+            <li>Set up slow query logging</li>
+            <li>Vacuum/optimize tables to reclaim space</li>
+        </ul>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> Always test query changes with EXPLAIN ANALYZE on production-like data. What works on small datasets may not scale.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 04: Transaction Management
+        </button>
+    `
+},
+{
+    title: "Module 04: Transaction Management & Concurrency",
+    desc: "Locking, MVCC, Deadlocks & Isolation Levels",
+    content: `
+        <span class="module-tag"><i class="fas fa-lock"></i> Concurrency</span>
+        <h2 class="mod-title">Locking, MVCC, Deadlocks & Isolation Levels</h2>
+
+        <p class="body-text">
+            In multi-user database environments, managing concurrent access is critical. This module covers 
+            transaction isolation, locking mechanisms, and concurrency control techniques that ensure data 
+            consistency while maintaining performance.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Understanding transaction isolation prevents race conditions, dirty reads, and deadlocks in production applications.
+        </div>
+
+        <h3 class="section-head">1. Transaction Isolation Levels</h3>
+        <p class="body-text">
+            SQL Standard defines four isolation levels with different trade-offs between consistency and concurrency:
+        </p>
+
+        <h4 class="subsection-head">1.1 Isolation Level Comparison</h4>
+        <div style="overflow-x: auto; margin: 20px 0;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="background: #f1f5f9;">
+                    <tr><th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Isolation Level</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Dirty Read</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Non-repeatable Read</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Phantom Read</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Serialization Anomaly</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">READ UNCOMMITTED</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">✓</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">✓</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">✓</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">✓</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">READ COMMITTED</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">✗</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">✓</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">✓</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">✓</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">REPEATABLE READ</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">✗</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">✗</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">✓</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">✓</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">SERIALIZABLE</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">✗</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">✗</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">✗</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0; text-align: center;">✗</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 class="subsection-head">1.2 Setting Isolation Levels</h4>
+        <pre>
+-- PostgreSQL
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+BEGIN;
+-- Your queries
+COMMIT;
+
+-- MySQL
+SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+START TRANSACTION;
+-- Your queries
+COMMIT;
+        </pre>
+
+        <h3 class="section-head">2. Locking Mechanisms</h3>
+        <p class="body-text">
+            Databases use locks to control concurrent access:
+        </p>
+
+        <h4 class="subsection-head">2.1 Lock Types</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>Shared Locks (S):</b> For reading, multiple transactions can hold</li>
+            <li><b>Exclusive Locks (X):</b> For writing, only one transaction</li>
+            <li><b>Intent Locks:</b> Signal intention to lock at finer granularity</li>
+            <li><b>Row-level vs Table-level:</b> Modern databases prefer row-level</li>
+        </ul>
+
+        <h4 class="subsection-head">2.2 Locking Examples</h4>
+        <pre>
+-- MySQL explicit locking
+START TRANSACTION;
+SELECT * FROM accounts WHERE id = 1 FOR UPDATE;
+-- Other transactions blocked from updating this row
+UPDATE accounts SET balance = balance + 100 WHERE id = 1;
+COMMIT;
+
+-- PostgreSQL advisory locks
+SELECT pg_advisory_lock(123456);
+-- Perform critical section
+SELECT pg_advisory_unlock(123456);
+        </pre>
+
+        <h3 class="section-head">3. Multi-Version Concurrency Control (MVCC)</h3>
+        <p class="body-text">
+            MVCC allows readers to see consistent snapshots without blocking writers:
+        </p>
+
+        <h4 class="subsection-head">3.1 How MVCC Works</h4>
+        <ol style="margin-left: 25px;">
+            <li>Each row has creation and deletion transaction IDs</li>
+            <li>Readers see rows visible to their transaction snapshot</li>
+            <li>Writers create new versions of rows</li>
+            <li>Old versions cleaned up by vacuum/autovacuum</li>
+        </ol>
+
+        <h4 class="subsection-head">3.2 MVCC Example</h4>
+        <pre>
+-- Transaction 1
+BEGIN;
+SELECT * FROM products WHERE id = 1; -- Sees version 1
+
+-- Transaction 2 (concurrent)
+BEGIN;
+UPDATE products SET price = 200 WHERE id = 1;
+COMMIT;
+
+-- Transaction 1 continues to see old version
+SELECT * FROM products WHERE id = 1; -- Still sees version 1
+COMMIT;
+        </pre>
+
+        <h3 class="section-head">4. Deadlock Detection & Prevention</h3>
+        <p class="body-text">
+            Deadlocks occur when transactions wait for each other in a cycle:
+        </p>
+
+        <h4 class="subsection-head">4.1 Common Deadlock Scenario</h4>
+        <pre>
+-- Transaction A
+BEGIN;
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+-- Has lock on account 1
+
+-- Transaction B (concurrent)
+BEGIN;
+UPDATE accounts SET balance = balance - 100 WHERE id = 2;
+-- Has lock on account 2
+
+-- Transaction A now tries to update account 2 (waits)
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+
+-- Transaction B tries to update account 1 (DEADLOCK)
+UPDATE accounts SET balance = balance + 100 WHERE id = 1;
+        </pre>
+
+        <h4 class="subsection-head">4.2 Prevention Strategies</h4>
+        <ul style="margin-left: 25px;">
+            <li>Always acquire locks in consistent order</li>
+            <li>Use lower isolation levels when possible</li>
+            <li>Keep transactions short</li>
+            <li>Use NOWAIT or SKIP LOCKED to avoid waiting</li>
+        </ul>
+
+        <h3 class="section-head">5. Optimistic vs Pessimistic Concurrency</h3>
+
+        <h4 class="subsection-head">5.1 Pessimistic Concurrency</h4>
+        <pre>
+-- Lock rows at read time
+SELECT * FROM inventory 
+WHERE product_id = 123 
+FOR UPDATE; -- Prevents others from updating
+
+UPDATE inventory SET quantity = quantity - 1 
+WHERE product_id = 123;
+COMMIT;
+        </pre>
+
+        <h4 class="subsection-head">5.2 Optimistic Concurrency</h4>
+        <pre>
+-- Check version at update time
+UPDATE inventory 
+SET quantity = quantity - 1, 
+    version = version + 1
+WHERE product_id = 123 
+AND version = 1; -- Fails if someone else updated
+
+-- Check affected rows
+IF ROW_COUNT() = 0 THEN
+    -- Someone else modified, handle conflict
+END IF;
+        </pre>
+
+        <h3 class="section-head">6. Database-Specific Features</h3>
+
+        <h4 class="subsection-head">6.1 PostgreSQL</h4>
+        <ul style="margin-left: 25px;">
+            <li>MVCC with transaction ID ranges</li>
+            <li>SSI (Serializable Snapshot Isolation)</li>
+            <li>Explicit table-level locking with LOCK command</li>
+        </ul>
+
+        <h4 class="subsection-head">6.2 MySQL/InnoDB</h4>
+        <ul style="margin-left: 25px;">
+            <li>MVCC with undo logs</li>
+            <li>Gap locking for REPEATABLE READ</li>
+            <li>Next-key locking to prevent phantoms</li>
+        </ul>
+
+        <h3 class="section-head">7. Best Practices</h3>
+        <ul style="margin-left: 25px;">
+            <li>Use READ COMMITTED unless you need higher isolation</li>
+            <li>Keep transactions as short as possible</li>
+            <li>Avoid holding locks during user interaction</li>
+            <li>Monitor deadlocks and long-running transactions</li>
+            <li>Use retry logic for deadlock victims</li>
+        </ul>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> For most applications, READ COMMITTED provides the best balance of consistency and performance. Reserve SERIALIZABLE for critical financial operations.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 05: Advanced Data Types
+        </button>
+    `
+},
+{
+    title: "Module 05: Advanced Data Types & JSON",
+    desc: "JSON, Arrays, HStore, Geospatial & Full-Text Search",
+    content: `
+        <span class="module-tag"><i class="fas fa-layer-group"></i> Data Types</span>
+        <h2 class="mod-title">JSON, Arrays, HStore, Geospatial & Full-Text Search</h2>
+
+        <p class="body-text">
+            Modern SQL databases support sophisticated data types beyond simple integers and strings. 
+            This module explores JSON, arrays, geospatial data, and full-text search capabilities that 
+            enable you to handle complex data structures efficiently within the database.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Using native database types for complex data can be 10-100x faster than processing in application code and simplifies your architecture.
+        </div>
+
+        <h3 class="section-head">1. JSON Support in SQL</h3>
+        <p class="body-text">
+            JSON support allows storing and querying semi-structured data:
+        </p>
+
+        <h4 class="subsection-head">1.1 JSON Data Types</h4>
+        <div style="overflow-x: auto; margin: 20px 0;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="background: #f1f5f9;">
+                    <tr><th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Type</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Description</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Use Case</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">JSON</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Text storage, validates on insert</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">General JSON storage</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">JSONB</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Binary storage, faster querying</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Frequent querying/updates</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 class="subsection-head">1.2 JSON Query Examples</h4>
+        <pre>
+-- PostgreSQL JSON examples
+CREATE TABLE products (
+    id SERIAL PRIMARY KEY,
+    details JSONB,
+    metadata JSONB
+);
+
+-- Insert JSON data
+INSERT INTO products (details) VALUES (
+    '{"name": "Laptop", "specs": {"ram": "16GB", "storage": "512GB"}, "tags": ["electronics", "computers"]}'
+);
+
+-- Query JSON fields
+SELECT 
+    details->>'name' as product_name,
+    details->'specs'->>'ram' as memory,
+    details->'tags'->>0 as primary_tag
+FROM products;
+
+-- Check if key exists
+SELECT * FROM products 
+WHERE details ? 'specs';
+
+-- Search in arrays
+SELECT * FROM products 
+WHERE details->'tags' ? 'electronics';
+
+-- Update JSON
+UPDATE products 
+SET details = jsonb_set(details, '{specs,color}', '"Silver"')
+WHERE id = 1;
+        </pre>
+
+        <h3 class="section-head">2. Array Data Types</h3>
+        <p class="body-text">
+            Arrays store multiple values in a single column:
+        </p>
+
+        <h4 class="subsection-head">2.1 Array Operations</h4>
+        <pre>
+-- Creating arrays
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    email_addresses TEXT[],
+    favorite_numbers INTEGER[]
+);
+
+-- Inserting arrays
+INSERT INTO users (name, email_addresses, favorite_numbers)
+VALUES ('Alice', ARRAY['alice@work.com', 'alice@personal.com'], ARRAY[7, 42, 100]);
+
+-- Querying arrays
+SELECT * FROM users WHERE 'alice@work.com' = ANY(email_addresses);
+
+-- Unnesting arrays
+SELECT id, unnest(email_addresses) as email
+FROM users;
+
+-- Array functions
+SELECT 
+    name,
+    array_length(email_addresses, 1) as email_count,
+    favorite_numbers[1] as first_favorite
+FROM users;
+        </pre>
+
+        <h3 class="section-head">3. Geospatial Data with PostGIS</h3>
+        <p class="body-text">
+            Geospatial support enables location-based queries:
+        </p>
+
+        <h4 class="subsection-head">3.1 Geospatial Examples</h4>
+        <pre>
+-- Enable PostGIS extension
+CREATE EXTENSION postgis;
+
+-- Create table with geography
+CREATE TABLE locations (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    coordinates GEOGRAPHY(POINT, 4326)
+);
+
+-- Insert locations
+INSERT INTO locations (name, coordinates) VALUES
+    ('Office', ST_MakePoint(-122.4194, 37.7749)),
+    ('Home', ST_MakePoint(-122.4313, 37.7739));
+
+-- Find distance between points
+SELECT 
+    a.name as point_a,
+    b.name as point_b,
+    ST_Distance(a.coordinates, b.coordinates) as distance_meters
+FROM locations a, locations b
+WHERE a.id = 1 AND b.id = 2;
+
+-- Find points within radius
+SELECT name FROM locations
+WHERE ST_DWithin(
+    coordinates,
+    ST_MakePoint(-122.4194, 37.7749)::geography,
+    1000 -- 1km radius
+);
+        </pre>
+
+        <h3 class="section-head">4. Full-Text Search</h3>
+        <p class="body-text">
+            Native full-text search outperforms LIKE queries for text search:
+        </p>
+
+        <h4 class="subsection-head">4.1 Full-Text Search Examples</h4>
+        <pre>
+-- Create search index
+CREATE TABLE documents (
+    id SERIAL PRIMARY KEY,
+    title TEXT,
+    content TEXT,
+    search_vector TSVECTOR
+);
+
+CREATE INDEX idx_search ON documents USING GIN(search_vector);
+
+-- Update search vector
+UPDATE documents 
+SET search_vector = to_tsvector('english', title || ' ' || content);
+
+-- Search with ranking
+SELECT 
+    title,
+    ts_rank(search_vector, query) as rank
+FROM documents, to_tsquery('english', 'database & performance') query
+WHERE search_vector @@ query
+ORDER BY rank DESC;
+
+-- Phrase search
+SELECT * FROM documents
+WHERE search_vector @@ phraseto_tsquery('english', 'SQL query optimization');
+        </pre>
+
+        <h3 class="section-head">5. Composite Types & Enums</h3>
+
+        <h4 class="subsection-head">5.1 Custom Types</h4>
+        <pre>
+-- Create composite type
+CREATE TYPE address_type AS (
+    street TEXT,
+    city TEXT,
+    state CHAR(2),
+    zip_code TEXT
+);
+
+-- Use composite type
+CREATE TABLE customers (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    address address_type
+);
+
+-- Query composite fields
+SELECT 
+    name,
+    (address).street,
+    (address).city
+FROM customers;
+
+-- Create enum type
+CREATE TYPE order_status AS ENUM (
+    'pending',
+    'processing',
+    'shipped',
+    'delivered',
+    'cancelled'
+);
+
+CREATE TABLE orders (
+    id SERIAL PRIMARY KEY,
+    status order_status DEFAULT 'pending'
+);
+        </pre>
+
+        <h3 class="section-head">6. HStore (Key-Value Store)</h3>
+        <p class="body-text">
+            HStore provides simple key-value storage within PostgreSQL:
+        </p>
+        <pre>
+-- Enable hstore extension
+CREATE EXTENSION hstore;
+
+-- Create table with hstore
+CREATE TABLE product_attributes (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER,
+    attributes HSTORE
+);
+
+-- Insert key-value pairs
+INSERT INTO product_attributes (product_id, attributes)
+VALUES (1, 'color => "red", size => "XL", material => "cotton"');
+
+-- Query by key
+SELECT * FROM product_attributes 
+WHERE attributes ? 'color';
+
+-- Get specific value
+SELECT attributes->'size' as size
+FROM product_attributes;
+
+-- Update hstore
+UPDATE product_attributes
+SET attributes = attributes || 'weight => "200g"'::hstore;
+        </pre>
+
+        <h3 class="section-head">7. Performance Considerations</h3>
+        <ul style="margin-left: 25px;">
+            <li>JSONB has higher insert overhead but faster queries than JSON</li>
+            <li>Create GIN indexes on JSONB fields you frequently query</li>
+            <li>Arrays can be indexed with GIN for fast membership tests</li>
+            <li>Geospatial queries benefit from GiST indexes</li>
+            <li>Full-text search requires proper dictionary configuration</li>
+        </ul>
+
+        <h3 class="section-head">8. Use Cases</h3>
+        <ul style="margin-left: 25px;">
+            <li>JSON: Configuration, user preferences, API responses</li>
+            <li>Arrays: Tags, categories, multi-select values</li>
+            <li>Geospatial: Location services, mapping, logistics</li>
+            <li>Full-text: Search engines, document management</li>
+            <li>HStore: Flexible attributes, feature flags</li>
+        </ul>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> Use JSONB for semi-structured data that needs querying, but consider normalized tables for data with fixed schemas and complex relationships.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 06: Security & Administration
+        </button>
+    `
+},
+{
+    title: "Module 06: Database Security & Administration",
+    desc: "Roles, Permissions, Encryption & Backup Strategies",
+    content: `
+        <span class="module-tag"><i class="fas fa-shield-alt"></i> Security</span>
+        <h2 class="mod-title">Roles, Permissions, Encryption & Backup Strategies</h2>
+
+        <p class="body-text">
+            Database security is critical for protecting sensitive data and ensuring compliance. 
+            This module covers authentication, authorization, encryption, auditing, and backup strategies 
+            that every database administrator must master.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Security is not a feature to add later—it must be designed into your database architecture from the beginning.
+        </div>
+
+        <h3 class="section-head">1. Authentication & Authorization</h3>
+        <p class="body-text">
+            Control who can access the database and what they can do:
+        </p>
+
+        <h4 class="subsection-head">1.1 Role-Based Access Control (RBAC)</h4>
+        <pre>
+-- Create roles
+CREATE ROLE read_only;
+CREATE ROLE read_write;
+CREATE ROLE dba;
+
+-- Grant privileges
+GRANT CONNECT ON DATABASE mydb TO read_only;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO read_only;
+
+GRANT INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO read_write;
+
+GRANT ALL PRIVILEGES ON DATABASE mydb TO dba;
+
+-- Create users and assign roles
+CREATE USER analyst WITH PASSWORD 'secure_password';
+GRANT read_only TO analyst;
+
+CREATE USER app_user WITH PASSWORD 'app_password';
+GRANT read_write TO app_user;
+        </pre>
+
+        <h4 class="subsection-head">1.2 Schema-Level Security</h4>
+        <pre>
+-- Create separate schemas
+CREATE SCHEMA hr_data;
+CREATE SCHEMA finance_data;
+CREATE SCHEMA public_api;
+
+-- Restrict access
+REVOKE ALL ON SCHEMA hr_data FROM PUBLIC;
+GRANT USAGE ON SCHEMA hr_data TO hr_role;
+
+REVOKE ALL ON SCHEMA finance_data FROM PUBLIC;
+GRANT USAGE ON SCHEMA finance_data TO finance_role;
+
+-- Schema for external APIs
+GRANT USAGE ON SCHEMA public_api TO web_app;
+GRANT SELECT ON ALL TABLES IN SCHEMA public_api TO web_app;
+        </pre>
+
+        <h3 class="section-head">2. Row-Level Security (RLS)</h3>
+        <p class="body-text">
+            RLS restricts which rows users can access within a table:
+        </p>
+
+        <h4 class="subsection-head">2.1 RLS Implementation</h4>
+        <pre>
+-- Enable RLS on table
+CREATE TABLE employee_salaries (
+    id SERIAL PRIMARY KEY,
+    employee_id INTEGER,
+    department_id INTEGER,
+    salary DECIMAL(10,2),
+    manager_id INTEGER
+);
+
+ALTER TABLE employee_salaries ENABLE ROW LEVEL SECURITY;
+
+-- Policy: Employees can only see their own salary
+CREATE POLICY employee_self_policy ON employee_salaries
+FOR SELECT
+USING (employee_id = current_user_id());
+
+-- Policy: Managers can see their team's salaries
+CREATE POLICY manager_team_policy ON employee_salaries
+FOR SELECT
+USING (
+    manager_id = current_user_id() 
+    OR 
+    current_user_role() = 'hr_director'
+);
+
+-- Policy: Only HR can insert/update
+CREATE POLICY hr_write_policy ON employee_salaries
+FOR ALL
+USING (current_user_role() IN ('hr_manager', 'hr_director'))
+WITH CHECK (current_user_role() IN ('hr_manager', 'hr_director'));
+        </pre>
+
+        <h3 class="section-head">3. Data Encryption</h3>
+
+        <h4 class="subsection-head">3.1 Encryption at Rest</h4>
+        <pre>
+-- PostgreSQL with pgcrypto
+CREATE EXTENSION pgcrypto;
+
+-- Encrypt sensitive columns
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email TEXT,
+    ssn TEXT, -- Encrypted
+    credit_card TEXT -- Encrypted
+);
+
+-- Insert encrypted data
+INSERT INTO users (email, ssn, credit_card) VALUES (
+    'user@example.com',
+    pgp_sym_encrypt('123-45-6789', 'encryption_key'),
+    pgp_sym_encrypt('4111111111111111', 'encryption_key')
+);
+
+-- Decrypt for authorized use
+SELECT 
+    email,
+    pgp_sym_decrypt(ssn::bytea, 'encryption_key') as ssn
+FROM users 
+WHERE id = 1;
+        </pre>
+
+        <h4 class="subsection-head">3.2 SSL/TLS for Connections</h4>
+        <pre>
+# postgresql.conf
+ssl = on
+ssl_cert_file = '/path/to/server.crt'
+ssl_key_file = '/path/to/server.key'
+ssl_ca_file = '/path/to/ca.crt'
+
+# pg_hba.conf
+# Require SSL for remote connections
+hostssl all all 0.0.0.0/0 md5 clientcert=verify-ca
+        </pre>
+
+        <h3 class="section-head">4. Auditing & Compliance</h3>
+
+        <h4 class="subsection-head">4.1 Audit Triggers</h4>
+        <pre>
+-- Create audit table
+CREATE TABLE audit_log (
+    id BIGSERIAL PRIMARY KEY,
+    table_name TEXT,
+    operation TEXT,
+    old_data JSONB,
+    new_data JSONB,
+    changed_by TEXT,
+    changed_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Create audit trigger function
+CREATE OR REPLACE FUNCTION audit_trigger_function()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO audit_log (
+        table_name,
+        operation,
+        old_data,
+        new_data,
+        changed_by
+    ) VALUES (
+        TG_TABLE_NAME,
+        TG_OP,
+        CASE WHEN TG_OP IN ('UPDATE', 'DELETE') THEN row_to_json(OLD) END,
+        CASE WHEN TG_OP IN ('INSERT', 'UPDATE') THEN row_to_json(NEW) END,
+        current_user
+    );
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Apply trigger to sensitive table
+CREATE TRIGGER audit_users_trigger
+AFTER INSERT OR UPDATE OR DELETE ON users
+FOR EACH ROW EXECUTE FUNCTION audit_trigger_function();
+        </pre>
+
+        <h3 class="section-head">5. Backup & Recovery Strategies</h3>
+
+        <h4 class="subsection-head">5.1 Backup Types</h4>
+        <div style="overflow-x: auto; margin: 20px 0;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="background: #f1f5f9;">
+                    <tr><th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Backup Type</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Description</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Recovery Point</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">Full Backup</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Complete database copy</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Backup time</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">Incremental</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Changes since last backup</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Backup time</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">Continuous Archiving</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">WAL files streaming</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Any point in time</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4 class="subsection-head">5.2 Backup Implementation</h4>
+        <pre>
+# PostgreSQL pg_dump
+pg_dump -h localhost -U postgres -d mydb -F c -b -v -f backup.dump
+
+# Full database backup
+pg_dumpall -h localhost -U postgres | gzip > full_backup.sql.gz
+
+# Continuous archiving setup
+# postgresql.conf
+wal_level = replica
+archive_mode = on
+archive_command = 'cp %p /var/lib/postgresql/wal_archive/%f'
+
+# Base backup
+pg_basebackup -D /var/lib/postgresql/backup -Ft -z
+
+# MySQL backup
+mysqldump --single-transaction --routines --triggers mydb > backup.sql
+
+# MySQL binary backup
+mysqlbackup --backup-dir=/backup --backup-image=backup.mbi backup-and-apply-log
+        </pre>
+
+        <h3 class="section-head">6. Monitoring & Alerting</h3>
+
+        <h4 class="subsection-head">6.1 Key Metrics to Monitor</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>Connection count:</b> Prevent connection exhaustion</li>
+            <li><b>Lock waits:</b> Detect contention issues</li>
+            <li><b>Cache hit ratio:</b> Ensure efficient memory usage</li>
+            <li><b>Replication lag:</b> For high availability setups</li>
+            <li><b>Disk space:</b> Prevent out-of-space crashes</li>
+        </ul>
+
+        <h4 class="subsection-head">6.2 Query Performance Monitoring</h4>
+        <pre>
+-- Find slow queries
+SELECT 
+    query,
+    total_exec_time,
+    calls,
+    mean_exec_time
+FROM pg_stat_statements
+ORDER BY total_exec_time DESC
+LIMIT 10;
+
+-- Monitor locks
+SELECT 
+    relation::regclass,
+    locktype,
+    mode,
+    granted
+FROM pg_locks
+WHERE NOT granted;
+
+-- Check table bloat
+SELECT 
+    schemaname,
+    tablename,
+    pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) as total_size,
+    pg_size_pretty(pg_relation_size(schemaname||'.'||tablename)) as table_size
+FROM pg_tables
+ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC
+LIMIT 10;
+        </pre>
+
+        <h3 class="section-head">7. High Availability & Replication</h3>
+
+        <h4 class="subsection-head">7.1 Replication Setup</h4>
+        <pre>
+# Primary server configuration
+# postgresql.conf
+wal_level = replica
+max_wal_senders = 10
+max_replication_slots = 10
+
+# Replica server configuration
+# Standby server recovery.conf (PostgreSQL 12+ in postgresql.conf)
+primary_conninfo = 'host=primary_host port=5432 user=replicator password=secret'
+primary_slot_name = 'replica_slot'
+        </pre>
+
+        <h3 class="section-head">8. Best Practices</h3>
+        <ul style="margin-left: 25px;">
+            <li>Follow principle of least privilege for all users</li>
+            <li>Encrypt sensitive data at rest and in transit</li>
+            <li>Implement comprehensive auditing for compliance</li>
+            <li>Test backup restoration regularly</li>
+            <li>Monitor proactively, not reactively</li>
+            <li>Keep database software patched and updated</li>
+        </ul>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> Implement defense in depth: network security, authentication, authorization, encryption, and auditing. No single layer is sufficient.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 07: Procedural SQL
+        </button>
+    `
+},
+{
+    title: "Module 07: Procedural SQL & PL/pgSQL",
+    desc: "Stored Procedures, Functions, Triggers & Dynamic SQL",
+    content: `
+        <span class="module-tag"><i class="fas fa-cogs"></i> Programming</span>
+        <h2 class="mod-title">Stored Procedures, Functions, Triggers & Dynamic SQL</h2>
+
+        <p class="body-text">
+            Procedural SQL extends SQL with programming constructs like variables, loops, and conditional logic. 
+            This module covers stored procedures, functions, triggers, and dynamic SQL that enable complex 
+            business logic to run directly in the database for improved performance and data integrity.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Procedural SQL can reduce network round-trips and ensure data consistency by keeping business logic close to the data.
+        </div>
+
+        <h3 class="section-head">1. Stored Procedures vs Functions</h3>
+        <p class="body-text">
+            Understanding when to use procedures vs functions:
+        </p>
+
+        <h4 class="subsection-head">1.1 Comparison</h4>
+        <div style="overflow-x: auto; margin: 20px 0;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="background: #f1f5f9;">
+                    <tr><th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Feature</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Stored Procedure</th>
+                        <th style="padding: 12px; text-align: left; border: 1px solid #e2e8f0;">Function</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">Transaction Control</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Can commit/rollback</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Cannot control transactions</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">Return Value</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Can return multiple values</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Returns single value or table</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">Usage in Queries</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Cannot be used in SELECT</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">Can be used in SELECT</td></tr>
+                    <tr><td style="padding: 12px; border: 1px solid #e2e8f0;">Calling</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">CALL procedure_name()</td>
+                        <td style="padding: 12px; border: 1px solid #e2e8f0;">SELECT function_name()</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="section-head">2. PL/pgSQL Functions</h3>
+
+        <h4 class="subsection-head">2.1 Basic Function Structure</h4>
+        <pre>
+CREATE OR REPLACE FUNCTION calculate_order_total(order_id INTEGER)
+RETURNS DECIMAL(10,2) AS $$
+DECLARE
+    total_amount DECIMAL(10,2) := 0;
+    item RECORD;
+BEGIN
+    -- Calculate sum of order items
+    FOR item IN 
+        SELECT quantity, unit_price 
+        FROM order_items 
+        WHERE order_id = calculate_order_total.order_id
+    LOOP
+        total_amount := total_amount + (item.quantity * item.unit_price);
+    END LOOP;
+    
+    -- Apply discount if total > 1000
+    IF total_amount > 1000 THEN
+        total_amount := total_amount * 0.9; -- 10% discount
+    END IF;
+    
+    RETURN total_amount;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Usage
+SELECT order_id, calculate_order_total(order_id) as total
+FROM orders;
+        </pre>
+
+        <h4 class="subsection-head">2.2 Table-Returning Functions</h4>
+        <pre>
+CREATE OR REPLACE FUNCTION get_customer_orders(customer_id INTEGER)
+RETURNS TABLE (
+    order_id INTEGER,
+    order_date DATE,
+    total_amount DECIMAL(10,2),
+    item_count INTEGER
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        o.id,
+        o.order_date,
+        SUM(oi.quantity * oi.unit_price) as total,
+        COUNT(oi.id) as items
+    FROM orders o
+    LEFT JOIN order_items oi ON o.id = oi.order_id
+    WHERE o.customer_id = get_customer_orders.customer_id
+    GROUP BY o.id, o.order_date
+    ORDER BY o.order_date DESC;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Usage
+SELECT * FROM get_customer_orders(123);
+        </pre>
+
+        <h3 class="section-head">3. Stored Procedures</h3>
+
+        <h4 class="subsection-head">3.1 Transactional Procedure</h4>
+        <pre>
+CREATE OR REPLACE PROCEDURE process_order(
+    p_customer_id INTEGER,
+    p_product_id INTEGER,
+    p_quantity INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_unit_price DECIMAL(10,2);
+    v_stock INTEGER;
+    v_order_id INTEGER;
+BEGIN
+    -- Check product availability
+    SELECT price, stock_quantity INTO v_unit_price, v_stock
+    FROM products WHERE id = p_product_id;
+    
+    IF v_stock < p_quantity THEN
+        RAISE EXCEPTION 'Insufficient stock: Available %, Requested %', 
+                        v_stock, p_quantity;
+    END IF;
+    
+    -- Start transaction
+    BEGIN
+        -- Create order
+        INSERT INTO orders (customer_id, order_date, status)
+        VALUES (p_customer_id, CURRENT_DATE, 'processing')
+        RETURNING id INTO v_order_id;
+        
+        -- Add order item
+        INSERT INTO order_items (order_id, product_id, quantity, unit_price)
+        VALUES (v_order_id, p_product_id, p_quantity, v_unit_price);
+        
+        -- Update stock
+        UPDATE products 
+        SET stock_quantity = stock_quantity - p_quantity
+        WHERE id = p_product_id;
+        
+        -- Update order total
+        UPDATE orders 
+        SET total = p_quantity * v_unit_price
+        WHERE id = v_order_id;
+        
+        COMMIT;
+        
+    EXCEPTION WHEN OTHERS THEN
+        ROLLBACK;
+        RAISE;
+    END;
+END;
+$$;
+
+-- Usage
+CALL process_order(123, 456, 2);
+        </pre>
+
+        <h3 class="section-head">4. Triggers</h3>
+
+        <h4 class="subsection-head">4.1 Basic Trigger Example</h4>
+        <pre>
+-- Trigger function
+CREATE OR REPLACE FUNCTION update_modified_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.modified_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Apply trigger
+CREATE TRIGGER update_customers_modified
+BEFORE UPDATE ON customers
+FOR EACH ROW
+EXECUTE FUNCTION update_modified_column();
+        </pre>
+
+        <h4 class="subsection-head">4.2 Complex Trigger for Data Validation</h4>
+        <pre>
+CREATE OR REPLACE FUNCTION validate_salary_change()
+RETURNS TRIGGER AS $$
+DECLARE
+    max_increase DECIMAL(10,2) := 5000;
+BEGIN
+    -- Prevent salary decrease
+    IF NEW.salary < OLD.salary THEN
+        RAISE EXCEPTION 'Salary cannot be decreased from % to %', 
+                        OLD.salary, NEW.salary;
+    END IF;
+    
+    -- Limit increase amount
+    IF NEW.salary - OLD.salary > max_increase THEN
+        RAISE EXCEPTION 'Salary increase limited to %. Requested: %', 
+                        max_increase, NEW.salary - OLD.salary;
+    END IF;
+    
+    -- Log the change
+    INSERT INTO salary_changes (
+        employee_id, 
+        old_salary, 
+        new_salary, 
+        changed_by, 
+        change_date
+    ) VALUES (
+        NEW.id,
+        OLD.salary,
+        NEW.salary,
+        current_user,
+        CURRENT_TIMESTAMP
+    );
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER validate_employee_salary
+BEFORE UPDATE OF salary ON employees
+FOR EACH ROW
+EXECUTE FUNCTION validate_salary_change();
+        </pre>
+
+        <h3 class="section-head">5. Dynamic SQL</h3>
+
+        <h4 class="subsection-head">5.1 EXECUTE with Dynamic Queries</h4>
+        <pre>
+CREATE OR REPLACE FUNCTION search_entities(
+    search_term TEXT,
+    entity_type TEXT
+)
+RETURNS TABLE(id INTEGER, name TEXT, match_score FLOAT) AS $$
+DECLARE
+    query TEXT;
+BEGIN
+    -- Build dynamic query based on entity type
+    query := format('
+        SELECT 
+            id, 
+            name,
+            ts_rank(search_vector, to_tsquery(''english'', %L)) as score
+        FROM %I 
+        WHERE search_vector @@ to_tsquery(''english'', %L)
+        ORDER BY score DESC
+        LIMIT 100',
+        search_term,
+        entity_type || '_entities',
+        search_term
+    );
+    
+    RETURN QUERY EXECUTE query;
+END;
+$$ LANGUAGE plpgsql;
+        </pre>
+
+        <h4 class="subsection-head">5.2 Dynamic Table Creation</h4>
+        <pre>
+CREATE OR REPLACE FUNCTION create_monthly_partition(
+    table_name TEXT,
+    month_date DATE
+)
+RETURNS VOID AS $$
+DECLARE
+    partition_name TEXT;
+    start_date DATE;
+    end_date DATE;
+    create_sql TEXT;
+BEGIN
+    -- Calculate partition bounds
+    start_date := date_trunc('month', month_date);
+    end_date := start_date + INTERVAL '1 month';
+    
+    -- Generate partition name
+    partition_name := table_name || '_' || 
+                      to_char(start_date, 'YYYY_MM');
+    
+    -- Create partition
+    create_sql := format('
+        CREATE TABLE %I PARTITION OF %I
+        FOR VALUES FROM (%L) TO (%L)',
+        partition_name,
+        table_name,
+        start_date,
+        end_date
+    );
+    
+    EXECUTE create_sql;
+    
+    -- Create indexes on partition
+    EXECUTE format('
+        CREATE INDEX ON %I (created_at)',
+        partition_name
+    );
+END;
+$$ LANGUAGE plpgsql;
+        </pre>
+
+        <h3 class="section-head">6. Error Handling</h3>
+
+        <h4 class="subsection-head">6.1 Comprehensive Error Handling</h4>
+        <pre>
+CREATE OR REPLACE FUNCTION safe_data_update()
+RETURNS VOID AS $$
+DECLARE
+    v_row_count INTEGER;
+BEGIN
+    BEGIN
+        -- Attempt update
+        UPDATE sensitive_table 
+        SET value = 'updated'
+        WHERE condition = true;
+        
+        GET DIAGNOSTICS v_row_count = ROW_COUNT;
+        
+        IF v_row_count = 0 THEN
+            RAISE NOTICE 'No rows updated';
+        ELSE
+            RAISE NOTICE 'Updated % rows', v_row_count;
+        END IF;
+        
+    EXCEPTION 
+        WHEN unique_violation THEN
+            RAISE EXCEPTION 'Duplicate key violation';
+        WHEN foreign_key_violation THEN
+            RAISE EXCEPTION 'Foreign key violation';
+        WHEN check_violation THEN
+            RAISE EXCEPTION 'Check constraint violation';
+        WHEN OTHERS THEN
+            -- Log error
+            INSERT INTO error_log (error_message, error_time)
+            VALUES (SQLERRM, CURRENT_TIMESTAMP);
+            
+            RAISE EXCEPTION 'Unexpected error: %', SQLERRM;
+    END;
+END;
+$$ LANGUAGE plpgsql;
+        </pre>
+
+        <h3 class="section-head">7. Performance Considerations</h3>
+        <ul style="margin-left: 25px;">
+            <li>Avoid excessive loops - use set-based operations when possible</li>
+            <li>Use VOLATILE, STABLE, or IMMUTABLE function attributes appropriately</li>
+            <li>Minimize context switches between SQL and procedural code</li>
+            <li>Cache expensive function results with materialized views</li>
+            <li>Use trigger judiciously - they add overhead</li>
+        </ul>
+
+        <h3 class="section-head">8. Best Practices</h3>
+        <ul style="margin-left: 25px;">
+            <li>Keep procedural logic simple and focused</li>
+            <li>Document functions with comments</li>
+            <li>Test thoroughly with edge cases</li>
+            <li>Consider security implications (SQL injection in dynamic SQL)</li>
+            <li>Version control your database functions</li>
+        </ul>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> Use procedural SQL for data-intensive operations that benefit from being close to the data, but keep complex business logic in application code where it's easier to test and maintain.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 08: Advanced Analytics
+        </button>
+    `
+},
+{
+    title: "Module 08: Advanced Analytics with SQL",
+    desc: "Time Series, Statistical Functions & Machine Learning in SQL",
+    content: `
+        <span class="module-tag"><i class="fas fa-chart-line"></i> Analytics</span>
+        <h2 class="mod-title">Time Series, Statistical Functions & Machine Learning in SQL</h2>
+
+        <p class="body-text">
+            Modern SQL databases include powerful analytical capabilities that can process complex data transformations, 
+            perform statistical analysis, and even run machine learning algorithms directly in the database. 
+            This module explores advanced analytics techniques that eliminate the need to move data to external systems.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Performing analytics in the database can be 10-100x faster than moving data to Python/R and avoids data consistency issues.
+        </div>
+
+        <h3 class="section-head">1. Time Series Analysis</h3>
+        <p class="body-text">
+            SQL provides excellent tools for time series data analysis:
+        </p>
+
+        <h4 class="subsection-head">1.1 Time Bucketing & Aggregation</h4>
+        <pre>
+-- Group by time intervals
+SELECT 
+    date_trunc('hour', event_time) as hour_bucket,
+    COUNT(*) as event_count,
+    AVG(value) as average_value
+FROM events
+WHERE event_time >= NOW() - INTERVAL '7 days'
+GROUP BY date_trunc('hour', event_time)
+ORDER BY hour_bucket;
+
+-- Using generate_series for time buckets
+SELECT 
+    bucket,
+    COALESCE(COUNT(events.id), 0) as event_count
+FROM generate_series(
+    NOW() - INTERVAL '30 days',
+    NOW(),
+    INTERVAL '1 day'
+) as bucket
+LEFT JOIN events ON date_trunc('day', events.event_time) = bucket
+GROUP BY bucket
+ORDER BY bucket;
+        </pre>
+
+        <h4 class="subsection-head">1.2 Window Functions for Time Series</h4>
+        <pre>
+-- Moving averages and trends
+SELECT 
+    date,
+    revenue,
+    AVG(revenue) OVER (
+        ORDER BY date 
+        ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+    ) as weekly_moving_avg,
+    revenue - LAG(revenue, 7) OVER (ORDER BY date) as week_over_week,
+    (revenue - LAG(revenue, 7) OVER (ORDER BY date)) / 
+    NULLIF(LAG(revenue, 7) OVER (ORDER BY date), 0) * 100 
+    as week_over_week_pct
+FROM daily_revenue
+ORDER BY date;
+        </pre>
+
+        <h3 class="section-head">2. Statistical Functions</h3>
+
+        <h4 class="subsection-head">2.1 Built-in Statistical Functions</h4>
+        <pre>
+-- Basic statistics
+SELECT 
+    COUNT(*) as n,
+    AVG(salary) as mean,
+    STDDEV(salary) as stddev,
+    MIN(salary) as min,
+    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY salary) as median,
+    PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY salary) as q1,
+    PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY salary) as q3,
+    MAX(salary) as max
+FROM employees
+WHERE department = 'Engineering';
+
+-- Correlation and covariance
+SELECT 
+    CORR(revenue, marketing_spend) as revenue_marketing_corr,
+    COVAR_POP(revenue, marketing_spend) as revenue_marketing_covariance,
+    REGR_SLOPE(revenue, marketing_spend) as regression_slope,
+    REGR_INTERCEPT(revenue, marketing_spend) as regression_intercept
+FROM monthly_financials;
+        </pre>
+
+        <h4 class="subsection-head">2.2 Advanced Statistical Analysis</h4>
+        <pre>
+-- Calculate z-scores
+WITH stats AS (
+    SELECT 
+        AVG(value) as mean,
+        STDDEV(value) as stddev
+    FROM measurements
+)
+SELECT 
+    m.id,
+    m.value,
+    (m.value - stats.mean) / NULLIF(stats.stddev, 0) as z_score,
+    CASE 
+        WHEN ABS((m.value - stats.mean) / NULLIF(stats.stddev, 0)) > 3 
+        THEN 'Outlier'
+        ELSE 'Normal'
+    END as outlier_status
+FROM measurements m, stats;
+
+-- Calculate running statistics
+SELECT 
+    event_time,
+    value,
+    AVG(value) OVER w as running_avg,
+    STDDEV(value) OVER w as running_stddev,
+    COUNT(*) OVER w as running_count
+FROM sensor_data
+WINDOW w AS (ORDER BY event_time ROWS BETWEEN 99 PRECEDING AND CURRENT ROW);
+        </pre>
+
+        <h3 class="section-head">3. Machine Learning in SQL</h3>
+
+        <h4 class="subsection-head">3.1 MADlib (Machine Learning in PostgreSQL)</h4>
+        <pre>
+-- Install MADlib extension
+CREATE EXTENSION madlib;
+
+-- Linear regression example
+SELECT madlib.linregr_train(
+    'training_data',
+    'regression_model',
+    'target_column',
+    'feature1, feature2, feature3'
+);
+
+-- Make predictions
+SELECT 
+    id,
+    madlib.linregr_predict(
+        ARRAY[feature1, feature2, feature3],
+        m.coef
+    ) as predicted_value
+FROM test_data, regression_model m;
+
+-- K-means clustering
+SELECT madlib.kmeans(
+    'customer_data',
+    'customer_features',
+    5, -- number of clusters
+    'madlib.squared_dist_norm2',
+    'madlib.avg', -- centroid function
+    20, -- max iterations
+    0.001 -- tolerance
+);
+        </pre>
+
+        <h4 class="subsection-head">3.2 Window Functions for Feature Engineering</h4>
+        <pre>
+-- Create features for ML models
+SELECT 
+    customer_id,
+    -- Basic features
+    COUNT(*) as total_orders,
+    SUM(total) as lifetime_value,
+    AVG(total) as avg_order_value,
+    
+    -- Time-based features
+    EXTRACT(DAY FROM NOW() - MAX(order_date)) as days_since_last_order,
+    EXTRACT(DAY FROM MAX(order_date) - MIN(order_date)) / 
+    NULLIF(COUNT(*) - 1, 0) as avg_days_between_orders,
+    
+    -- Behavioral features
+    COUNT(DISTINCT product_category) as categories_purchased,
+    SUM(CASE WHEN total > 100 THEN 1 ELSE 0 END) as large_orders_count,
+    
+    -- Trend features
+    SUM(CASE 
+        WHEN order_date >= NOW() - INTERVAL '30 days' 
+        THEN total ELSE 0 
+    END) as last_30_days_spend,
+    
+    -- Using window for recent trend
+    AVG(total) OVER (
+        PARTITION BY customer_id 
+        ORDER BY order_date 
+        ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+    ) as recent_3_order_avg
+    
+FROM orders
+GROUP BY customer_id;
+        </pre>
+
+        <h3 class="section-head">4. Pattern Matching & Sequences</h3>
+
+        <h4 class="subsection-head">4.1 MATCH_RECOGNIZE (Oracle, Snowflake)</h4>
+        <pre>
+-- Find patterns in time series
+SELECT *
+FROM stock_prices
+MATCH_RECOGNIZE (
+    PARTITION BY symbol
+    ORDER BY trade_time
+    MEASURES
+        STRT.trade_time as start_time,
+        LAST(DOWN.trade_time) as bottom_time,
+        LAST(UP.trade_time) as recovery_time
+    ONE ROW PER MATCH
+    PATTERN (STRT DOWN+ UP+)
+    DEFINE
+        DOWN AS price < PREV(price),
+        UP AS price > PREV(price)
+) mr
+WHERE symbol = 'AAPL';
+        </pre>
+
+        <h4 class="subsection-head">4.2 Finding Sequences with SQL</h4>
+        <pre>
+-- Find consecutive login days
+WITH login_sequences AS (
+    SELECT 
+        user_id,
+        login_date,
+        login_date - ROW_NUMBER() OVER (
+            PARTITION BY user_id 
+            ORDER BY login_date
+        ) * INTERVAL '1 day' as sequence_group
+    FROM user_logins
+    GROUP BY user_id, login_date
+)
+SELECT 
+    user_id,
+    MIN(login_date) as sequence_start,
+    MAX(login_date) as sequence_end,
+    COUNT(*) as consecutive_days
+FROM login_sequences
+GROUP BY user_id, sequence_group
+HAVING COUNT(*) >= 7  -- At least 7 consecutive days
+ORDER BY consecutive_days DESC;
+        </pre>
+
+        <h3 class="section-head">5. Geospatial Analytics</h3>
+
+        <h4 class="subsection-head">5.1 Spatial Aggregations</h4>
+        <pre>
+-- Calculate service area coverage
+SELECT 
+    service_area_id,
+    COUNT(DISTINCT customer_id) as customers_served,
+    SUM(order_total) as total_revenue,
+    ST_ConvexHull(ST_Collect(customer_location)) as coverage_area
+FROM orders o
+JOIN customers c ON o.customer_id = c.id
+JOIN service_areas sa ON ST_Within(c.location, sa.coverage_polygon)
+GROUP BY service_area_id;
+
+-- Find optimal locations (centroid of customers)
+SELECT 
+    region,
+    ST_Centroid(ST_Collect(customer_location)) as optimal_warehouse_location,
+    AVG(ST_Distance(
+        customer_location, 
+        ST_Centroid(ST_Collect(customer_location))
+    )) as avg_distance
+FROM customers
+GROUP BY region;
+        </pre>
+
+        <h3 class="section-head">6. JSON Analytics</h3>
+
+        <h4 class="subsection-head">6.1 Analyzing JSON Data</h4>
+        <pre>
+-- Analyze event data stored as JSON
+SELECT 
+    (event_data->>'user_id')::INTEGER as user_id,
+    event_data->>'event_type' as event_type,
+    COUNT(*) as event_count,
+    AVG((event_data->>'duration')::FLOAT) as avg_duration,
+    PERCENTILE_CONT(0.95) WITHIN GROUP (
+        ORDER BY (event_data->>'duration')::FLOAT
+    ) as p95_duration
+FROM events
+WHERE event_time >= NOW() - INTERVAL '1 day'
+GROUP BY 
+    (event_data->>'user_id')::INTEGER,
+    event_data->>'event_type'
+HAVING COUNT(*) > 10
+ORDER BY event_count DESC;
+
+-- Unnest JSON arrays for analysis
+SELECT 
+    user_id,
+    unnested_tag,
+    COUNT(*) as tag_count
+FROM users,
+LATERAL jsonb_array_elements_text(interests->'tags') as unnested_tag
+GROUP BY user_id, unnested_tag
+ORDER BY tag_count DESC;
+        </pre>
+
+        <h3 class="section-head">7. Performance Optimization for Analytics</h3>
+        <ul style="margin-left: 25px;">
+            <li>Use materialized views for expensive aggregations</li>
+            <li>Partition large tables by time for time-series analysis</li>
+            <li>Create appropriate indexes for window function ORDER BY clauses</li>
+            <li>Use approximate functions (APPROX_COUNT_DISTINCT) for big data</li>
+            <li>Consider columnar storage for analytical workloads</li>
+        </ul>
+
+        <h3 class="section-head">8. Real-World Analytics Pipeline</h3>
+        <pre>
+-- Complete analytics pipeline in SQL
+WITH raw_events AS (
+    SELECT 
+        user_id,
+        event_type,
+        event_time,
+        event_data
+    FROM events
+    WHERE event_time >= CURRENT_DATE - 30
+),
+user_sessions AS (
+    SELECT 
+        user_id,
+        session_id,
+        MIN(event_time) as session_start,
+        MAX(event_time) as session_end,
+        COUNT(*) as events_per_session
+    FROM raw_events
+    GROUP BY user_id, session_id
+),
+user_metrics AS (
+    SELECT 
+        user_id,
+        COUNT(DISTINCT session_id) as total_sessions,
+        AVG(events_per_session) as avg_session_length,
+        SUM(events_per_session) as total_events,
+        EXTRACT(EPOCH FROM AVG(session_end - session_start)) as avg_session_duration
+    FROM user_sessions
+    GROUP BY user_id
+),
+cohort_analysis AS (
+    SELECT 
+        DATE_TRUNC('week', u.created_at) as signup_week,
+        COUNT(DISTINCT um.user_id) as cohort_size,
+        AVG(um.total_sessions) as avg_sessions,
+        AVG(um.avg_session_duration) as avg_duration
+    FROM user_metrics um
+    JOIN users u ON um.user_id = u.id
+    GROUP BY DATE_TRUNC('week', u.created_at)
+)
+SELECT * FROM cohort_analysis
+ORDER BY signup_week DESC;
+        </pre>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> For complex analytics, consider using specialized extensions like TimescaleDB for time series, PostGIS for geospatial, and MADlib for machine learning.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-trophy"></i> Take Final Exam & Claim Certificate
+        </button>
+    `
+},
+
+];
+
+const quizData = [
+    { 
+        q:"ACID properties mein 'Isolation' ka primary uddeshya kya hai?", 
+        options:["Data corruption se bachana","Concurrent transactions interference rokna","Data permanently save karna","Query optimization karna"], 
+        correct:1 
+    },
+    { 
+        q:"Database normalization ka primary goal kya hai?", 
+        options:["Query performance badhana","Data redundancy kam karna","Storage space bachana","Backup size ghata na"], 
+        correct:1 
+    },
+    { 
+        q:"Agar aapko query performance analyze karni hai, toh sabse behtar tool konsa hai?", 
+        options:["EXPLAIN ANALYZE","SHOW TABLES","DESCRIBE TABLE","CHECK CONSTRAINT"], 
+        correct:0 
+    },
+    { 
+        q:"Composite index create karte samay columns ka order kyu important hai?", 
+        options:["Storage space ke liye","Data types ke liye","Leftmost prefix rule ke liye","Backup ke liye"], 
+        correct:2 
+    },
+    { 
+        q:"READ COMMITTED isolation level mein kaunsi anomaly possible hai?", 
+        options:["Dirty Read","Non-repeatable Read","Phantom Read","Serialization Anomaly"], 
+        correct:1 
+    },
+    { 
+        q:"JSONB aur JSON mein kya antar hai?", 
+        options:["JSONB binary format hai","JSONB smaller hai","JSONB faster inserts hai","JSONB human-readable nahi hai"], 
+        correct:0 
+    },
+    { 
+        q:"Row-Level Security (RLS) implement karne ke liye pehle kya karna padta hai?", 
+        options:["Table pe ENABLE ROW LEVEL SECURITY","New user create karna","Index create karna","Trigger add karna"], 
+        correct:0 
+    },
+    { 
+        q:"Database sharding ka primary fayda kya hai?", 
+        options:["Query complexity kam karna","Horizontal scaling enable karna","Backup time kam karna","Security improve karna"], 
+        correct:1 
+    },
+    { 
+        q:"Two-Phase Commit (2PC) distributed transactions mein kis problem ko solve karta hai?", 
+        options:["Network latency","Atomicity across multiple databases","Data encryption","Query optimization"], 
+        correct:1 
+    },
+    { 
+        q:"Microservices architecture mein 'Database per Service' pattern ka main advantage kya hai?", 
+        options:["Data sharing asaan hai","Service isolation strong hai","Single backup sufficient hai","Less code required hai"], 
+        correct:1 
+    }
+];
+
+let maxUnlocked = 0;
+let currentModule = 0;
+let examScore = 0;
+let examTaken = false;
+
+function toggleSidebar(){
+    document.getElementById('toc').classList.toggle('active');
+    document.getElementById('overlay').classList.toggle('active');
+}
+
+function startCourse(){
+    document.getElementById('welcome-screen').classList.add('hidden');
+    document.getElementById('course-player').classList.remove('hidden');
+    document.querySelector('.sidebar-toggle').style.display='block';
+    loadModule(0); 
+    renderTOC();
+}
+
+function renderTOC(){
+    const toc = document.getElementById('toc');
+    let html = `
+        <div class="sidebar-header">
+            <h3 class="sidebar-title"><i class="fas fa-book-open"></i> COURSE MODULES</h3>
+            <div style="color: #94a3b8; font-size: 0.85rem; margin-top: 5px;">${syllabus.length} comprehensive modules</div>
+        </div>
+    `;
+    
+    syllabus.forEach((mod,i)=>{
+        const locked = i > maxUnlocked;
+        const completed = i < maxUnlocked;
+        const active = i === currentModule;
+        
+        html += `
+        <div class="module-item ${active?'active':''} ${locked?'locked':''}" onclick="${!locked?`loadModule(${i})`:''}">
+            <div class="module-number">${i+1}</div>
+            <div class="module-text">
+                <div class="module-title">${mod.title.replace("Module " + (i+1).toString().padStart(2, '0') + ": ", "")}</div>
+                <div class="module-desc">${mod.desc}</div>
+            </div>
+            <div class="module-status">
+                ${locked ? 
+                    '<i class="fas fa-lock" style="color: #94a3b8;"></i>' : 
+                    completed ? 
+                    '<i class="fas fa-check-circle" style="color: var(--success);"></i>' : 
+                    '<i class="fas fa-play-circle" style="color: var(--primary);"></i>'
+                }
+            </div>
+        </div>`;
+    });
+    
+    html += `
+        <div style="padding: 25px; text-align: center; margin-top: 20px; border-top: 1px solid var(--border-dark);">
+            <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 10px;">Progress</div>
+            <div style="background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                <div style="height: 100%; width: ${Math.round((maxUnlocked/(syllabus.length-1))*100)}%; background: var(--primary); border-radius: 3px;"></div>
+            </div>
+            <div style="color: white; font-size: 0.9rem; margin-top: 10px; font-weight: 600;">
+                ${maxUnlocked}/${syllabus.length} modules completed
+            </div>
+        </div>
+    `;
+    
+    toc.innerHTML = html;
+}
+
+function loadModule(idx){
+    currentModule = idx;
+    document.getElementById('loader').classList.add('active');
+    
+    setTimeout(() => {
+        document.getElementById('module-content').classList.remove('hidden');
+        document.getElementById('exam-section').classList.add('hidden');
+        document.getElementById('final-step-section').classList.add('hidden');
+        document.getElementById('module-content').innerHTML = syllabus[idx].content;
+        
+        const prog = Math.round((maxUnlocked/(syllabus.length-1))*100);
+        document.getElementById('progress-fill').style.width = prog + "%";
+        document.getElementById('prog-stat-text').innerText = prog + "% COMPLETE";
+        
+        renderTOC(); 
+        window.scrollTo(0,0);
+        document.getElementById('loader').classList.remove('active');
+    }, 300);
+}
+
+function completeModule(){
+    if(currentModule === syllabus.length-1){
+        showExam();
+    } else {
+        if(currentModule === maxUnlocked) {
+            maxUnlocked++;
+            Swal.fire({
+                title: "Module Completed!",
+                text: `You've unlocked Module ${currentModule+2}`,
+                icon: "success",
+                confirmButtonText: "Continue",
+                confirmButtonColor: "var(--primary)"
+            });
+        }
+        loadModule(currentModule+1);
+    }
+}
+
+function showExam(){
+    document.getElementById('module-content').classList.add('hidden');
+    const examBox = document.getElementById('exam-section');
+    examBox.classList.remove('hidden');
+
+    let html = `
+        <span class="module-tag"><i class="fas fa-graduation-cap"></i> FINAL ASSESSMENT</span>
+        <h2 class="mod-title">Proctored Final Exam</h2>
+        <p class="body-text">Complete this final assessment to earn your Elite SQL Fundamentals Mastery certificate. Score 50% or above to pass.</p>
+        
+        <div style="background: #f0f9ff; padding: 20px; border-radius: 16px; margin-bottom: 30px; border-left: 4px solid var(--primary);">
+            <h4 style="font-weight: 700; margin-bottom: 10px; color: var(--dark-bg);"><i class="fas fa-info-circle"></i> Exam Details</h4>
+            <p style="color: #475569; margin-bottom: 5px;"><b>Questions:</b> ${quizData.length} multiple choice</p>
+            <p style="color: #475569; margin-bottom: 5px;"><b>Passing Score:</b> 50% or higher</p>
+            <p style="color: #475569;"><b>Time:</b> No time limit</p>
+        </div>
+    `;
+    
+    quizData.forEach((item,i)=>{
+        html += `<div class="q-block">
+            <p style="font-weight: 600; font-size: 1.1rem; margin-bottom: 15px; color: var(--dark-bg);">
+                <span style="background: var(--primary); color: white; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.9rem; margin-right: 10px;">${i+1}</span>
+                ${item.q}
+            </p>`;
+        item.options.forEach((opt,oi)=>{
+            html += `
+            <label class="option-label">
+                <input type="radio" name="q_${i}" value="${oi}">
+                ${opt}
+            </label>`;
+        });
+        html += `</div>`;
+    });
+    
+    html += `<button class="btn-primary" onclick="submitExam()">
+        <i class="fas fa-paper-plane"></i> Submit Exam
+    </button>`;
+    
+    examBox.innerHTML = html;
+    window.scrollTo(0,0);
+}
+
+function submitExam(){
+    let score = 0;
+    const results = [];
+    
+    quizData.forEach((item,i)=>{
+        const ans = document.querySelector(`input[name="q_${i}"]:checked`);
+        if(ans && parseInt(ans.value) === item.correct){
+            score++;
+            results.push({question: i, correct: true});
+        } else {
+            results.push({question: i, correct: false, selected: ans ? parseInt(ans.value) : null});
+        }
+    });
+
+    examScore = score;
+    const percent = Math.round((score/quizData.length)*100);
+    examTaken = true;
+
+    // Create detailed results HTML
+    let resultsHTML = `
+        <div class="score-display">
+            <h3 style="margin-bottom: 10px; font-weight: 700;">Exam Results</h3>
+            <div class="score-value">${percent}%</div>
+            <p style="font-size: 1.1rem; margin-bottom: 20px;">${score}/${quizData.length} Correct Answers</p>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; margin-top: 15px;">
+                <p style="margin-bottom: 8px;"><b>Status:</b> <span style="color: ${percent >= 50 ? '#4ade80' : '#f87171'}">${percent >= 50 ? 'PASSED' : 'FAILED'}</span></p>
+                <p><b>Required to pass:</b> 50%</p>
+            </div>
+        </div>
+        
+        <h3 style="margin: 30px 0 15px; color: var(--dark-bg);">Question Review</h3>
+    `;
+    
+    results.forEach((result, i) => {
+        resultsHTML += `
+        <div style="background: ${result.correct ? '#f0fdf4' : '#fef2f2'}; padding: 15px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid ${result.correct ? '#10b981' : '#ef4444'};">
+            <p style="font-weight: 600; margin-bottom: 8px; color: var(--dark-bg);">${i+1}. ${quizData[i].q}</p>
+            <p style="margin-bottom: 5px;"><b>Your answer:</b> ${result.selected !== null ? quizData[i].options[result.selected] : 'Not answered'}</p>
+            <p><b>Correct answer:</b> ${quizData[i].options[quizData[i].correct]}</p>
+        </div>`;
+    });
+
+    if(percent >= 50){
+        Swal.fire({
+            title: "Congratulations!",
+            html: `<div style="text-align: left;">${resultsHTML}</div>`,
+            icon: "success",
+            confirmButtonText: "Claim Certificate",
+            confirmButtonColor: "var(--primary)",
+            width: 800
+        }).then(()=>{
+            document.getElementById('exam-section').classList.add('hidden');
+            document.getElementById('final-step-section').classList.remove('hidden');
+        });
+    } else {
+        Swal.fire({
+            title: "Try Again",
+            html: `<div style="text-align: left;">${resultsHTML}</div>`,
+            icon: "error",
+            confirmButtonText: "Retry Exam",
+            confirmButtonColor: "var(--primary)",
+            width: 800
+        }).then(() => {
+            // Allow retaking the exam
+            showExam();
+        });
+    }
+}
+
+function claimCertificate(){
+    const name = document.getElementById('student-name').value.trim();
+    const course = "Elite SQL Fundamentals Mastery"; // Updated course name
+
+    if(!name) {
+        return Swal.fire("Error","Please enter your full name.","error");
+    }
+    
+    // Save to localStorage as backup
+    localStorage.setItem("internadda_cert_name", name);
+    localStorage.setItem("internadda_course_name", course);
+    
+    Swal.fire({
+        title: "Generating Certificate...",
+        text: "Redirecting you to your official certificate.",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false
+    }).then(() => {
+        // Construct the URL with encoded parameters for safety
+        const urlName = encodeURIComponent(name);
+        const urlCourse = encodeURIComponent(course);
+        
+        // Redirect to certificate.html with parameters
+        window.location.href = `certificate.html?name=${urlName}&course=${urlCourse}`;
+    });
+}
+
+</script>
+</body>
+</html>
