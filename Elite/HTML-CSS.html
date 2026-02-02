@@ -1,0 +1,2634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Elite HTML & CSS Mastery | Internadda</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        :root {
+            --primary: #4338ca; 
+            --primary-hover: #3730a3;
+            --secondary: #10b981;
+            --accent: #8b5cf6;
+            --dark-bg: #0f172a;
+            --dark-card: #1e293b;
+            --text-main: #1e293b;
+            --text-light: #64748b;
+            --white: #ffffff;
+            --off-white: #f8fafc;
+            --border: #e2e8f0;
+            --border-dark: #334155;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --header-height: 75px;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
+            --gradient-primary: linear-gradient(135deg, #4338ca 0%, #7c3aed 100%);
+            --gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--off-white); color: var(--text-main); line-height: 1.8; overflow-x: hidden; }
+
+        /* --- HEADER & PROGRESS --- */
+        header { 
+            background: var(--white); 
+            border-bottom: 1px solid var(--border); 
+            box-shadow: var(--shadow-sm);
+            position: fixed; top: 0; width: 100%; z-index: 1000; height: var(--header-height);
+            display: flex; align-items: center; padding: 0 25px;
+        }
+        .nav-container { 
+            display: flex; align-items: center; justify-content: space-between; 
+            width: 100%; max-width: 1400px; margin: 0 auto; 
+        }
+        .logo-container { display: flex; align-items: center; gap: 10px; }
+        .logo-icon { color: var(--primary); font-size: 1.8rem; }
+        .logo-text { font-weight: 800; font-size: 1.5rem; color: #0f172a; text-decoration: none; letter-spacing: -0.5px; }
+        .logo-text span { background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .progress-stats { display: flex; align-items: center; gap: 15px; }
+        .progress-percent { font-weight: 800; font-size: 1rem; color: var(--primary); background: #eef2ff; padding: 6px 12px; border-radius: 20px; }
+        @media (max-width: 768px) {
+            .nav-container { 
+                display: flex; 
+                justify-content: center; /* Centers the logo container */
+                align-items: center;
+                position: relative; 
+            }
+            .sidebar-toggle { 
+                display: block !important; 
+                position: absolute; /* Takes toggle out of flow so logo can center */
+                left: 0; 
+                z-index: 1001; 
+            }
+            .logo-text { font-size: 1.3rem; }
+            .progress-stats { display: none !important; } /* Hide % in header */
+        }
+        /* --- SIDEBAR & OVERLAY --- */
+        .sidebar {
+            position: fixed; top: 0; left: -350px; width: 320px; height: 100vh;
+            background: var(--dark-bg); z-index: 1100; padding: 30px 0;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); color: white; overflow-y: auto;
+            box-shadow: 5px 0 30px rgba(0,0,0,0.2);
+        }
+        .sidebar.active { left: 0; }
+        .sidebar-overlay { 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1050; display: none; 
+            backdrop-filter: blur(3px); 
+        }
+        .sidebar-overlay.active { display: block; }
+        .sidebar-header { padding: 0 25px 25px; border-bottom: 1px solid var(--border-dark); margin-bottom: 20px; }
+        .sidebar-title { font-size: 1.1rem; font-weight: 700; color: #cbd5e1; letter-spacing: 0.5px; }
+        .module-item { 
+            padding: 16px 25px; margin: 0 15px 8px; border-radius: 12px; cursor: pointer; 
+            display: flex; align-items: center; gap: 15px; transition: all 0.3s; 
+            background: rgba(255,255,255,0.03); border: 1px solid transparent; 
+        }
+        .module-item:hover { background: rgba(255,255,255,0.07); }
+        .module-item.active { 
+            background: rgba(67, 56, 202, 0.15); border-color: var(--primary); 
+            box-shadow: 0 4px 12px rgba(67, 56, 202, 0.15); 
+        }
+        .module-number { 
+            width: 28px; height: 28px; background: rgba(255,255,255,0.1); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            font-size: 0.85rem; font-weight: 700; 
+        }
+        .module-item.active .module-number { background: var(--primary); }
+        .module-text { flex: 1; }
+        .module-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 3px; }
+        .module-desc { font-size: 0.8rem; color: #94a3b8; }
+        .module-status { font-size: 0.9rem; }
+        .module-item.locked { opacity: 0.6; cursor: not-allowed; }
+
+        /* --- CONTENT UI --- */
+        .main-layout { 
+            margin-top: calc(var(--header-height) + 30px); padding: 0 20px 80px; 
+            display: flex; justify-content: center; 
+        }
+        .content-card { 
+            background: white; border-radius: 28px; padding: 50px; max-width: 920px; width: 100%; 
+            border: 1px solid var(--border); box-shadow: var(--shadow-md); 
+            position: relative; overflow: hidden; 
+        }
+        .content-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+            background: var(--gradient-primary);
+        }
+        
+        @keyframes reveal { 
+            from { opacity: 0; transform: translateY(30px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        .animate-content { animation: reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+        .module-tag { 
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #eef2ff; color: var(--primary); padding: 6px 14px; 
+            border-radius: 20px; font-size: 0.75rem; font-weight: 800; 
+            text-transform: uppercase; margin-bottom: 20px; letter-spacing: 0.5px; 
+        }
+        .mod-title { 
+            font-size: 2.4rem; font-weight: 800; color: var(--dark-bg); 
+            margin-bottom: 25px; letter-spacing: -1px; line-height: 1.2; 
+        }
+        .body-text { 
+            margin-bottom: 25px; font-size: 1.1rem; color: #334155; 
+            line-height: 1.7; 
+        }
+        
+        pre { 
+            background: #0f172a; color: #e2e8f0; padding: 25px; border-radius: 16px; 
+            margin: 25px 0; overflow-x: auto; font-family: 'Fira Code', monospace; 
+            font-size: 0.9rem; border: 1px solid #1e293b; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2); 
+            position: relative; 
+        }
+        pre::before {
+            content: 'Code'; position: absolute; top: 0; right: 20px;
+            background: var(--primary); color: white; padding: 4px 12px;
+            font-size: 0.7rem; border-radius: 0 0 6px 6px; font-weight: 700;
+        }
+
+        .section-head { 
+            font-size: 1.6rem; font-weight: 700; color: var(--dark-bg); 
+            margin: 35px 0 15px; padding-bottom: 10px; border-bottom: 2px solid #eef2ff; 
+        }
+        .subsection-head { 
+            font-size: 1.2rem; font-weight: 600; color: var(--dark-bg); 
+            margin: 25px 0 12px; 
+        }
+        .pro-note {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid #0ea5e9; padding: 20px; border-radius: 12px;
+            margin: 25px 0; font-size: 0.95rem;
+        }
+        .pro-note b { color: #0369a1; }
+
+        /* --- BUTTONS --- */
+        .btn-primary, .btn-premium { 
+            background: var(--gradient-primary); color: white; padding: 18px 35px; 
+            border-radius: 14px; border: none; font-weight: 700; cursor: pointer; 
+            transition: all 0.3s ease; width: 100%; display: flex; align-items: center; 
+            justify-content: center; gap: 12px; font-size: 1rem; letter-spacing: 0.3px;
+            box-shadow: 0 6px 20px rgba(67, 56, 202, 0.25); margin-top: 30px;
+        }
+        .btn-primary:hover, .btn-premium:hover { 
+            transform: translateY(-3px); box-shadow: 0 12px 25px rgba(67, 56, 202, 0.35); 
+        }
+
+        /* Landing Page Enhancements */
+        .hero-section { 
+            text-align: center; padding: 140px 20px 80px; max-width: 1000px; margin: 0 auto; 
+        }
+        .hero-title { 
+            font-size: 3.8rem; font-weight: 800; margin-bottom: 25px; letter-spacing: -2px; 
+            line-height: 1.1; opacity: 0; animation: reveal 0.8s 0.2s forwards; 
+        }
+        
+        .instructor-card { 
+            background: #fff; border: 1px solid var(--border); border-radius: 24px; 
+            padding: 30px; display: flex; align-items: center; gap: 25px; 
+            max-width: 550px; margin: 40px auto; text-align: left;
+            box-shadow: var(--shadow-md); opacity: 0; animation: reveal 0.8s 0.6s forwards;
+        }
+        .instructor-img { 
+            width: 80px; height: 80px; border-radius: 50%; background: #ddd; 
+            object-fit: cover; border: 4px solid #eef2ff; box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+        }
+        .badge-verified { 
+            color: var(--success); font-size: 0.8rem; font-weight: 700; 
+            background: #f0f9ff; padding: 4px 12px; border-radius: 20px; 
+            display: inline-flex; align-items: center; gap: 5px; margin-bottom: 8px; 
+        }
+
+        .perks-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+            gap: 20px; max-width: 900px; margin: 50px auto; 
+            opacity: 0; animation: reveal 0.8s 0.4s forwards;
+        }
+        .perk-item { 
+            background: white; padding: 25px 20px; border-radius: 18px; 
+            border: 1px solid var(--border); font-size: 0.9rem; font-weight: 700; 
+            text-align: center; box-shadow: var(--shadow-sm); transition: transform 0.3s;
+        }
+        .perk-item:hover { transform: translateY(-5px); }
+        .perk-item i { 
+            color: var(--primary); margin-bottom: 12px; display: block; 
+            font-size: 1.8rem; 
+        }
+
+        /* Quiz Styles */
+        .quiz-box, .cert-input-box { 
+            margin-top: 40px; animation: reveal 0.5s ease; 
+        }
+        .q-block { margin-bottom: 30px; }
+        .option-label { 
+            display: flex; align-items: center; background: white; padding: 20px; 
+            margin-bottom: 15px; border: 2px solid var(--border); border-radius: 16px; 
+            cursor: pointer; transition: all 0.2s; position: relative; 
+        }
+        .option-label:hover { border-color: #c7d2fe; background: #f8fafc; }
+        .option-input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; left:0; top:0; }
+        .option-label:has(.option-input:checked) { 
+            border-color: var(--primary); background: #f5f7ff; 
+            box-shadow: 0 4px 12px rgba(67, 56, 202, 0.1); 
+        }
+        
+        .score-display {
+            background: var(--gradient-dark); color: white; padding: 25px;
+            border-radius: 20px; text-align: center; margin: 30px 0;
+            box-shadow: var(--shadow-lg);
+        }
+        .score-value {
+            font-size: 3.5rem; font-weight: 800; margin: 10px 0;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        
+        .cert-input-box input {
+            width: 100%; padding: 20px; border-radius: 14px; 
+            border: 2px solid var(--border); font-size: 1rem; 
+            margin-bottom: 25px; transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        .cert-input-box input:focus {
+            outline: none; border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.1);
+        }
+
+        .hidden { display: none !important; }
+        
+        /* Trust Badges */
+        .trust-badges {
+            display: flex; justify-content: center; gap: 30px;
+            margin-top: 60px; flex-wrap: wrap;
+        }
+        .trust-badge {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 0.9rem; color: var(--text-light);
+        }
+        .trust-badge i { color: var(--success); font-size: 1.2rem; }
+        
+        /* Loading Animation */
+        .loader { display: none; }
+        .loader.active {
+            display: block; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(255,255,255,0.9);
+            z-index: 2000; display: flex; align-items: center;
+            justify-content: center; flex-direction: column; gap: 20px;
+        }
+        .spinner {
+            width: 60px; height: 60px; border: 5px solid #e2e8f0;
+            border-top-color: var(--primary); border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        /* Achievement Badge */
+        .achievement-badge {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white; padding: 8px 16px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 700; display: inline-flex;
+            align-items: center; gap: 5px; margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+        <p style="color: var(--text-main); font-weight: 600;">Loading Module...</p>
+    </div>
+
+<header>
+        <div class="nav-container">
+            <button class="sidebar-toggle" onclick="toggleSidebar()" style="background:none; border:none; cursor:pointer; font-size:1.4rem; display:none; color: var(--text-main);">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="logo-container">
+                <i class="fas fa-graduation-cap logo-icon"></i>
+                <a href="#" class="logo-text">Intern<span>adda</span></a>
+            </div>
+
+            <div class="progress-stats">
+                <div class="progress-percent" id="prog-stat-text">0% COMPLETE</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="mobile-progress-container"><div id="progress-fill"></div></div>
+    <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
+    <aside class="sidebar" id="toc"></aside>
+
+    <div id="welcome-screen">
+        <section class="hero-section">
+            <div style="opacity: 0; animation: reveal 0.8s 0.1s forwards;">
+                <div class="module-tag"><i class="fas fa-crown"></i> ELITE MASTERY PROGRAM</div>
+            </div>
+            
+            <h1 class="hero-title">Master HTML & CSS at an <span style="background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Expert Level</span></h1>
+            <p style="color:var(--text-light); font-size: 1.25rem; margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto; opacity: 0; animation: reveal 0.8s 0.3s forwards;">
+                Engineered for web developers who want to build responsive, accessible, and production-ready websites with modern CSS techniques and best practices.
+            </p>
+            
+            <div class="perks-grid">
+                <div class="perk-item"><i class="fas fa-award"></i>Professional Credentials</div>
+                <div class="perk-item"><i class="fas fa-code"></i> 25+ Hands-on Exercises</div>
+                <div class="perk-item"><i class="fas fa-chart-line"></i> Real-world Projects</div>
+                <div class="perk-item"><i class="fas fa-certificate"></i> Verified Certificate</div>
+            </div>
+
+            <div class="instructor-card">
+                <img src="sumit.jpg" alt="Sumit " class="instructor-img">
+                <div>
+                    <span class="badge-verified"><i class="fas fa-shield-alt"></i> VERIFIED INSTRUCTOR</span>
+                    <h4 style="font-weight: 800; font-size: 1.2rem; margin-bottom: 5px;">Sumit Pandey</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-light);">CTO of Internadda & Senior Frontend Architect</p>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin-top: 8px;">4+ years in production web development</p>
+                </div>
+            </div>
+
+            <div class="trust-badges">
+                <div class="trust-badge"><i class="fas fa-check-circle"></i> Industry-recognized</div>
+                <div class="trust-badge"><i class="fas fa-clock"></i> Self-paced learning</div>
+                <div class="trust-badge"><i class="fas fa-users"></i> 18,000+ students</div>
+            </div>
+
+            <button class="btn-primary" style="max-width:320px; margin:50px auto 0; opacity: 0; animation: reveal 0.8s 0.8s forwards;" onclick="startCourse()">
+                <i class="fas fa-rocket"></i> Start Learning Now
+            </button>
+        </section>
+    </div>
+
+    <div id="course-player" class="hidden">
+        <main class="main-layout">
+            <div class="content-card">
+                <div id="module-content"></div>
+                <div id="exam-section" class="hidden quiz-box"></div>
+                <div id="final-step-section" class="hidden cert-input-box">
+                    <span class="module-tag"><i class="fas fa-trophy"></i> ACHIEVEMENT UNLOCKED</span>
+                    <h2 class="mod-title">Claim Your Certificate</h2>
+                    <p class="body-text">Congratulations! You've successfully completed all modules and passed the final exam. Your certificate is ready for generation.</p>
+                    
+                    <div style="background: #f0f9ff; padding: 25px; border-radius: 16px; margin: 30px 0; border-left: 4px solid var(--success);">
+                        <h4 style="font-weight: 700; margin-bottom: 10px; color: var(--dark-bg);"><i class="fas fa-certificate"></i> Certificate Details</h4>
+                        <p style="color: #475569; margin-bottom: 5px;"><b>Issued by:</b> Internadda Academy</p>
+                        <p style="color: #475569; margin-bottom: 5px;"><b>Course:</b> Elite HTML & CSS Mastery</p>
+                        <p style="color: #475569;"><b>Verification ID:</b> HC-ELITE-${Math.random().toString(36).substr(2, 9).toUpperCase()}</p>
+                    </div>
+                    
+                    <input type="text" id="student-name" placeholder="Enter your full name as it should appear on certificate">
+                    <button class="btn-primary" onclick="claimCertificate()">
+                        <i class="fas fa-file-certificate"></i> Generate & Download Certificate
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+const syllabus = [
+{
+    title: "Module 01: Web Fundamentals & HTML5",
+    desc: "HTML5 Semantic Elements & Web Standards",
+    content: `
+        <span class="module-tag"><i class="fas fa-code"></i> Web Foundations</span>
+        <h2 class="mod-title">HTML5 Semantic Elements & Modern Web Standards</h2>
+
+        <p class="body-text">
+            Welcome to the first module of <b>Elite HTML & CSS Basics</b>. Here, we go beyond writing basic markup — 
+            we explore how to structure web content for accessibility, SEO, and maintainability. You will gain a deep understanding of semantic HTML, 
+            web standards, and how browsers parse and render your code. By the end of this module, you will be able to write HTML like a <b>professional frontend engineer</b>.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Browser Rendering Overview:</b>
+            <ul style="margin-top: 10px; padding-left: 20px;">
+                <li><b>HTML Parsing</b> → Constructing DOM Tree → <b>CSS Parsing</b> → CSSOM Tree</li>
+                <li><b>Render Tree Construction</b> combining DOM and CSSOM</li>
+                <li><b>Layout</b> (Reflow) calculating position and size of elements</li>
+                <li><b>Paint</b> filling pixels for each visual part</li>
+                <li><b>Compositing</b> layering and GPU acceleration</li>
+            </ul>
+        </div>
+
+        <h3 class="section-head">1. Understanding Semantic HTML</h3>
+        <p class="body-text">
+            Semantic HTML uses elements that clearly describe their meaning to both browsers and developers. 
+            This improves accessibility, SEO, and code maintainability compared to generic <code>&lt;div&gt;</code> elements.
+        </p>
+        
+        <h4 class="subsection-head">1.1 Key Semantic Elements</h4>
+        <ul style="margin-left: 25px; margin-bottom: 20px;">
+            <li><b>&lt;header&gt;:</b> Introductory content or navigation</li>
+            <li><b>&lt;nav&gt;:</b> Navigation links</li>
+            <li><b>&lt;main&gt;:</b> Dominant content of the document</li>
+            <li><b>&lt;article&gt;:</b> Self-contained composition</li>
+            <li><b>&lt;section&gt;:</b> Thematic grouping of content</li>
+            <li><b>&lt;aside&gt;:</b> Content indirectly related to main content</li>
+            <li><b>&lt;footer&gt;:</b> Footer for its nearest ancestor</li>
+        </ul>
+
+        <h4 class="subsection-head">1.2 Example: Semantic Structure</h4>
+        <pre>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Semantic Example&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;
+        &lt;h1&gt;Website Title&lt;/h1&gt;
+        &lt;nav&gt;
+            &lt;ul&gt;
+                &lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="/about"&gt;About&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/nav&gt;
+    &lt;/header&gt;
+    
+    &lt;main&gt;
+        &lt;article&gt;
+            &lt;h2&gt;Article Title&lt;/h2&gt;
+            &lt;p&gt;Article content...&lt;/p&gt;
+        &lt;/article&gt;
+        
+        &lt;aside&gt;
+            &lt;h3&gt;Related Content&lt;/h3&gt;
+            &lt;p&gt;Additional information...&lt;/p&gt;
+        &lt;/aside&gt;
+    &lt;/main&gt;
+    
+    &lt;footer&gt;
+        &lt;p&gt;Copyright 2023&lt;/p&gt;
+    &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+        </pre>
+
+        <h3 class="section-head">2. HTML5 Forms & Input Types</h3>
+        <p class="body-text">
+            Modern forms use HTML5 input types that provide built-in validation and better user experience on mobile devices.
+        </p>
+
+        <h4 class="subsection-head">2.1 Advanced Input Types</h4>
+        <pre>
+&lt;form&gt;
+    &lt;label for="email"&gt;Email:&lt;/label&gt;
+    &lt;input type="email" id="email" required&gt;
+    
+    &lt;label for="date"&gt;Date:&lt;/label&gt;
+    &lt;input type="date" id="date"&gt;
+    
+    &lt;label for="range"&gt;Range:&lt;/label&gt;
+    &lt;input type="range" id="range" min="0" max="100"&gt;
+    
+    &lt;label for="search"&gt;Search:&lt;/label&gt;
+    &lt;input type="search" id="search"&gt;
+    
+    &lt;button type="submit"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;
+        </pre>
+
+        <h3 class="section-head">3. Accessibility (A11y) Fundamentals</h3>
+        <p class="body-text">
+            Web accessibility ensures that people with disabilities can perceive, understand, navigate, and interact with the web.
+        </p>
+
+        <h4 class="subsection-head">3.1 Key Accessibility Features</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>Alt Text:</b> <code>&lt;img src="image.jpg" alt="Descriptive text"&gt;</code></li>
+            <li><b>ARIA Labels:</b> <code>&lt;button aria-label="Close menu"&gt;X&lt;/button&gt;</code></li>
+            <li><b>Keyboard Navigation:</b> Ensure all interactive elements are focusable</li>
+            <li><b>Color Contrast:</b> Maintain sufficient contrast between text and background</li>
+            <li><b>Semantic Headings:</b> Proper heading hierarchy (h1 → h2 → h3)</li>
+        </ul>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> Use the WAVE Web Accessibility Evaluation Tool to check your pages for accessibility issues during development.
+        </div>
+
+        <h3 class="section-head">4. HTML5 APIs & Modern Features</h3>
+        <p class="body-text">
+            HTML5 introduced powerful APIs that enable rich web applications without plugins.
+        </p>
+
+        <h4 class="subsection-head">4.1 Canvas Example</h4>
+        <pre>
+&lt;canvas id="myCanvas" width="200" height="100"&gt;
+    Your browser does not support canvas.
+&lt;/canvas&gt;
+
+&lt;script&gt;
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#4338ca';
+    ctx.fillRect(10, 10, 150, 80);
+&lt;/script&gt;
+        </pre>
+
+        <h4 class="subsection-head">4.2 Local Storage</h4>
+        <pre>
+&lt;script&gt;
+    // Store data
+    localStorage.setItem('username', 'JohnDoe');
+    
+    // Retrieve data
+    const username = localStorage.getItem('username');
+    
+    // Remove data
+    localStorage.removeItem('username');
+&lt;/script&gt;
+        </pre>
+
+        <h3 class="section-head">5. Performance Optimization</h3>
+        <p class="body-text">
+            HTML structure impacts page loading speed and Core Web Vitals:
+        </p>
+        <ul style="margin-left: 25px;">
+            <li><b>Lazy Loading Images:</b> <code>&lt;img src="image.jpg" loading="lazy"&gt;</code></li>
+            <li><b>Async/Defer Scripts:</b> Control when JavaScript loads and executes</li>
+            <li><b>Preload Critical Resources:</b> <code>&lt;link rel="preload" href="style.css" as="style"&gt;</code></li>
+            <li><b>Minimize DOM Size:</b> Reduce unnecessary nesting and elements</li>
+        </ul>
+
+        <h3 class="section-head">6. Best Practices Summary</h3>
+        <p class="body-text">
+            By understanding:
+        </p>
+        <ul style="margin-left: 25px;">
+            <li>Semantic HTML for accessibility and SEO</li>
+            <li>HTML5 forms with built-in validation</li>
+            <li>Accessibility principles (A11y)</li>
+            <li>Modern HTML5 APIs</li>
+            <li>Performance optimization techniques</li>
+        </ul>
+        <p class="body-text">
+            You can now create web pages that are accessible, performant, and maintainable for enterprise-grade applications.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-arrow-right"></i> Next Steps:</b> In Module 02, we explore Modern CSS Layouts including Flexbox, Grid, and responsive design techniques for building professional web interfaces.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 02: Modern CSS Layouts
+        </button>
+    `
+},
+
+{
+    title: "Module 02: Modern CSS Layouts",
+    desc: "Flexbox, Grid & Responsive Design",
+    content: `
+        <span class="module-tag"><i class="fas fa-layer-group"></i> Layout Mastery</span>
+        <h2 class="mod-title">Flexbox, CSS Grid & Responsive Design Systems</h2>
+
+        <p class="body-text">
+            In this module, we master modern CSS layout techniques that have revolutionized web design. 
+            Flexbox and CSS Grid provide powerful tools for creating complex, responsive layouts with minimal code. 
+            We'll explore when to use each, how they work together, and best practices for production websites.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Use Flexbox for one-dimensional layouts (rows OR columns) and CSS Grid for two-dimensional layouts (rows AND columns).
+        </div>
+
+        <h3 class="section-head">1. CSS Flexbox Deep Dive</h3>
+        <p class="body-text">
+            Flexbox is designed for one-dimensional layouts — either a row or a column. It provides efficient alignment and distribution of space among items.
+        </p>
+
+        <h4 class="subsection-head">1.1 Flex Container Properties</h4>
+        <pre>
+.flex-container {
+    display: flex;
+    flex-direction: row; /* row, row-reverse, column, column-reverse */
+    justify-content: center; /* flex-start, flex-end, center, space-between, space-around, space-evenly */
+    align-items: center; /* stretch, flex-start, flex-end, center, baseline */
+    flex-wrap: wrap; /* nowrap, wrap, wrap-reverse */
+    gap: 20px; /* Space between flex items */
+}
+        </pre>
+
+        <h4 class="subsection-head">1.2 Flex Item Properties</h4>
+        <pre>
+.flex-item {
+    flex: 1; /* Shorthand for flex-grow, flex-shrink, flex-basis */
+    flex-grow: 1; /* How much the item will grow relative to others */
+    flex-shrink: 1; /* How much the item will shrink relative to others */
+    flex-basis: 100px; /* Default size before growing/shrinking */
+    align-self: flex-start; /* Override align-items for individual item */
+    order: 2; /* Visual order, independent of source order */
+}
+        </pre>
+
+        <h4 class="subsection-head">1.3 Practical Flexbox Example</h4>
+        <pre>
+&lt;style&gt;
+    .nav-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        background: #f8fafc;
+    }
+    
+    .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+    }
+    
+    .hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+&lt;/style&gt;
+
+&lt;nav class="nav-bar"&gt;
+    &lt;div class="logo"&gt;Logo&lt;/div&gt;
+    &lt;ul class="nav-links"&gt;
+        &lt;li&gt;&lt;a href="#"&gt;Home&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#"&gt;About&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/nav&gt;
+
+&lt;section class="hero"&gt;
+    &lt;h1&gt;Welcome to Our Site&lt;/h1&gt;
+    &lt;p&gt;Modern web design with Flexbox&lt;/p&gt;
+&lt;/section&gt;
+        </pre>
+
+        <h3 class="section-head">2. CSS Grid Mastery</h3>
+        <p class="body-text">
+            CSS Grid is a two-dimensional layout system that handles both rows and columns simultaneously. 
+            It's perfect for complex layouts like dashboards, galleries, and entire page structures.
+        </p>
+
+        <h4 class="subsection-head">2.1 Grid Container Properties</h4>
+        <pre>
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr; /* Fractional units */
+    grid-template-rows: auto 1fr auto; /* Automatic and fractional rows */
+    gap: 20px; /* Row and column gaps */
+    grid-template-areas: 
+        "header header header"
+        "sidebar main aside"
+        "footer footer footer";
+}
+        </pre>
+
+        <h4 class="subsection-head">2.2 Grid Item Placement</h4>
+        <pre>
+.grid-item {
+    grid-column: 1 / 3; /* Start at line 1, end at line 3 */
+    grid-row: 2; /* Place in second row */
+    grid-area: header; /* Named grid area */
+}
+        </pre>
+
+        <h4 class="subsection-head">2.3 Responsive Grid Example</h4>
+        <pre>
+&lt;style&gt;
+    .dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        padding: 20px;
+    }
+    
+    .card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    @media (min-width: 768px) {
+        .dashboard {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+&lt;/style&gt;
+
+&lt;div class="dashboard"&gt;
+    &lt;div class="card"&gt;Statistics&lt;/div&gt;
+    &lt;div class="card"&gt;Charts&lt;/div&gt;
+    &lt;div class="card"&gt;Recent Activity&lt;/div&gt;
+    &lt;div class="card"&gt;User List&lt;/div&gt;
+    &lt;div class="card"&gt;Notifications&lt;/div&gt;
+&lt;/div&gt;
+        </pre>
+
+        <h3 class="section-head">3. Responsive Design Principles</h3>
+        <p class="body-text">
+            Responsive design ensures your website works well on all devices from mobile phones to desktop computers.
+        </p>
+
+        <h4 class="subsection-head">3.1 Mobile-First Approach</h4>
+        <pre>
+/* Base styles for mobile */
+.container {
+    padding: 1rem;
+}
+
+/* Tablet styles */
+@media (min-width: 768px) {
+    .container {
+        padding: 2rem;
+    }
+}
+
+/* Desktop styles */
+@media (min-width: 1024px) {
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+}
+        </pre>
+
+        <h4 class="subsection-head">3.2 Responsive Units</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>rem:</b> Relative to root element font-size</li>
+            <li><b>em:</b> Relative to parent element font-size</li>
+            <li><b>vw/vh:</b> Viewport width/height percentage</li>
+            <li><b>%:</b> Percentage of parent element</li>
+            <li><b>fr:</b> Fractional unit in CSS Grid</li>
+        </ul>
+
+        <h3 class="section-head">4. Combining Flexbox & Grid</h3>
+        <p class="body-text">
+            Professional layouts often combine both techniques:
+        </p>
+        <pre>
+&lt;style&gt;
+    .page {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        min-height: 100vh;
+    }
+    
+    .sidebar {
+        /* Sidebar with flexbox for internal layout */
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 2rem;
+    }
+    
+    .main-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        padding: 2rem;
+    }
+&lt;/style&gt;
+
+&lt;div class="page"&gt;
+    &lt;aside class="sidebar"&gt;
+        &lt;!-- Flexbox items --&gt;
+    &lt;/aside&gt;
+    &lt;main class="main-content"&gt;
+        &lt;!-- Grid items --&gt;
+    &lt;/main&gt;
+&lt;/div&gt;
+        </pre>
+
+        <h3 class="section-head">5. Common Layout Patterns</h3>
+
+        <h4 class="subsection-head">5.1 Holy Grail Layout</h4>
+        <pre>
+.holy-grail {
+    display: grid;
+    grid-template: 
+        "header header header" auto
+        "nav main aside" 1fr
+        "footer footer footer" auto
+        / 200px 1fr 200px;
+    min-height: 100vh;
+}
+
+.header { grid-area: header; }
+.nav { grid-area: nav; }
+.main { grid-area: main; }
+.aside { grid-area: aside; }
+.footer { grid-area: footer; }
+        </pre>
+
+        <h4 class="subsection-head">5.2 Card Grid with Variable Heights</h4>
+        <pre>
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    align-items: start; /* Prevents stretching */
+}
+        </pre>
+
+        <h3 class="section-head">6. Performance Considerations</h3>
+        <ul style="margin-left: 25px;">
+            <li><b>Minimize reflows:</b> Changing layout properties causes expensive reflows</li>
+            <li><b>Use <code>will-change</code> sparingly:</b> Hint browser about upcoming changes</li>
+            <li><b>Optimize CSS:</b> Remove unused styles and minify production CSS</li>
+            <li><b>Test on various devices:</b> Ensure performance on low-end mobile devices</li>
+        </ul>
+
+        <h3 class="section-head">7. Browser Support & Fallbacks</h3>
+        <p class="body-text">
+            While Flexbox and Grid have excellent modern browser support, provide fallbacks for older browsers:
+        </p>
+        <pre>
+/* Float-based fallback */
+@supports not (display: grid) {
+    .card {
+        float: left;
+        width: 33.33%;
+    }
+}
+
+/* Modern grid */
+@supports (display: grid) {
+    .card {
+        float: none;
+        width: auto;
+    }
+}
+        </pre>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> Use <code>@supports</code> feature queries to provide progressive enhancement for modern CSS features.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 03: Advanced CSS Techniques
+        </button>
+    `
+},
+
+{
+    title: "Module 03: Advanced CSS Techniques",
+    desc: "Animations, Transitions & Custom Properties",
+    content: `
+        <span class="module-tag"><i class="fas fa-bolt"></i> Visual Effects</span>
+        <h2 class="mod-title">CSS Animations, Transitions & Custom Properties (CSS Variables)</h2>
+
+        <p class="body-text">
+            In this module, we explore advanced CSS techniques that bring interfaces to life. 
+            Learn to create smooth animations, leverage CSS custom properties for dynamic theming, 
+            and implement modern visual effects that enhance user experience without JavaScript overhead.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Use CSS animations for complex, multi-step animations and CSS transitions for simple state changes. Always prefer CSS animations over JavaScript for better performance.
+        </div>
+
+        <h3 class="section-head">1. CSS Transitions</h3>
+        <p class="body-text">
+            CSS transitions provide a way to control animation speed when changing CSS properties. 
+            They create smooth, gradual transitions between states.
+        </p>
+
+        <h4 class="subsection-head">1.1 Transition Properties</h4>
+        <pre>
+.element {
+    transition-property: all; /* Properties to animate */
+    transition-duration: 0.3s; /* How long transition lasts */
+    transition-timing-function: ease-in-out; /* Speed curve */
+    transition-delay: 0s; /* Delay before starting */
+    
+    /* Shorthand */
+    transition: all 0.3s ease-in-out;
+}
+        </pre>
+
+        <h4 class="subsection-head">1.2 Practical Transition Examples</h4>
+        <pre>
+&lt;style&gt;
+    .button {
+        background: #4338ca;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+    }
+    
+    .button:hover {
+        background: #3730a3;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(67, 56, 202, 0.3);
+    }
+    
+    .card {
+        transition: transform 0.5s ease, opacity 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: scale(1.05);
+    }
+&lt;/style&gt;
+
+&lt;button class="button"&gt;Hover Me&lt;/button&gt;
+&lt;div class="card"&gt;Interactive Card&lt;/div&gt;
+        </pre>
+
+        <h3 class="section-head">2. CSS Animations & Keyframes</h3>
+        <p class="body-text">
+            CSS animations allow for more complex, multi-step animations using <code>@keyframes</code>. 
+            Unlike transitions, animations can loop, reverse, and maintain multiple states.
+        </p>
+
+        <h4 class="subsection-head">2.1 Animation Properties</h4>
+        <pre>
+.element {
+    animation-name: slideIn;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-delay: 0.5s;
+    animation-iteration-count: infinite; /* or number */
+    animation-direction: alternate; /* normal, reverse, alternate, alternate-reverse */
+    animation-fill-mode: forwards; /* none, forwards, backwards, both */
+    animation-play-state: running; /* running, paused */
+    
+    /* Shorthand */
+    animation: slideIn 1s ease-out 0.5s infinite alternate forwards;
+}
+        </pre>
+
+        <h4 class="subsection-head">2.2 Keyframes Examples</h4>
+        <pre>
+&lt;style&gt;
+    @keyframes slideIn {
+        from {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+    }
+    
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0);
+        }
+        40% {
+            transform: translateY(-20px);
+        }
+        60% {
+            transform: translateY(-10px);
+        }
+    }
+    
+    .animated-element {
+        animation: slideIn 0.8s ease-out;
+    }
+    
+    .pulse {
+        animation: pulse 2s infinite;
+    }
+    
+    .bounce {
+        animation: bounce 1s infinite;
+    }
+&lt;/style&gt;
+        </pre>
+
+        <h3 class="section-head">3. CSS Custom Properties (Variables)</h3>
+        <p class="body-text">
+            CSS custom properties (variables) allow you to store values in one place and reuse them throughout your stylesheet. 
+            They enable dynamic theming, consistent design systems, and runtime updates via JavaScript.
+        </p>
+
+        <h4 class="subsection-head">3.1 Defining & Using Variables</h4>
+        <pre>
+:root {
+    --primary-color: #4338ca;
+    --secondary-color: #10b981;
+    --spacing-unit: 1rem;
+    --border-radius: 8px;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --font-family: 'Inter', sans-serif;
+}
+
+.button {
+    background-color: var(--primary-color);
+    padding: var(--spacing-unit) calc(var(--spacing-unit) * 2);
+    border-radius: var(--border-radius);
+    font-family: var(--font-family);
+}
+
+.card {
+    box-shadow: var(--shadow);
+    border-radius: var(--border-radius);
+    padding: calc(var(--spacing-unit) * 2);
+}
+        </pre>
+
+        <h4 class="subsection-head">3.2 Dynamic Theming with Variables</h4>
+        <pre>
+&lt;style&gt;
+    :root {
+        --bg-color: #ffffff;
+        --text-color: #1e293b;
+        --primary: #4338ca;
+    }
+    
+    .dark-theme {
+        --bg-color: #0f172a;
+        --text-color: #f8fafc;
+        --primary: #8b5cf6;
+    }
+    
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        transition: background-color 0.3s, color 0.3s;
+    }
+    
+    .theme-toggle {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+&lt;/style&gt;
+
+&lt;body&gt;
+    &lt;button class="theme-toggle" onclick="toggleTheme()"&gt;
+        Toggle Theme
+    &lt;/button&gt;
+&lt;/body&gt;
+
+&lt;script&gt;
+    function toggleTheme() {
+        document.body.classList.toggle('dark-theme');
+    }
+&lt;/script&gt;
+        </pre>
+
+        <h3 class="section-head">4. Advanced Visual Effects</h3>
+
+        <h4 class="subsection-head">4.1 Gradient Borders</h4>
+        <pre>
+.gradient-border {
+    position: relative;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+}
+
+.gradient-border::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #4338ca, #8b5cf6, #10b981);
+    border-radius: 14px;
+    z-index: -1;
+}
+        </pre>
+
+        <h4 class="subsection-head">4.2 Clip-path Shapes</h4>
+        <pre>
+.shape {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(135deg, #4338ca, #8b5cf6);
+    
+    /* Triangle */
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    
+    /* Circle */
+    clip-path: circle(50% at 50% 50%);
+    
+    /* Complex shape */
+    clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 75% 75%, 75% 100%, 50% 75%, 0% 75%);
+}
+        </pre>
+
+        <h4 class="subsection-head">4.3 Backdrop Filters</h4>
+        <pre>
+.modal {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+        </pre>
+
+        <h3 class="section-head">5. Performance Optimization</h3>
+        <ul style="margin-left: 25px;">
+            <li><b>Use transform and opacity:</b> These properties are GPU-accelerated and don't trigger layout recalculations</li>
+            <li><b>Avoid animating height/width:</b> Use transform: scale() instead</li>
+            <li><b>Limit animation complexity:</b> Complex animations can cause jank on low-end devices</li>
+            <li><b>Use will-change sparingly:</b> Only apply to elements you're about to animate</li>
+            <li><b>Test with reduced motion preference:</b> Respect <code>@media (prefers-reduced-motion: reduce)</code></li>
+        </ul>
+
+        <h3 class="section-head">6. Responsive Animations</h3>
+        <pre>
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Adjust animation for mobile */
+@media (max-width: 768px) {
+    .desktop-animation {
+        animation: none;
+        transform: none;
+    }
+}
+        </pre>
+
+        <h3 class="section-head">7. CSS Houdini (Experimental)</h3>
+        <p class="body-text">
+            CSS Houdini is a set of low-level APIs that expose parts of the CSS engine, allowing developers to extend CSS.
+        </p>
+        <pre>
+/* Register custom properties */
+@property --gradient-angle {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0deg;
+}
+
+/* Use in animation */
+.element {
+    --gradient-angle: 0deg;
+    background: linear-gradient(var(--gradient-angle), #4338ca, #8b5cf6);
+    animation: rotate-gradient 5s linear infinite;
+}
+
+@keyframes rotate-gradient {
+    to { --gradient-angle: 360deg; }
+}
+        </pre>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> Combine CSS custom properties with JavaScript for truly dynamic interfaces. You can update CSS variables in real-time based on user interactions or application state.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 04: CSS Architecture & Methodologies
+        </button>
+    `
+},
+
+{
+    title: "Module 04: CSS Architecture & Methodologies",
+    desc: "BEM, SMACSS & Component-Based Design",
+    content: `
+        <span class="module-tag"><i class="fas fa-sitemap"></i> Scalable Architecture</span>
+        <h2 class="mod-title">BEM, SMACSS & Component-Based CSS Architecture</h2>
+
+        <p class="body-text">
+            In this module, we tackle the challenge of writing maintainable, scalable CSS for large applications. 
+            Learn industry-standard methodologies like BEM and SMACSS, understand CSS specificity wars, 
+            and implement component-based architectures that scale with your team and project complexity.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Good CSS architecture reduces bugs, improves team collaboration, and makes your stylesheets predictable and maintainable as projects grow.
+        </div>
+
+        <h3 class="section-head">1. CSS Specificity & Cascade</h3>
+        
+        <p class="body-text">
+            Understanding CSS specificity is crucial for avoiding style conflicts and writing predictable CSS.
+        </p>
+
+        <h4 class="subsection-head">1.1 Specificity Hierarchy</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>Inline styles:</b> 1,0,0,0 (Highest)</li>
+            <li><b>ID selectors:</b> 0,1,0,0</li>
+            <li><b>Class/attribute/pseudo-class selectors:</b> 0,0,1,0</li>
+            <li><b>Type/pseudo-element selectors:</b> 0,0,0,1 (Lowest)</li>
+            <li><b>Universal selector:</b> 0,0,0,0</li>
+        </ul>
+
+        <h4 class="subsection-head">1.2 Calculating Specificity</h4>
+        <pre>
+/* Specificity: 0,0,1,0 */
+.button { }
+
+/* Specificity: 0,0,2,0 */
+.button.primary { }
+
+/* Specificity: 0,1,0,0 */
+#submit-button { }
+
+/* Specificity: 0,1,1,0 */
+#submit-button.primary { }
+
+/* Specificity: 0,0,0,1 */
+div { }
+
+/* Specificity: 0,0,1,1 */
+div.button { }
+        </pre>
+
+        <h3 class="section-head">2. BEM Methodology</h3>
+        
+        <p class="body-text">
+            Block Element Modifier (BEM) is a naming convention that makes relationships between CSS and HTML clear and predictable.
+        </p>
+
+        <h4 class="subsection-head">2.1 BEM Naming Convention</h4>
+        <pre>
+/* Block - standalone entity */
+.card { }
+
+/* Element - part of a block */
+.card__title { }
+.card__body { }
+.card__footer { }
+
+/* Modifier - different state or version */
+.card--featured { }
+.card__button--primary { }
+.card--dark-theme { }
+        </pre>
+
+        <h4 class="subsection-head">2.2 BEM Example</h4>
+        <pre>
+&lt;style&gt;
+    /* Block */
+    .menu { }
+    
+    /* Elements */
+    .menu__list { }
+    .menu__item { }
+    .menu__link { }
+    
+    /* Modifiers */
+    .menu--horizontal { }
+    .menu__item--active { }
+    .menu__link--disabled { }
+&lt;/style&gt;
+
+&lt;nav class="menu menu--horizontal"&gt;
+    &lt;ul class="menu__list"&gt;
+        &lt;li class="menu__item menu__item--active"&gt;
+            &lt;a class="menu__link" href="#"&gt;Home&lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li class="menu__item"&gt;
+            &lt;a class="menu__link" href="#"&gt;About&lt;/a&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/nav&gt;
+        </pre>
+
+        <h3 class="section-head">3. SMACSS Architecture</h3>
+        <p class="body-text">
+            Scalable and Modular Architecture for CSS (SMACSS) categorizes CSS rules into five types to improve organization.
+        </p>
+
+        <h4 class="subsection-head">3.1 SMACSS Categories</h4>
+        <pre>
+/* 1. Base Rules - Default styles */
+html, body { }
+h1, h2, h3 { }
+a { }
+
+/* 2. Layout Rules - Major layout components */
+.header, .footer, .sidebar { }
+.layout-grid { }
+.container { }
+
+/* 3. Module Rules - Reusable components */
+.card { }
+.button { }
+.modal { }
+
+/* 4. State Rules - How modules look in different states */
+.is-hidden { }
+.is-active { }
+.is-disabled { }
+
+/* 5. Theme Rules - Design variations */
+.theme-dark { }
+.theme-light { }
+        </pre>
+
+        <h4 class="subsection-head">3.2 SMACSS File Structure</h4>
+        <pre>
+styles/
+├── base/
+│   ├── _reset.css
+│   ├── _typography.css
+│   └── _base.css
+├── layout/
+│   ├── _grid.css
+│   ├── _header.css
+│   └── _footer.css
+├── modules/
+│   ├── _buttons.css
+│   ├── _cards.css
+│   └── _forms.css
+├── states/
+│   ├── _visibility.css
+│   └── _states.css
+├── themes/
+│   └── _dark.css
+└── main.css
+        </pre>
+
+        <h3 class="section-head">4. Component-Based CSS</h3>
+        <p class="body-text">
+            Modern frameworks like React, Vue, and Angular encourage component-based development. 
+            CSS should follow the same component boundaries.
+        </p>
+
+        <h4 class="subsection-head">4.1 CSS-in-JS Approach</h4>
+        <pre>
+// Example with styled-components (React)
+import styled from 'styled-components';
+
+const Button = styled.button\`
+    background: \${props => props.primary ? '#4338ca' : '#f1f5f9'};
+    color: \${props => props.primary ? 'white' : '#1e293b'};
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+\`;
+
+// Usage
+&lt;Button primary&gt;Primary Button&lt;/Button&gt;
+&lt;Button&gt;Secondary Button&lt;/Button&gt;
+        </pre>
+
+        <h4 class="subsection-head">4.2 CSS Modules</h4>
+        <pre>
+/* Button.module.css */
+.button {
+    background: #4338ca;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+}
+
+.primary {
+    background: #10b981;
+}
+
+// Component usage
+import styles from './Button.module.css';
+
+function Button({ primary, children }) {
+    const className = primary 
+        ? \`\${styles.button} \${styles.primary}\`
+        : styles.button;
+    
+    return &lt;button className={className}&gt;{children}&lt;/button&gt;;
+}
+        </pre>
+
+        <h3 class="section-head">5. Utility-First CSS (Tailwind Approach)</h3>
+        <p class="body-text">
+            Utility-first CSS provides small, single-purpose classes that can be composed to build complex designs.
+        </p>
+
+        <h4 class="subsection-head">5.1 Utility Classes Example</h4>
+        <pre>
+&lt;style&gt;
+    /* Utility classes */
+    .bg-primary { background-color: #4338ca; }
+    .text-white { color: white; }
+    .p-4 { padding: 1rem; }
+    .rounded-lg { border-radius: 0.5rem; }
+    .shadow-lg { box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+    /* Corrected single backslash for CSS escape */
+    .hover\:scale-105:hover { transform: scale(1.05); }
+    .transition-all { transition: all 0.3s ease; }
+&lt;/style&gt;
+
+&lt;button class="bg-primary text-white p-4 rounded-lg shadow-lg hover:scale-105 transition-all"&gt;
+    Click Me
+&lt;/button&gt;
+        </pre>
+
+        <h3 class="section-head">6. CSS Performance & Optimization</h3>
+
+        <h4 class="subsection-head">6.1 Critical CSS Extraction</h4>
+        <pre>
+/* Extract critical styles for above-the-fold content */
+.critical {
+    /* Styles needed for initial render */
+}
+
+/* Load non-critical styles asynchronously */
+&lt;link rel="preload" href="non-critical.css" as="style" onload="this.rel='stylesheet'"&gt;
+&lt;noscript&gt;&lt;link rel="stylesheet" href="non-critical.css"&gt;&lt;/noscript&gt;
+        </pre>
+
+        <h4 class="subsection-head">6.2 CSS Minification & Compression</h4>
+        <ul style="margin-left: 25px;">
+            <li>Remove whitespace, comments, and unnecessary semicolons</li>
+            <li>Minify class names in production (using tools like CSSNano)</li>
+            <li>Use Gzip/Brotli compression for CSS files</li>
+            <li>Concatenate CSS files to reduce HTTP requests</li>
+        </ul>
+
+        <h3 class="section-head">7. Design Tokens & Design Systems</h3>
+        <p class="body-text">
+            Design tokens are the visual design atoms of a design system — named entities that store design decisions.
+        </p>
+
+        <h4 class="subsection-head">7.1 Design Tokens Implementation</h4>
+        <pre>
+:root {
+    /* Color tokens */
+    --color-primary: #4338ca;
+    --color-primary-dark: #3730a3;
+    --color-secondary: #10b981;
+    --color-text: #1e293b;
+    --color-text-light: #64748b;
+    
+    /* Spacing tokens */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 4rem;
+    
+    /* Typography tokens */
+    --font-family: 'Inter', sans-serif;
+    --font-size-sm: 0.875rem;
+    --font-size-md: 1rem;
+    --font-size-lg: 1.25rem;
+    --font-size-xl: 1.5rem;
+    
+    /* Border radius tokens */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 1rem;
+    
+    /* Shadow tokens */
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
+}
+        </pre>
+
+        <h3 class="section-head">8. Best Practices Summary</h3>
+        <ul style="margin-left: 25px;">
+            <li><b>Use a consistent naming convention</b> (BEM, SMACSS, or your own)</li>
+            <li><b>Keep specificity low</b> to avoid override wars</li>
+            <li><b>Organize CSS by component</b> rather than by page</li>
+            <li><b>Use CSS custom properties</b> for theming and consistency</li>
+            <li><b>Document your architecture</b> for team members</li>
+            <li><b>Implement a design system</b> with reusable tokens</li>
+            <li><b>Regularly audit and refactor</b> CSS for maintainability</li>
+        </ul>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> Choose a CSS methodology that fits your team's workflow and project requirements. The best architecture is the one that your team can consistently follow and maintain.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 05: Responsive Design & Mobile Optimization
+        </button>
+    `
+},
+
+
+{
+    title: "Module 05: Responsive Design & Mobile Optimization",
+    desc: "Media Queries, Mobile-First & Performance",
+    content: `
+        <span class="module-tag"><i class="fas fa-mobile-alt"></i> Mobile Optimization</span>
+        <h2 class="mod-title">Advanced Media Queries, Mobile-First Development & Performance Optimization</h2>
+
+        <p class="body-text">
+            In this module, we master responsive web design techniques that ensure your websites work flawlessly across all devices. 
+            Learn advanced media query strategies, mobile-first development, touch-friendly interfaces, 
+            and performance optimization techniques for mobile networks.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Mobile-first isn't just about screen size—it's about performance, touch interactions, and prioritizing content for smaller viewports.
+        </div>
+
+        <h3 class="section-head">1. Advanced Media Queries</h3>
+        <p class="body-text">
+            Modern responsive design uses more than just width-based media queries. 
+            Consider device capabilities, orientation, and user preferences.
+        </p>
+
+        <h4 class="subsection-head">1.1 Media Query Features</h4>
+        <pre>
+/* Width-based queries */
+@media (min-width: 768px) { }
+@media (max-width: 1024px) { }
+@media (width >= 768px) and (width <= 1024px) { }
+
+/* Height considerations */
+@media (min-height: 600px) { }
+
+/* Orientation */
+@media (orientation: landscape) { }
+@media (orientation: portrait) { }
+
+/* Resolution (for high-DPI screens) */
+@media (min-resolution: 2dppx) { }
+@media (-webkit-min-device-pixel-ratio: 2) { }
+
+/* Hover capability */
+@media (hover: hover) { } /* Device supports hover */
+@media (hover: none) { } /* Touch devices */
+
+/* Pointer type */
+@media (pointer: coarse) { } /* Touch screens */
+@media (pointer: fine) { } /* Mouse */
+@media (pointer: none) { } /* No pointing device */
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) { }
+
+/* Color scheme preference */
+@media (prefers-color-scheme: dark) { }
+@media (prefers-color-scheme: light) { }
+
+/* Reduced data mode */
+@media (prefers-reduced-data: reduce) { }
+        </pre>
+
+        <h4 class="subsection-head">1.2 Container Queries (Modern CSS)</h4>
+        <pre>
+.component {
+    container-type: inline-size;
+}
+
+@container (min-width: 400px) {
+    .component__title {
+        font-size: 1.5rem;
+    }
+}
+
+@container (min-width: 600px) {
+    .component {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+    }
+}
+        </pre>
+
+        <h3 class="section-head">2. Mobile-First Development Strategy</h3>
+        <p class="body-text">
+            Mobile-first means designing for the smallest screen first, then progressively enhancing for larger screens.
+        </p>
+
+        <h4 class="subsection-head">2.1 Mobile-First CSS Structure</h4>
+        <pre>
+/* Base styles - Mobile first */
+.container {
+    padding: 1rem;
+    max-width: 100%;
+}
+
+/* Small tablets */
+@media (min-width: 640px) {
+    .container {
+        padding: 1.5rem;
+    }
+}
+
+/* Tablets and small laptops */
+@media (min-width: 768px) {
+    .container {
+        padding: 2rem;
+        max-width: 720px;
+        margin: 0 auto;
+    }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    .container {
+        max-width: 960px;
+    }
+}
+
+/* Large desktop */
+@media (min-width: 1280px) {
+    .container {
+        max-width: 1200px;
+    }
+}
+        </pre>
+
+        <h4 class="subsection-head">2.2 Content-First Approach</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>Prioritize content:</b> Show essential information first</li>
+            <li><b>Progressive enhancement:</b> Add features for larger screens</li>
+            <li><b>Conditional loading:</b> Load resources based on viewport</li>
+            <li><b>Touch targets:</b> Minimum 44×44px for touch interactions</li>
+            <li><b>Font sizes:</b> Minimum 16px for body text on mobile</li>
+        </ul>
+
+        <h3 class="section-head">3. Responsive Typography</h3>
+        <p class="body-text">
+            Responsive typography scales smoothly across different screen sizes using fluid typography techniques.
+        </p>
+
+        <h4 class="subsection-head">3.1 Fluid Typography with clamp()</h4>
+        <pre>
+:root {
+    /* Fluid typography scale */
+    --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+    --text-sm: clamp(0.875rem, 0.825rem + 0.25vw, 1rem);
+    --text-base: clamp(1rem, 0.925rem + 0.375vw, 1.125rem);
+    --text-lg: clamp(1.125rem, 1.025rem + 0.5vw, 1.5rem);
+    --text-xl: clamp(1.25rem, 1.125rem + 0.625vw, 1.875rem);
+    --text-2xl: clamp(1.5rem, 1.325rem + 0.875vw, 2.25rem);
+    --text-3xl: clamp(1.875rem, 1.625rem + 1.25vw, 3rem);
+}
+
+h1 {
+    font-size: var(--text-3xl);
+    line-height: 1.2;
+}
+
+p {
+    font-size: var(--text-base);
+    line-height: 1.6;
+}
+        </pre>
+
+        <h4 class="subsection-head">3.2 Viewport Units for Typography</h4>
+        <pre>
+/* Responsive heading that scales with viewport width */
+.responsive-heading {
+    font-size: clamp(1.5rem, 5vw, 3rem);
+}
+
+/* Height-based typography for tall screens */
+@media (min-height: 800px) {
+    .tall-screen {
+        font-size: 1.25rem;
+        line-height: 1.8;
+    }
+}
+        </pre>
+
+        <h3 class="section-head">4. Responsive Images & Media</h3>
+
+        <h4 class="subsection-head">4.1 Responsive Images with srcset</h4>
+        <pre>
+&lt;img 
+    src="image-800.jpg"
+    srcset="image-400.jpg 400w,
+            image-800.jpg 800w,
+            image-1200.jpg 1200w,
+            image-1600.jpg 1600w"
+    sizes="(max-width: 600px) 100vw,
+           (max-width: 1200px) 50vw,
+           33vw"
+    alt="Responsive image example"
+    loading="lazy"
+&gt;
+        </pre>
+
+        <h4 class="subsection-head">4.2 Picture Element for Art Direction</h4>
+        <pre>
+&lt;picture&gt;
+    &lt;source 
+        media="(min-width: 1200px)"
+        srcset="hero-desktop.jpg"
+    &gt;
+    &lt;source 
+        media="(min-width: 768px)"
+        srcset="hero-tablet.jpg"
+    &gt;
+    &lt;img 
+        src="hero-mobile.jpg"
+        alt="Hero image"
+        loading="eager"
+    &gt;
+&lt;/picture&gt;
+        </pre>
+
+        <h4 class="subsection-head">4.3 Responsive Background Images</h4>
+        <pre>
+.hero {
+    background-image: url('hero-mobile.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 300px;
+}
+
+@media (min-width: 768px) {
+    .hero {
+        background-image: url('hero-tablet.jpg');
+        min-height: 400px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .hero {
+        background-image: url('hero-desktop.jpg');
+        min-height: 500px;
+    }
+}
+        </pre>
+
+        <h3 class="section-head">5. Touch-Friendly Interfaces</h3>
+
+        <h4 class="subsection-head">5.1 Touch Target Guidelines</h4>
+        <pre>
+/* Minimum touch target size */
+.touch-button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 12px 24px;
+}
+
+/* Spacing between touch targets */
+.touch-menu li {
+    margin: 8px 0;
+}
+
+/* Visual feedback for touch */
+.touch-button:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
+
+/* Disable text selection on interactive elements */
+.draggable {
+    user-select: none;
+    -webkit-user-select: none;
+}
+        </pre>
+
+        <h4 class="subsection-head">5.2 Touch Gesture Considerations</h4>
+        <ul style="margin-left: 25px;">
+            <li>Avoid hover-only interactions on touch devices</li>
+            <li>Provide ample space for swipe gestures</li>
+            <li>Disable pull-to-refresh on non-scrollable areas</li>
+            <li>Handle both click and touch events appropriately</li>
+            <li>Test with actual touch devices, not just emulators</li>
+        </ul>
+
+        <h3 class="section-head">6. Mobile Performance Optimization</h3>
+
+        <h4 class="subsection-head">6.1 Critical Rendering Path Optimization</h4>
+        <pre>
+/* Inline critical CSS */
+&lt;style&gt;
+    /* Above-the-fold styles only */
+&lt;/style&gt;
+
+/* Defer non-critical CSS */
+&lt;link rel="preload" href="styles.css" as="style" onload="this.rel='stylesheet'"&gt;
+
+/* Lazy load images */
+&lt;img loading="lazy" src="image.jpg" alt="..."&gt;
+
+/* Defer JavaScript */
+&lt;script src="app.js" defer&gt;&lt;/script&gt;
+        </pre>
+
+        <h4 class="subsection-head">6.2 Network-Aware Loading</h4>
+        <pre>
+// Check connection speed
+if (navigator.connection) {
+    const connection = navigator.connection;
+    
+    if (connection.saveData === true) {
+        // Load lightweight version
+    }
+    
+    if (connection.effectiveType === 'slow-2g' || 
+        connection.effectiveType === '2g') {
+        // Load minimal assets
+    }
+}
+
+// CSS media query for reduced data
+@media (prefers-reduced-data: reduce) {
+    .hero {
+        background-image: none;
+    }
+    
+    .video {
+        display: none;
+    }
+}
+        </pre>
+
+        <h3 class="section-head">7. Testing & Debugging</h3>
+
+        <h4 class="subsection-head">7.1 Device Testing Matrix</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>iOS:</b> iPhone SE, iPhone 13, iPad Pro</li>
+            <li><b>Android:</b> Various screen sizes and OS versions</li>
+            <li><b>Tablets:</b> Portrait and landscape orientations</li>
+            <li><b>Foldables:</b> Consider foldable device behaviors</li>
+            <li><b>Desktop:</b> Different window sizes and zoom levels</li>
+        </ul>
+
+        <h4 class="subsection-head">7.2 Browser DevTools Features</h4>
+        <ul style="margin-left: 25px;">
+            <li>Device mode emulation</li>
+            <li>Throttling network and CPU</li>
+            <li>Touch simulation</li>
+            <li>CSS media query inspection</li>
+            <li>Performance audits (Lighthouse)</li>
+        </ul>
+
+        <h3 class="section-head">8. Progressive Web App (PWA) Considerations</h3>
+        <pre>
+/* Viewport meta tag for PWAs */
+&lt;meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"&gt;
+
+/* Safe area insets for notches */
+.safe-area {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+}
+
+/* App-like scrolling */
+body {
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+}
+        </pre>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> Always test responsive designs on actual devices. Emulators can't perfectly replicate touch interactions, performance characteristics, or browser quirks of real mobile devices.
+        </div>
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-lock-open"></i> Unlock Module 06: Cross-Browser Compatibility
+        </button>
+    `
+},
+{
+    title: "Module 06: Cross-Browser Compatibility",
+    desc: "Vendor Prefixes, Feature Detection & Polyfills",
+    content: `
+        <span class="module-tag"><i class="fas fa-browser"></i> Browser Consistency</span>
+        <h2 class="mod-title">Vendor Prefixes, Feature Detection & Polyfills</h2>
+
+        <p class="body-text">
+            In this module, we tackle one of the biggest challenges in web development: ensuring consistent behavior across different browsers. 
+            Learn how to handle browser inconsistencies, implement feature detection, use polyfills for missing features, 
+            and write CSS that works reliably in all major browsers.
+        </p>
+
+        <div class="pro-note">
+            <b><i class="fas fa-lightbulb"></i> Pro Tip:</b> Don't aim for pixel-perfect consistency across all browsers. Instead, focus on functional consistency—ensure your site works well and looks good in all browsers, even if there are minor visual differences.
+        </div>
+
+        <h3 class="section-head">1. Understanding Browser Engines</h3>
+        <p class="body-text">
+            Different browsers use different rendering engines, which interpret CSS and JavaScript differently.
+        </p>
+
+        <h4 class="subsection-head">1.1 Major Browser Engines</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>Blink:</b> Chrome, Edge, Opera, Brave (Chromium-based)</li>
+            <li><b>Gecko:</b> Firefox</li>
+            <li><b>WebKit:</b> Safari, iOS browsers</li>
+            <li><b>Trident/EdgeHTML:</b> Legacy Internet Explorer/Edge</li>
+        </ul>
+
+        <h4 class="subsection-head">1.2 CSS Vendor Prefixes</h4>
+        <pre>
+/* Gradient with all vendor prefixes */
+.gradient {
+    background: #4338ca; /* Fallback for older browsers */
+    background: -webkit-linear-gradient(45deg, #4338ca, #8b5cf6);
+    background: -moz-linear-gradient(45deg, #4338ca, #8b5cf6);
+    background: -o-linear-gradient(45deg, #4338ca, #8b5cf6);
+    background: linear-gradient(45deg, #4338ca, #8b5cf6);
+}
+
+/* Flexbox with prefixes */
+.flex-container {
+    display: -webkit-box; /* OLD - iOS 6-, Safari 3.1-6 */
+    display: -moz-box; /* OLD - Firefox 19- */
+    display: -ms-flexbox; /* TWEENER - IE 10 */
+    display: -webkit-flex; /* NEW - Chrome */
+    display: flex; /* NEW, Spec - Opera 12.1, Firefox 20+ */
+}
+
+/* CSS Grid with prefixes */
+.grid-container {
+    display: -ms-grid; /* IE 10-11 */
+    display: grid;
+}
+        </pre>
+
+        <h3 class="section-head">2. Modern CSS with Autoprefixer</h3>
+        <p class="body-text">
+            Instead of manually writing prefixes, use build tools like Autoprefixer to automatically add necessary prefixes based on your browser support targets.
+        </p>
+
+        <h4 class="subsection-head">2.1 Autoprefixer Configuration</h4>
+        <pre>
+// package.json
+{
+  "browserslist": [
+    "> 0.5%",                // Global usage > 0.5%
+    "last 2 versions",       // Last 2 versions of each browser
+    "Firefox ESR",           // Firefox Extended Support Release
+    "not dead",              // Exclude browsers without official support
+    "not IE 11"              // Exclude Internet Explorer 11
+  ]
+}
+
+// .browserslistrc (alternative)
+> 0.5%
+last 2 versions
+Firefox ESR
+not dead
+not IE 11
+        </pre>
+
+        <h4 class="subsection-head">2.2 Build Process Integration</h4>
+        <pre>
+// webpack.config.js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [
+                  require('autoprefixer')
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+};
+        </pre>
+
+        <h3 class="section-head">3. Feature Detection Techniques</h3>
+        <p class="body-text">
+            Feature detection checks if a browser supports specific features before using them.
+        </p>
+
+        <h4 class="subsection-head">3.1 CSS Feature Queries (@supports)</h4>
+        <pre>
+/* Check for CSS Grid support */
+@supports (display: grid) {
+    .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Fallback for browsers without grid */
+@supports not (display: grid) {
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
+
+/* Check for custom properties support */
+@supports (--css: variables) {
+    :root {
+        --primary-color: #4338ca;
+    }
+    
+    .button {
+        background-color: var(--primary-color);
+    }
+}
+        </pre>
+
+        <h4 class="subsection-head">3.2 JavaScript Feature Detection</h4>
+        <pre>
+// Check for CSS Grid support
+if ('CSS' in window && CSS.supports('display', 'grid')) {
+    document.documentElement.classList.add('css-grid');
+} else {
+    document.documentElement.classList.add('no-css-grid');
+}
+
+// Check for Intersection Observer API
+if ('IntersectionObserver' in window) {
+    // Use modern lazy loading
+    const observer = new IntersectionObserver(callback, options);
+} else {
+    // Fallback to older technique
+    window.addEventListener('scroll', throttle(lazyLoad, 200));
+}
+
+// Modernizr-like manual detection
+function supportsFeature(feature) {
+    const el = document.createElement('div');
+    return feature in el.style;
+}
+
+if (supportsFeature('grid')) {
+    // Use CSS Grid
+}
+        </pre>
+
+        <h3 class="section-head">4. Polyfills & Shims</h3>
+        <p class="body-text">
+            Polyfills implement modern features in older browsers that don't natively support them.
+        </p>
+
+        <h4 class="subsection-head">4.1 Common Polyfills</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>CSS Grid:</b> css-grid-polyfill</li>
+            <li><b>Flexbox:</b> flexibility (for IE 10-11)</li>
+            <li><b>Fetch API:</b> whatwg-fetch</li>
+            <li><b>Intersection Observer:</b> intersection-observer</li>
+            <li><b>Custom Elements:</b> @webcomponents/custom-elements</li>
+            <li><b>ES6+ Features:</b> core-js, babel-polyfill</li>
+        </ul>
+
+        <h4 class="subsection-head">4.2 Conditional Polyfill Loading</h4>
+        <pre>
+// Check if polyfill is needed
+if (!('fetch' in window)) {
+    // Load fetch polyfill
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/whatwg-fetch@3.6.2/dist/fetch.umd.min.js';
+    document.head.appendChild(script);
+}
+
+// Using modernizr and yepnope (legacy but effective)
+Modernizr.load({
+    test: Modernizr.cssgrid,
+    nope: 'css-grid-polyfill.js',
+    complete: function() {
+        // Initialize after polyfill loads
+    }
+});
+        </pre>
+
+        <h3 class="section-head">5. Internet Explorer & Legacy Browser Support</h3>
+
+        <h4 class="subsection-head">5.1 IE-Specific CSS Hacks (Avoid When Possible)</h4>
+        <pre>
+/* IE 10-11 only */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    .ie-only {
+        display: block;
+    }
+}
+
+/* IE 10+ */
+_:-ms-input-placeholder, :root .selector { }
+
+/* IE 9 */
+@media screen and (min-width:0\0) and (min-resolution: +72dpi) { }
+
+/* Better approach: Use feature detection */
+@supports not (display: grid) {
+    /* Styles for browsers without grid support */
+}
+        </pre>
+
+        <h4 class="subsection-head">5.2 Graceful Degradation Strategies</h4>
+        <pre>
+/* Modern browsers get enhanced experience */
+.button {
+    background: #4338ca;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    color: white;
+    
+    /* Enhancement for modern browsers */
+    transition: transform 0.3s ease;
+}
+
+.button:hover {
+    /* Modern browsers: enhanced hover */
+    transform: translateY(-2px);
+}
+
+/* Legacy browsers get functional experience */
+.no-transforms .button:hover {
+    /* Legacy browsers: simple hover */
+    background: #3730a3;
+}
+        </pre>
+
+        <h3 class="section-head">6. Testing Across Browsers</h3>
+
+        <h4 class="subsection-head">6.1 Browser Testing Tools</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>BrowserStack:</b> Cloud-based testing on real devices</li>
+            <li><b>Sauce Labs:</b> Automated cross-browser testing</li>
+            <li><b>LambdaTest:</b> Online browser testing platform</li>
+            <li><b>Microsoft Edge DevTools:</b> IE mode simulation</li>
+            <li><b>Browserling:</b> Interactive cross-browser testing</li>
+        </ul>
+
+        <h4 class="subsection-head">6.2 Manual Testing Checklist</h4>
+        <ul style="margin-left: 25px;">
+            <li>Test on latest versions of Chrome, Firefox, Safari, Edge</li>
+            <li>Test on mobile Safari (iOS) and Chrome (Android)</li>
+            <li>Test on older browsers if supporting legacy users</li>
+            <li>Check JavaScript console for errors in each browser</li>
+            <li>Verify CSS rendering matches expectations</li>
+            <li>Test form elements and interactive components</li>
+            <li>Check print styles if applicable</li>
+        </ul>
+
+        <h3 class="section-head">7. CSS Reset & Normalization</h3>
+
+        <h4 class="subsection-head">7.1 Modern CSS Reset</h4>
+        <pre>
+/* Modern CSS Reset by Andy Bell */
+/* https://piccalil.li/blog/a-modern-css-reset/ */
+
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+    margin: 0;
+}
+
+/* Remove list styles on ul, ol elements */
+ul[role='list'],
+ol[role='list'] {
+    list-style: none;
+}
+
+/* Set core root defaults */
+html:focus-within {
+    scroll-behavior: smooth;
+}
+
+/* Set core body defaults */
+body {
+    min-height: 100vh;
+    text-rendering: optimizeSpeed;
+    line-height: 1.5;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+    text-decoration-skip-ink: auto;
+}
+
+/* Make images easier to work with */
+img,
+picture {
+    max-width: 100%;
+    display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+/* Remove all animations and transitions for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    html:focus-within {
+        scroll-behavior: auto;
+    }
+    
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+        </pre>
+
+        <h4 class="subsection-head">7.2 Normalize.css vs Reset.css</h4>
+        <ul style="margin-left: 25px;">
+            <li><b>Reset.css:</b> Removes all default browser styling</li>
+            <li><b>Normalize.css:</b> Makes browser styles consistent while preserving useful defaults</li>
+            <li><b>Modern approach:</b> Use a minimal custom reset tailored to your project</li>
+        </ul>
+
+        <h3 class="section-head">8. Progressive Enhancement Strategy</h3>
+        <pre>
+/* Base layer - Works everywhere */
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #4338ca;
+    color: white;
+    text-decoration: none;
+    border: 2px solid #4338ca;
+}
+
+/* Enhancement layer 1 - Better browsers */
+@supports (display: flex) {
+    .button-container {
+        display: flex;
+        gap: 10px;
+    }
+}
+
+/* Enhancement layer 2 - Modern browsers */
+@supports (display: grid) {
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+    }
+}
+
+/* Enhancement layer 3 - Cutting edge */
+@supports (backdrop-filter: blur(10px)) {
+    .modal {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.1);
+    }
+}
+        </pre>
+
+        <div class="pro-note">
+            <b><i class="fas fa-tools"></i> Pro Tip:</b> Use caniuse.com to check browser support for CSS and JavaScript features. Consider using Feature Policy headers to control which browser features your site can use for enhanced security and compatibility.
+        </div>
+
+
+        <button class="btn-premium" onclick="completeModule()">
+            <i class="fas fa-trophy"></i> Take Final Exam & Claim Certificate
+        </button>
+    `
+},
+
+];
+
+const quizData = [
+    { 
+        q: "Browser rendering process mein 'Layout' (Reflow) stage ka primary kaam kya hota hai?", 
+        options: ["Pixels ko screen par paint karna", "Elements ki exact position aur size calculate karna", "DOM aur CSSOM ko combine karna", "JavaScript ko execute karna"], 
+        correct: 1 
+    },
+    { 
+        q: "Semantic HTML ka use karne ka sabse bada advantage kya hai?", 
+        options: ["Website ki loading speed badhana", "CSS likhne ki zarurat khatam karna", "Accessibility (A11y) aur SEO behtar banana", "Browser window ka size fix karna"], 
+        correct: 2 
+    },
+    { 
+        q: "Flexbox mein 'flex-basis' property kya define karti hai?", 
+        options: ["Element ki maximum width", "Items ke beech ka gap", "Growth factor", "Item ka default size (growth/shrink se pehle)"], 
+        correct: 3 
+    },
+    { 
+        q: "CSS Grid mein '1fr 2fr 1fr' ka kya matlab hai?", 
+        options: ["Columns ki width 1px aur 2px hogi", "Beech wala column baaki dono se double space lega", "Teenon columns fixed size ke honge", "Grid sirf mobile par dikhega"], 
+        correct: 1 
+    },
+    { 
+        q: "Inme se kaunsa property combination GPU acceleration use karke performance optimize karta hai?", 
+        options: ["width aur height", "margin aur padding", "transform aur opacity", "display aur visibility"], 
+        correct: 2 
+    },
+    { 
+        q: "CSS Specificity ke hisaab se, kis selector ki priority sabse zyada hogi?", 
+        options: ["#my-id", ".my-class", "div", "style='' (Inline Style)"], 
+        correct: 3 
+    },
+    { 
+        q: "BEM methodology mein 'button--large' kya represent karta hai?", 
+        options: ["Block", "Element", "Modifier", "Structure"], 
+        correct: 2 
+    },
+    { 
+        q: "Responsive design mein 'clamp(1rem, 5vw, 2rem)' function ka kya role hai?", 
+        options: ["Font size ko fix kar dena", "Minimum, preferred, aur maximum limits ke beech fluid scaling", "Image ko crop karna", "Sirf mobile par text dikhana"], 
+        correct: 1 
+    },
+    { 
+        q: "Mobile-first development strategy mein hum media queries ko kaise structure karte hain?", 
+        options: ["max-width ka use karke", "min-width ka use karke", "Z-index ka use karke", "JavaScript ke through"], 
+        correct: 1 
+    },
+    { 
+        q: "CSS '@supports' query ka primary use-case kya hai?", 
+        options: ["Dark mode check karna", "Browser ki feature support detect karna (Feature Detection)", "External fonts load karna", "User ki internet speed check karna"], 
+        correct: 1 
+    }
+];
+
+let maxUnlocked = 0;
+let currentModule = 0;
+let examScore = 0;
+let examTaken = false;
+
+function toggleSidebar(){
+    document.getElementById('toc').classList.toggle('active');
+    document.getElementById('overlay').classList.toggle('active');
+}
+
+function startCourse(){
+    document.getElementById('welcome-screen').classList.add('hidden');
+    document.getElementById('course-player').classList.remove('hidden');
+    document.querySelector('.sidebar-toggle').style.display='block';
+    loadModule(0); 
+    renderTOC();
+}
+
+function renderTOC(){
+    const toc = document.getElementById('toc');
+    let html = `
+        <div class="sidebar-header">
+            <h3 class="sidebar-title"><i class="fas fa-book-open"></i> COURSE MODULES</h3>
+            <div style="color: #94a3b8; font-size: 0.85rem; margin-top: 5px;">${syllabus.length} comprehensive modules</div>
+        </div>
+    `;
+    
+    syllabus.forEach((mod,i)=>{
+        const locked = i > maxUnlocked;
+        const completed = i < maxUnlocked;
+        const active = i === currentModule;
+        
+        html += `
+        <div class="module-item ${active?'active':''} ${locked?'locked':''}" onclick="${!locked?`loadModule(${i})`:''}">
+            <div class="module-number">${i+1}</div>
+            <div class="module-text">
+                <div class="module-title">${mod.title.replace("Module " + (i+1).toString().padStart(2, '0') + ": ", "")}</div>
+                <div class="module-desc">${mod.desc}</div>
+            </div>
+            <div class="module-status">
+                ${locked ? 
+                    '<i class="fas fa-lock" style="color: #94a3b8;"></i>' : 
+                    completed ? 
+                    '<i class="fas fa-check-circle" style="color: var(--success);"></i>' : 
+                    '<i class="fas fa-play-circle" style="color: var(--primary);"></i>'
+                }
+            </div>
+        </div>`;
+    });
+    
+    html += `
+        <div style="padding: 25px; text-align: center; margin-top: 20px; border-top: 1px solid var(--border-dark);">
+            <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 10px;">Progress</div>
+            <div style="background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                <div style="height: 100%; width: ${Math.round((maxUnlocked/(syllabus.length-1))*100)}%; background: var(--primary); border-radius: 3px;"></div>
+            </div>
+            <div style="color: white; font-size: 0.9rem; margin-top: 10px; font-weight: 600;">
+                ${maxUnlocked}/${syllabus.length} modules completed
+            </div>
+        </div>
+    `;
+    
+    toc.innerHTML = html;
+}
+
+function loadModule(idx){
+    currentModule = idx;
+    document.getElementById('loader').classList.add('active');
+    
+    setTimeout(() => {
+        document.getElementById('module-content').classList.remove('hidden');
+        document.getElementById('exam-section').classList.add('hidden');
+        document.getElementById('final-step-section').classList.add('hidden');
+        document.getElementById('module-content').innerHTML = syllabus[idx].content;
+        
+        const prog = Math.round((maxUnlocked/(syllabus.length-1))*100);
+        document.getElementById('progress-fill').style.width = prog + "%";
+        document.getElementById('prog-stat-text').innerText = prog + "% COMPLETE";
+        
+        renderTOC(); 
+        window.scrollTo(0,0);
+        document.getElementById('loader').classList.remove('active');
+    }, 300);
+}
+
+function completeModule(){
+    if(currentModule === syllabus.length-1){
+        showExam();
+    } else {
+        if(currentModule === maxUnlocked) {
+            maxUnlocked++;
+            Swal.fire({
+                title: "Module Completed!",
+                text: `You've unlocked Module ${currentModule+2}`,
+                icon: "success",
+                confirmButtonText: "Continue",
+                confirmButtonColor: "var(--primary)"
+            });
+        }
+        loadModule(currentModule+1);
+    }
+}
+
+function showExam(){
+    document.getElementById('module-content').classList.add('hidden');
+    const examBox = document.getElementById('exam-section');
+    examBox.classList.remove('hidden');
+
+    let html = `
+        <span class="module-tag"><i class="fas fa-graduation-cap"></i> FINAL ASSESSMENT</span>
+        <h2 class="mod-title">Proctored Final Exam</h2>
+        <p class="body-text">Complete this final assessment to earn your Elite HTML & CSS Mastery. Score 50% or above to pass.</p>
+        
+        <div style="background: #f0f9ff; padding: 20px; border-radius: 16px; margin-bottom: 30px; border-left: 4px solid var(--primary);">
+            <h4 style="font-weight: 700; margin-bottom: 10px; color: var(--dark-bg);"><i class="fas fa-info-circle"></i> Exam Details</h4>
+            <p style="color: #475569; margin-bottom: 5px;"><b>Questions:</b> ${quizData.length} multiple choice</p>
+            <p style="color: #475569; margin-bottom: 5px;"><b>Passing Score:</b> 50% or higher</p>
+            <p style="color: #475569;"><b>Time:</b> No time limit</p>
+        </div>
+    `;
+    
+    quizData.forEach((item,i)=>{
+        html += `<div class="q-block">
+            <p style="font-weight: 600; font-size: 1.1rem; margin-bottom: 15px; color: var(--dark-bg);">
+                <span style="background: var(--primary); color: white; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.9rem; margin-right: 10px;">${i+1}</span>
+                ${item.q}
+            </p>`;
+        item.options.forEach((opt,oi)=>{
+            html += `
+            <label class="option-label">
+                <input type="radio" name="q_${i}" value="${oi}">
+                ${opt}
+            </label>`;
+        });
+        html += `</div>`;
+    });
+    
+    html += `<button class="btn-primary" onclick="submitExam()">
+        <i class="fas fa-paper-plane"></i> Submit Exam
+    </button>`;
+    
+    examBox.innerHTML = html;
+    window.scrollTo(0,0);
+}
+
+function submitExam(){
+    let score = 0;
+    const results = [];
+    
+    quizData.forEach((item,i)=>{
+        const ans = document.querySelector(`input[name="q_${i}"]:checked`);
+        if(ans && parseInt(ans.value) === item.correct){
+            score++;
+            results.push({question: i, correct: true});
+        } else {
+            results.push({question: i, correct: false, selected: ans ? parseInt(ans.value) : null});
+        }
+    });
+
+    examScore = score;
+    const percent = Math.round((score/quizData.length)*100);
+    examTaken = true;
+
+    // Create detailed results HTML
+    let resultsHTML = `
+        <div class="score-display">
+            <h3 style="margin-bottom: 10px; font-weight: 700;">Exam Results</h3>
+            <div class="score-value">${percent}%</div>
+            <p style="font-size: 1.1rem; margin-bottom: 20px;">${score}/${quizData.length} Correct Answers</p>
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; margin-top: 15px;">
+                <p style="margin-bottom: 8px;"><b>Status:</b> <span style="color: ${percent >= 50 ? '#4ade80' : '#f87171'}">${percent >= 50 ? 'PASSED' : 'FAILED'}</span></p>
+                <p><b>Required to pass:</b> 50%</p>
+            </div>
+        </div>
+        
+        <h3 style="margin: 30px 0 15px; color: var(--dark-bg);">Question Review</h3>
+    `;
+    
+    results.forEach((result, i) => {
+        resultsHTML += `
+        <div style="background: ${result.correct ? '#f0fdf4' : '#fef2f2'}; padding: 15px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid ${result.correct ? '#10b981' : '#ef4444'};">
+            <p style="font-weight: 600; margin-bottom: 8px; color: var(--dark-bg);">${i+1}. ${quizData[i].q}</p>
+            <p style="margin-bottom: 5px;"><b>Your answer:</b> ${result.selected !== null ? quizData[i].options[result.selected] : 'Not answered'}</p>
+            <p><b>Correct answer:</b> ${quizData[i].options[quizData[i].correct]}</p>
+        </div>`;
+    });
+
+    if(percent >= 50){
+        Swal.fire({
+            title: "Congratulations!",
+            html: `<div style="text-align: left;">${resultsHTML}</div>`,
+            icon: "success",
+            confirmButtonText: "Claim Certificate",
+            confirmButtonColor: "var(--primary)",
+            width: 800
+        }).then(()=>{
+            document.getElementById('exam-section').classList.add('hidden');
+            document.getElementById('final-step-section').classList.remove('hidden');
+        });
+    } else {
+        Swal.fire({
+            title: "Try Again",
+            html: `<div style="text-align: left;">${resultsHTML}</div>`,
+            icon: "error",
+            confirmButtonText: "Retry Exam",
+            confirmButtonColor: "var(--primary)",
+            width: 800
+        }).then(() => {
+            // Allow retaking the exam
+            showExam();
+        });
+    }
+}
+
+function claimCertificate(){
+    const name = document.getElementById('student-name').value.trim();
+    const course = "Elite HTML & CSS Mastery"; // The proper course name
+
+    if(!name) {
+        return Swal.fire("Error","Please enter your full name.","error");
+    }
+    
+    // Save to localStorage as backup
+    localStorage.setItem("internadda_cert_name", name);
+    localStorage.setItem("internadda_course_name", course);
+    
+    Swal.fire({
+        title: "Generating Certificate...",
+        text: "Redirecting you to your official certificate.",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false
+    }).then(() => {
+        // Construct the URL with encoded parameters for safety
+        const urlName = encodeURIComponent(name);
+        const urlCourse = encodeURIComponent(course);
+        
+        // Redirect to certificate.html with parameters
+        window.location.href = `certificate.html?name=${urlName}&course=${urlCourse}`;
+    });
+}
+
+</script>
+</body>
+</html>
